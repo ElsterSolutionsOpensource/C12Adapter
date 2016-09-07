@@ -1,0 +1,50 @@
+<map id="MObject" name="MObject">
+<area shape="rect" id="node2" href="$class_m_aes.html" title="AES encryption and decryption class. " alt="" coords="165,5,221,32"/>
+<area shape="rect" id="node4" href="$class_m_algorithm.html" title="Set of various, mostly string related algorithms. " alt="" coords="149,56,237,83"/>
+<area shape="rect" id="node5" href="$class_m_automation.html" title="Wrapper class allows creating and using any Automation COM object. " alt="" coords="144,107,243,133"/>
+<area shape="rect" id="node6" href="$class_m_c_o_m_factory.html" title="Factory that is capable of creating MCOM objects. " alt="" coords="140,157,247,184"/>
+<area shape="rect" id="node7" href="$class_m_c_o_m_object.html" title="Root communication object that defines default property handling and configuration location..." alt="" coords="143,208,244,235"/>
+<area shape="rect" id="node10" href="$class_m_des.html" title="DES encryption and decryption class. " alt="" coords="165,259,221,285"/>
+<area shape="rect" id="node11" href="$class_m_dictionary.html" title="Dictionary of keys and their values, associative collection. " alt="" coords="148,309,239,336"/>
+<area shape="rect" id="node12" href="$class_m_error_enum.html" title="Error enumeration. " alt="" coords="146,360,241,387"/>
+<area shape="rect" id="node13" href="$class_m_exception.html" title="Common exception base for MeteringSDK. " alt="" coords="148,411,239,437"/>
+<area shape="rect" id="node21" href="$class_m_guid.html" title="Global identifier (GUID) object. " alt="" coords="163,461,223,488"/>
+<area shape="rect" id="node22" href="$class_m_ini_file.html" title="Class that allows reading and writing the Windows&#45;like INI files sequentially. " alt="" coords="160,512,227,539"/>
+<area shape="rect" id="node23" href="$class_m_iso8825.html" title="A set of utilities to work with ISO 8825 data types. " alt="" coords="154,563,233,589"/>
+<area shape="rect" id="node24" href="$class_m_math.html" title="MMath is derived from MObject, and it only has static properties and methods. " alt="" coords="162,613,225,640"/>
+<area shape="rect" id="node25" href="$class_m_m_d5_checksum.html" title="MD5 Checksum updater and calculator class. " alt="" coords="132,664,255,691"/>
+<area shape="rect" id="node26" href="$class_m_message_catalog.html" title="Catalog of local strings. " alt="" coords="128,715,259,741"/>
+<area shape="rect" id="node27" href="$class_m_monitor.html" title="Abstract monitor to watch communication. " alt="" coords="155,765,231,792"/>
+<area shape="rect" id="node30" href="$class_m_progress_action.html" title="Representation of task activity. " alt="" coords="132,816,255,843"/>
+<area shape="rect" id="node31" href="$class_m_progress_listener.html" title="Listener interface that should be implemented in order to get updates from progress monitor..." alt="" coords="128,867,259,893"/>
+<area shape="rect" id="node33" href="$class_m_progress_monitor.html" title="ProgressMonitor manages a set of ProgressAction objects. " alt="" coords="129,917,257,944"/>
+<area shape="rect" id="node34" href="$class_m_random_generator.html" title="Cryptographically secure random generator. " alt="" coords="124,968,263,995"/>
+<area shape="rect" id="node35" href="$class_m_regexp.html" title="POSIX&#45;like regular expression handler. " alt="" coords="155,1019,232,1045"/>
+<area shape="rect" id="node36" href="$class_m_registry.html" title="Provides the access to Windows registry, system dependent class. " alt="" coords="153,1069,234,1096"/>
+<area shape="rect" id="node37" href="$class_m_sock_opt_enum.html" title="Enumerations and constants for socket options. " alt="" coords="134,1120,253,1147"/>
+<area shape="rect" id="node38" href="$class_m_str.html" title="Provides static methods for string manipulation. " alt="" coords="168,1171,219,1197"/>
+<area shape="rect" id="node39" href="$class_m_stream.html" title="MStream is the base class of all streams. " alt="" coords="156,1221,231,1248"/>
+<area shape="rect" id="node43" href="$class_m_time.html" title="Value to represent a moment in time, consists of both date and time information. " alt="" coords="163,1272,224,1299"/>
+<area shape="rect" id="node44" href="$class_m_timer.html" title="Timer with milliseconds resolution. " alt="" coords="161,1323,226,1349"/>
+<area shape="rect" id="node45" href="$class_m_time_recurrent.html" title="Abstract value to represent a recurrent time, a certain time that happens periodically. " alt="" coords="135,1373,252,1400"/>
+<area shape="rect" id="node46" href="$class_m_time_span.html" title="Time span represents the difference between two times, a duration. " alt="" coords="148,1424,239,1451"/>
+<area shape="rect" id="node47" href="$class_m_time_zone.html" title="Time zone. " alt="" coords="149,1475,238,1501"/>
+<area shape="rect" id="node48" href="$class_m_version.html" title="Version that has multiple fraction (subversion) numbers, up to a certain limit. " alt="" coords="155,1525,232,1552"/>
+<area shape="rect" id="node49" href="$class_m_xml_node.html" title="DOM representation of XML node. " alt="" coords="151,1576,235,1603"/>
+<area shape="rect" id="node3" href="$class_m_aes_eax.html" title="AES encryption and decryption in EAX mode with authentication. " alt="" coords="363,5,441,32"/>
+<area shape="rect" id="node8" href="$class_m_channel.html" title="Abstraction of all channel&#45;level communication media. " alt="" coords="362,157,442,184"/>
+<area shape="rect" id="node9" href="$class_m_protocol.html" title="Abstraction of a communication protocol. " alt="" coords="361,208,443,235"/>
+<area shape="rect" id="node14" href="$class_m_c_o_m_exception.html" title="Root of every exception thrown by the MCOM component. " alt="" coords="341,259,463,285"/>
+<area shape="rect" id="node15" href="$class_m_e_index_out_of_range.html" title="Exception, array index is out of range. " alt="" coords="330,309,474,336"/>
+<area shape="rect" id="node16" href="$class_m_e_math.html" title="Exception, Error during mathematical operation. " alt="" coords="367,360,437,387"/>
+<area shape="rect" id="node17" href="$class_m_e_number_out_of_range.html" title="Exception, number is out of range. " alt="" coords="323,411,481,437"/>
+<area shape="rect" id="node18" href="$class_m_e_operation_cancelled.html" title="Exception which is thrown in case the operation is canceled. " alt="" coords="325,461,479,488"/>
+<area shape="rect" id="node19" href="$class_m_e_socket_error.html" title="Sockets exception that is thrown in case of the sockets failure. " alt="" coords="347,512,457,539"/>
+<area shape="rect" id="node20" href="$class_m_e_system_error.html" title="System&#45;related exception that is thrown in case some system service fails. " alt="" coords="345,563,459,589"/>
+<area shape="rect" id="node28" href="$class_m_monitor_file.html" title="Activity monitor object that dumps communication into a binary file. " alt="" coords="353,740,451,767"/>
+<area shape="rect" id="node29" href="$class_m_monitor_syslog.html" title="Activity monitor object that dumps communication into a syslog. " alt="" coords="344,791,460,817"/>
+<area shape="rect" id="node32" href="$class_m_progress_monitor_1_1_listener.html" title="MProgressMonitor::Listener" alt="" coords="311,867,493,893"/>
+<area shape="rect" id="node40" href="$class_m_stream_external_memory.html" title="The random access stream, arranged on the memory chunk, that this class does not own. " alt="" coords="317,1171,487,1197"/>
+<area shape="rect" id="node41" href="$class_m_stream_file.html" title="Classic file stream capable of manipulating files in the file system. " alt="" coords="354,1221,450,1248"/>
+<area shape="rect" id="node42" href="$class_m_stream_memory.html" title="The random access stream in memory that is always open. " alt="" coords="341,1272,463,1299"/>
+</map>

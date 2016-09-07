@@ -1,0 +1,9 @@
+<map id="MChannelSerialPort" name="MChannelSerialPort">
+<area shape="rect" id="node5" href="$class_m_channel_current_loop.html" title="MChannelCurrentLoop implements methods necessary for handling RS&#45;232 serial port. ..." alt="" coords="5,304,156,331"/>
+<area shape="rect" id="node6" href="$class_m_channel_modem.html" title="Modem channel is a channel based on serial port. " alt="" coords="181,304,303,331"/>
+<area shape="rect" id="node8" href="$class_m_channel_optical_probe.html" title="Optical probe is a channel based on serial port that is able to control the batteries of the probe (i..." alt="" coords="327,304,482,331"/>
+<area shape="rect" id="node2" href="$class_m_channel.html" title="Abstraction of all channel&#45;level communication media. " alt="" coords="202,155,282,181"/>
+<area shape="rect" id="node3" href="$class_m_c_o_m_object.html" title="Root communication object that defines default property handling and configuration location..." alt="" coords="191,80,293,107"/>
+<area shape="rect" id="node4" href="$class_m_object.html" title="Root object that establishes dynamic class information, dynamic property and method handling and mars..." alt="" coords="207,5,277,32"/>
+<area shape="rect" id="node7" href="$class_m_channel_modem_callback.html" title="Modem callback channel is MChannelModem that has Auto Answer enabled by default. " alt="" coords="155,379,329,405"/>
+</map>

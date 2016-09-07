@@ -1,0 +1,5 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$class_m_thread.html" title="Operating system independent abstract thread. " alt="" coords="5,31,77,57"/>
+<area shape="rect" id="node2" href="$class_m_thread_current.html" title="Thread instance that attaches to the current thread to allow manipulations with the thread parameters..." alt="" coords="125,5,240,32"/>
+<area shape="rect" id="node3" href="$class_m_thread_worker.html" title="Abstract worker thread, the one optimized for doing work outside of the currently running thread..." alt="" coords="125,56,240,83"/>
+</map>

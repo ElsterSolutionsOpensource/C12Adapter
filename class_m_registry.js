@@ -1,0 +1,37 @@
+var class_m_registry =
+[
+    [ "PredefinedKeyEnum", "class_m_registry.html#ab0290a1cca36b65e993ca0bb74d74b43", [
+      [ "KeyClassesRoot", "class_m_registry.html#ab0290a1cca36b65e993ca0bb74d74b43a77ec3416039e2bb5c7e37c9ce1bee256", null ],
+      [ "KeyCurrentUser", "class_m_registry.html#ab0290a1cca36b65e993ca0bb74d74b43a494aeffbb25ed10d89e4b012cb955579", null ],
+      [ "KeyLocalMachine", "class_m_registry.html#ab0290a1cca36b65e993ca0bb74d74b43acc5e3260b446677cdc839fb7a639ca65", null ],
+      [ "KeyUsers", "class_m_registry.html#ab0290a1cca36b65e993ca0bb74d74b43acfceb630e634261b8c248cee80af04c9", null ]
+    ] ],
+    [ "MRegistry", "class_m_registry.html#af9a169853a2a9a973a8dc541898d4a37", null ],
+    [ "MRegistry", "class_m_registry.html#a4ea9c36867461b6e3269b5d0d4ee4c40", null ],
+    [ "MRegistry", "class_m_registry.html#a365a6577e602081f369540608a94cd45", null ],
+    [ "MRegistry", "class_m_registry.html#ab88224a9f7ba689078df83ab7daaf38e", null ],
+    [ "~MRegistry", "class_m_registry.html#aecd47b6e48b207f2d2c588372cfce157", null ],
+    [ "CheckIfOpen", "class_m_registry.html#a6a349724c551f130a404b0cfce6c244b", null ],
+    [ "Close", "class_m_registry.html#a05ac45149ef38da8984d55eb27be47a4", null ],
+    [ "GetAllSubkeys", "class_m_registry.html#a584171491c3a9b27980a11419330944e", null ],
+    [ "GetAllValues", "class_m_registry.html#a3a38e37c37f0f0fb513c503eb653eabe", null ],
+    [ "GetBinary", "class_m_registry.html#add8e37a042e0af3da61099c1b41d9ac2", null ],
+    [ "GetExistingBinary", "class_m_registry.html#a3db890c1f8f19b45c66d88360628f9a3", null ],
+    [ "GetExistingInteger", "class_m_registry.html#a28482e9fc1c0263daf70bd35c136f782", null ],
+    [ "GetExistingString", "class_m_registry.html#ac01a893f0dabdeadf57a7f7ec7e9a630", null ],
+    [ "GetInteger", "class_m_registry.html#ac9ecbe76bdc4fe97868ad44b828d105b", null ],
+    [ "GetString", "class_m_registry.html#ad1835b62f2fc47e10e31cf8d7ef61b2b", null ],
+    [ "IsOpen", "class_m_registry.html#a6f07840251aeee417add81e9161eae19", null ],
+    [ "IsPresent", "class_m_registry.html#aa57df0966d2492861605b1b33101937b", null ],
+    [ "IsReadOnly", "class_m_registry.html#af753bf2dde0b332e94e5880d08fc6c39", null ],
+    [ "IsSubkeyPresent", "class_m_registry.html#a88ffcaadd0bfafb559c21a383205202f", null ],
+    [ "IsValuePresent", "class_m_registry.html#aa24dc293f031fcbee9efe06ea1367543", null ],
+    [ "Open", "class_m_registry.html#a53e5d4b245d8f7248ad6987d676f2c08", null ],
+    [ "OpenSubkey", "class_m_registry.html#a4b7f0451bdc4cbe12f632470edefdaef", null ],
+    [ "Remove", "class_m_registry.html#af2299ef3912e7b7bebd2e17429866528", null ],
+    [ "RemoveSubkey", "class_m_registry.html#a3cf57e17b28b28d1ab32837413a333fb", null ],
+    [ "RemoveValue", "class_m_registry.html#aa5a0a3459ca6e9776d977233644cea0e", null ],
+    [ "SetBinary", "class_m_registry.html#aef8a58bbac15b350511891bbfdc41a4c", null ],
+    [ "SetInteger", "class_m_registry.html#a4a0279fe9f5fceccd435b57f47b2171d", null ],
+    [ "SetString", "class_m_registry.html#a62bc4594b83cf811c2a8a0866404e92e", null ]
+];

@@ -1,0 +1,7 @@
+<map id="MProtocolC1218" name="MProtocolC1218">
+<area shape="rect" id="node6" href="$class_m_protocol_c1221.html" title="ANSI C12.21 protocol implementation. " alt="" coords="5,379,124,405"/>
+<area shape="rect" id="node2" href="$class_m_protocol_c12.html" title="Generic ANSI C12 abstract protocol, base for C12.18, C12.21, and C12.22. " alt="" coords="13,229,117,256"/>
+<area shape="rect" id="node3" href="$class_m_protocol.html" title="Abstraction of a communication protocol. " alt="" coords="24,155,105,181"/>
+<area shape="rect" id="node4" href="$class_m_c_o_m_object.html" title="Root communication object that defines default property handling and configuration location..." alt="" coords="14,80,115,107"/>
+<area shape="rect" id="node5" href="$class_m_object.html" title="Root object that establishes dynamic class information, dynamic property and method handling and mars..." alt="" coords="29,5,100,32"/>
+</map>

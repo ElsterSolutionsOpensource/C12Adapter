@@ -1,0 +1,9 @@
+<map id="MStream" name="MStream">
+<area shape="rect" id="node3" href="$class_m_stream_external_memory.html" title="The random access stream, arranged on the memory chunk, that this class does not own. " alt="" coords="5,155,176,181"/>
+<area shape="rect" id="node4" href="$class_m_stream_file.html" title="Classic file stream capable of manipulating files in the file system. " alt="" coords="200,155,296,181"/>
+<area shape="rect" id="node5" href="$class_m_stream_memory.html" title="The random access stream in memory that is always open. " alt="" coords="320,155,443,181"/>
+<area shape="rect" id="node6" href="$class_m_stream_socket_base.html" title="Abstract IP socket, either TCP or UDP. " alt="" coords="467,155,613,181"/>
+<area shape="rect" id="node2" href="$class_m_object.html" title="Root object that establishes dynamic class information, dynamic property and method handling and mars..." alt="" coords="279,5,350,32"/>
+<area shape="rect" id="node7" href="$class_m_stream_socket.html" title="TCP/IP socket, reliable stream. " alt="" coords="406,229,522,256"/>
+<area shape="rect" id="node8" href="$class_m_stream_socket_udp.html" title="UDP datagram socket. " alt="" coords="547,229,685,256"/>
+</map>

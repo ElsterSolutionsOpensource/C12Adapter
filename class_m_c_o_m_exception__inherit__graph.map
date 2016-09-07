@@ -1,0 +1,10 @@
+<map id="MCOMException" name="MCOMException">
+<area shape="rect" id="node4" href="$class_m_e_c12_bad_procedure_result.html" title="Exception which is thrown for the erroneous ANSI C12 procedure response code. " alt="" coords="463,5,647,32"/>
+<area shape="rect" id="node5" href="$class_m_e_c12_nok_response.html" title="Exception which is thrown in case the ANSI C12 meter responded with an error defined by the protocol..." alt="" coords="482,56,629,83"/>
+<area shape="rect" id="node6" href="$class_m_e_channel_disconnected_unexpectedly.html" title="Exception which is thrown in case the channel is unexpectedly disconnected. " alt="" coords="432,107,679,133"/>
+<area shape="rect" id="node7" href="$class_m_e_channel_read_timeout.html" title="Exception which is thrown in case the timeout condition happens during reading from the channel..." alt="" coords="473,157,638,184"/>
+<area shape="rect" id="node8" href="$class_m_e_channel_write_timeout.html" title="Exception which is thrown in case the timeout condition happens during writing to the channel..." alt="" coords="472,208,639,235"/>
+<area shape="rect" id="node9" href="$class_m_e_collision_detected.html" title="Exception which is thrown in case the channel detects the collision, and it has to yield to the peer..." alt="" coords="484,259,627,285"/>
+<area shape="rect" id="node2" href="$class_m_exception.html" title="Common exception base for MeteringSDK. " alt="" coords="124,132,215,159"/>
+<area shape="rect" id="node3" href="$class_m_object.html" title="Root object that establishes dynamic class information, dynamic property and method handling and mars..." alt="" coords="5,132,76,159"/>
+</map>

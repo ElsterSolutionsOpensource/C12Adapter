@@ -1,0 +1,7 @@
+<map id="MChannelSocket" name="MChannelSocket">
+<area shape="rect" id="node6" href="$class_m_channel_socket_callback.html" title="Socket callback channel is MChannelSocket that has Auto Answer enabled by default. " alt="" coords="5,379,176,405"/>
+<area shape="rect" id="node2" href="$class_m_channel_socket_base.html" title="MChannelSocket implements the channel interface for an IP socket, either TCP or UDP. " alt="" coords="15,229,166,256"/>
+<area shape="rect" id="node3" href="$class_m_channel.html" title="Abstraction of all channel&#45;level communication media. " alt="" coords="51,155,131,181"/>
+<area shape="rect" id="node4" href="$class_m_c_o_m_object.html" title="Root communication object that defines default property handling and configuration location..." alt="" coords="40,80,141,107"/>
+<area shape="rect" id="node5" href="$class_m_object.html" title="Root object that establishes dynamic class information, dynamic property and method handling and mars..." alt="" coords="55,5,126,32"/>
+</map>

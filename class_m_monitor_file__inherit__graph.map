@@ -1,0 +1,5 @@
+<map id="MMonitorFile" name="MMonitorFile">
+<area shape="rect" id="node4" href="$class_m_monitor_socket.html" title="Activity monitor object based on a TCP socket. " alt="" coords="5,229,123,256"/>
+<area shape="rect" id="node2" href="$class_m_monitor.html" title="Abstract monitor to watch communication. " alt="" coords="26,80,102,107"/>
+<area shape="rect" id="node3" href="$class_m_object.html" title="Root object that establishes dynamic class information, dynamic property and method handling and mars..." alt="" coords="29,5,99,32"/>
+</map>

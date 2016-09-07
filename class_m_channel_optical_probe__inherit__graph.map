@@ -1,0 +1,6 @@
+<map id="MChannelOpticalProbe" name="MChannelOpticalProbe">
+<area shape="rect" id="node2" href="$class_m_channel_serial_port.html" title="Serial port based channel, a null cable direct serial link or a link through a current loop adapter..." alt="" coords="14,229,151,256"/>
+<area shape="rect" id="node3" href="$class_m_channel.html" title="Abstraction of all channel&#45;level communication media. " alt="" coords="43,155,123,181"/>
+<area shape="rect" id="node4" href="$class_m_c_o_m_object.html" title="Root communication object that defines default property handling and configuration location..." alt="" coords="32,80,133,107"/>
+<area shape="rect" id="node5" href="$class_m_object.html" title="Root object that establishes dynamic class information, dynamic property and method handling and mars..." alt="" coords="47,5,118,32"/>
+</map>

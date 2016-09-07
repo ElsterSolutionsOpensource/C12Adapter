@@ -1,0 +1,4 @@
+<map id="MThread" name="MThread">
+<area shape="rect" id="node2" href="$class_m_thread_current.html" title="Thread instance that attaches to the current thread to allow manipulations with the thread parameters..." alt="" coords="5,80,120,107"/>
+<area shape="rect" id="node3" href="$class_m_thread_worker.html" title="Abstract worker thread, the one optimized for doing work outside of the currently running thread..." alt="" coords="144,80,259,107"/>
+</map>

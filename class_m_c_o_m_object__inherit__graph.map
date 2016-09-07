@@ -1,0 +1,19 @@
+<map id="MCOMObject" name="MCOMObject">
+<area shape="rect" id="node3" href="$class_m_channel.html" title="Abstraction of all channel&#45;level communication media. " alt="" coords="274,183,354,209"/>
+<area shape="rect" id="node14" href="$class_m_protocol.html" title="Abstraction of a communication protocol. " alt="" coords="273,233,355,260"/>
+<area shape="rect" id="node2" href="$class_m_object.html" title="Root object that establishes dynamic class information, dynamic property and method handling and mars..." alt="" coords="5,208,76,235"/>
+<area shape="rect" id="node4" href="$class_m_channel_serial_port.html" title="Serial port based channel, a null cable direct serial link or a link through a current loop adapter..." alt="" coords="409,81,547,108"/>
+<area shape="rect" id="node9" href="$class_m_channel_socket_base.html" title="MChannelSocket implements the channel interface for an IP socket, either TCP or UDP. " alt="" coords="403,183,553,209"/>
+<area shape="rect" id="node5" href="$class_m_channel_current_loop.html" title="MChannelCurrentLoop implements methods necessary for handling RS&#45;232 serial port. ..." alt="" coords="603,5,754,32"/>
+<area shape="rect" id="node6" href="$class_m_channel_modem.html" title="Modem channel is a channel based on serial port. " alt="" coords="617,56,740,83"/>
+<area shape="rect" id="node8" href="$class_m_channel_optical_probe.html" title="Optical probe is a channel based on serial port that is able to control the batteries of the probe (i..." alt="" coords="601,107,756,133"/>
+<area shape="rect" id="node7" href="$class_m_channel_modem_callback.html" title="Modem callback channel is MChannelModem that has Auto Answer enabled by default. " alt="" coords="815,56,988,83"/>
+<area shape="rect" id="node10" href="$class_m_channel_socket.html" title="MChannelSocket implements the channel interface for an TCP/IP socket. " alt="" coords="618,157,739,184"/>
+<area shape="rect" id="node12" href="$class_m_channel_socket_udp.html" title="Implements the channel interface for an UDP datagram socket. " alt="" coords="607,208,751,235"/>
+<area shape="rect" id="node11" href="$class_m_channel_socket_callback.html" title="Socket callback channel is MChannelSocket that has Auto Answer enabled by default. " alt="" coords="816,157,987,184"/>
+<area shape="rect" id="node13" href="$class_m_channel_socket_udp_callback.html" title="Socket callback channel is MChannelSocketUdp that has Auto Answer enabled by default. " alt="" coords="804,208,999,235"/>
+<area shape="rect" id="node15" href="$class_m_protocol_c12.html" title="Generic ANSI C12 abstract protocol, base for C12.18, C12.21, and C12.22. " alt="" coords="426,259,530,285"/>
+<area shape="rect" id="node16" href="$class_m_protocol_c1218.html" title="ANSI C12 18 protocol implementation, a further specialization of C12 set of protocols. " alt="" coords="619,259,738,285"/>
+<area shape="rect" id="node18" href="$class_m_protocol_c1222.html" title="ANSI C12.22 protocol implementation. " alt="" coords="619,309,738,336"/>
+<area shape="rect" id="node17" href="$class_m_protocol_c1221.html" title="ANSI C12.21 protocol implementation. " alt="" coords="842,259,961,285"/>
+</map>

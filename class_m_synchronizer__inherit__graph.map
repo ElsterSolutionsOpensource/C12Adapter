@@ -1,0 +1,4 @@
+<map id="MSynchronizer" name="MSynchronizer">
+<area shape="rect" id="node2" href="$class_m_event.html" title="Class that supports event paradigm, synchronizer kind. " alt="" coords="5,80,71,107"/>
+<area shape="rect" id="node3" href="$class_m_semaphore.html" title="Semaphore to be used to synchronize resource access. " alt="" coords="95,80,194,107"/>
+</map>

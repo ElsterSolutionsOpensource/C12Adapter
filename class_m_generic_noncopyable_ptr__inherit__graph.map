@@ -1,0 +1,6 @@
+<map id="MGenericNoncopyablePtr&lt; Type &gt;" name="MGenericNoncopyablePtr&lt; Type &gt;">
+<area shape="rect" id="node2" href="$class_m_unique_array_ptr.html" title="Compiler version independent unique pointer to an array variable. " alt="" coords="224,5,397,32"/>
+<area shape="rect" id="node3" href="$class_m_unique_ptr.html" title="Compiler version independent unique pointer to a variable that is not an array. " alt="" coords="239,56,382,83"/>
+<area shape="rect" id="node4" href="$class_m_value_end_scope_setter.html" title="Class that helps set a certain value when a certain scope exits. " alt="" coords="230,107,391,149"/>
+<area shape="rect" id="node5" href="$class_m_value_savior.html" title="Class that helps preserve a certain value of a variable outside a local C++ scope. " alt="" coords="234,173,387,200"/>
+</map>

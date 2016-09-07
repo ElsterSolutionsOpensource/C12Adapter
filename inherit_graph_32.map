@@ -1,0 +1,5 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$class_m_synchronizer.html" title="Abstract synchronizer object. " alt="" coords="5,31,115,57"/>
+<area shape="rect" id="node2" href="$class_m_event.html" title="Class that supports event paradigm, synchronizer kind. " alt="" coords="179,5,245,32"/>
+<area shape="rect" id="node3" href="$class_m_semaphore.html" title="Semaphore to be used to synchronize resource access. " alt="" coords="163,56,261,83"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$class_m_buffer.html" title="Buffer, a byte string with extra manipulation facilities. " alt="" coords="5,5,72,32"/>
+<area shape="rect" id="node2" href="$class_m_buffer_bidirectional.html" title="Buffer where the data can be added to both the beginning and the end of the buffer. " alt="" coords="120,5,257,32"/>
+</map>
