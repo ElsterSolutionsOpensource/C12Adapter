@@ -95,6 +95,16 @@ public: // Clearing, resetting, resizing:
 
 public: // Adding packet chunks
 
+   /// Assign the whole buffer with the given character of the given length.
+   ///
+   /// \param size Count of characters to assign.
+   /// \param c Character value to assign to the buffer.
+   ///
+   void Assign(unsigned size, char c)
+   {
+      m_bytes.assign(size, c);
+   }
+
    /// Assign the whole buffer with the given data.
    ///
    /// \param data New data for the buffer.
@@ -429,6 +439,34 @@ public: // Reading methods:
    ///             an exception is thrown.
    ///
    void ReadBuffer(Muint8* data, unsigned size);
+
+   /// Read a typed value from the buffer, return the value.
+   ///
+   /// If the type of such size does not fit in the remainder of the buffer, an exception is thrown.
+   ///
+   /// \return Value of the given type as read from the buffer.
+   ///
+   template
+      <typename T>
+   void Read(T& result)
+   {
+      ReadBuffer(reinterpret_cast<char*>(&result), sizeof(T));
+   }
+
+   /// Read a typed value from the buffer, return the value.
+   ///
+   /// If the type of such size does not fit in the remainder of the buffer, an exception is thrown.
+   ///
+   /// \return Value of the given type as read from the buffer.
+   ///
+   template
+      <typename T>
+   T Read()
+   {
+      T result;
+      Read(result);
+      return result;
+   }
 
    /// Read bytes from the buffer into the given pointer and size.
    ///

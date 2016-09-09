@@ -2049,6 +2049,16 @@ protected: // Implementation services:
    /// Under no circumstance shall this method shall throw an error.
    ///
    virtual void DoBuildComplexServiceName(MChars fullServiceName, MConstChars serviceName, MCOMNumberConstRef number, int par1 = -1, int par2 = -1) M_NO_THROW;
+
+   /// Helper service name builder that can interpret numeric values either as hex or as decimal.
+   /// If parameters are not present they are not in the name.
+   /// The particular protocols can fill in their own implementations for full service name.
+   ///
+   /// \pre The given chars pointer shall point to a buffer at least
+   /// MAXIMUM_SERVICE_NAME_STRING_SIZE long. Otherwise the behavior is undefined.
+   /// Under no circumstance shall this method shall throw an error.
+   ///
+   void DoBuildPossiblyNumericComplexServiceName(MChars fullServiceName, MConstChars serviceName, MCOMNumberConstRef number, bool isHex, int par1 = -1, int par2 = -1) M_NO_THROW;
 #endif
 
 public: // Services:

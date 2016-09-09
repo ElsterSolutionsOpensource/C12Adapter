@@ -277,6 +277,17 @@
    #endif
 #endif
 
+
+/// No verbose error information significantly decreases the size of the executable image.
+///
+/// Zero by default, error information is verbose.
+/// Defining it to one helps fit the executable image into a small memory device.
+///
+#ifndef M_NO_VERBOSE_ERROR_INFORMATION
+   #define M_NO_VERBOSE_ERROR_INFORMATION 0
+#endif
+
+
 /// Whether or not to support XML classes.
 ///
 /// By default, XML classes are present in MCORE, the macro value is zero.

@@ -12,8 +12,6 @@
 ///
 class M_CLASS MFindFile
 {
-   friend class MLibrary;
-
 public: // Constructor, destructor and services.
 
    /// Default constructor, no search is initialized.

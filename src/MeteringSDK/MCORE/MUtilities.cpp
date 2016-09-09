@@ -1138,58 +1138,13 @@ bool MUtilities::IsPathExisting(const MStdString& path) M_NO_THROW
 MStdString MUtilities::GetFullPath(const MStdString& path)
 {
    MStdString result;
-
-   #if (M_OS & M_OS_WINDOWS) != 0 && (M_OS & M_OS_WIN32_CE) == 0
-
-      if ( MLibrary::IsPathInLibrary(path) )
-      {
-         result = GetFullPath(MLibrary::GetPathOutsideLibrary(path));  // recurse
-         result += ':';
-         result += MLibrary::GetPathResourceName(path);
-         result += ':';
-         result += MLibrary::GetPathInsideLibrary(path);
-      }
-      else
-      {
-         #if M_UNICODE
-            wchar_t* filePart;
-            wchar_t fullPath [ M_MAX_PATH ];
-            if ( ::GetFullPathName(MToWideString(path).c_str(), M_MAX_PATH, fullPath, &filePart) == 0 )
-               result = path;
-            else
-            {
-               result = MToStdString(fullPath);
-               if ( IsPathDirectory(result) )
-                  MAddDirectorySeparatorIfNecessary(result);
-            }
-         #else
-            char* filePart;
-            char fullPath [ M_MAX_PATH ];
-            if ( ::GetFullPathName(path.c_str(), M_MAX_PATH, fullPath, &filePart) == 0 )
-               result = path;
-            else
-            {
-               result = fullPath;
-               if ( IsPathDirectory(result) )
-                  MAddDirectorySeparatorIfNecessary(result);
-            }
-         #endif
-      }
-
-   #else
-
-      if ( IsPathFull(path) )
-         result = path;
-      else
-      {
-         result = GetCurrentPath(); // *NIX has no problems with :: in names, so it does not care
-         result += path;
-         if ( result.find("/::") != MStdString::npos ) // prevent the algorithm from falling into an impossible sequence in the name
-            result = path;
-      }
-
-   #endif
-
+   if ( IsPathFull(path) )
+      result = path;
+   else
+   {
+      result = GetCurrentPath();
+      result += path;
+   }
    return result;
 }
 

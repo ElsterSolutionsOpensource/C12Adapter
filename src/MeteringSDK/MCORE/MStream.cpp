@@ -671,7 +671,6 @@ void MStream::DoStartOpen(unsigned flags)
 
 void MStream::DoFinishOpen()
 {
-   char header [ 2 ];
    DoDeleteProcessors();
 
    if ( (m_flags & FlagBuffered) != 0 )

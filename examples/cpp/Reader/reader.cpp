@@ -221,7 +221,6 @@ int main(int argc, char** argv)
    }
 
    linkLayerRetries = proto->GetCountLinkLayerPacketsRetried();
-   delete proto;
    cout << "Successful cycles: " << successfulCycles 
         << ", errors: " << failures
         << ", retries: " << linkLayerRetries;

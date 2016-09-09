@@ -1,6 +1,7 @@
-doxygen_out
+doxygen_out/
+build/
 *.user*
 *.local
-__history
+__history/
 ~*
 *~

@@ -19,6 +19,8 @@ Setup::Setup()
 
 Setup::~Setup()
 {
+   delete m_protocol;
+   delete m_channel;
 }
 
 bool Setup::Initialize(int argc, char** argv)
@@ -52,11 +54,11 @@ bool Setup::Initialize(int argc, char** argv)
                        "    TYPE=PROTOCOL_ANSI_C12_21;IDENTITY=2\n"
                        "Tables-functions can be a list of the following items:\n"
                        "  - Table reads by number, such as: 1 5 2049\n"
-                       "  - Table reads: ST1 ST5 MT1 MT155\n"
-                       "  - Function with no request: SF3() MF7()\n"
-                       "  - Function with request: MF72(084800000000) MF24(01)\n"
+                       "  - Table reads: ST1 ST5\n"
+                       "  - Function with no request: SF3()\n"
+                       "  - Function with request: SF4(01)\n"
                        "Table 1 will always be read at the start.\n"
-                       "Do not forget to enclose semicolons and blanks into quotes.\n");
+                       "Do not forget to enclose semicolons and blanks with quotes.\n");
       if ( parser.Process(argc, argv) != 0 )
          return false;
 

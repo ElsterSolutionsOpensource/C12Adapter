@@ -399,6 +399,40 @@ void MProtocol::DoBuildComplexServiceName(MChars fullServiceName, MConstChars se
    M_ASSERT(fullServiceNameSize > 0 && fullServiceNameSize < MAXIMUM_SERVICE_NAME_STRING_SIZE); // Check if MAXIMUM_SERVICE_NAME_STRING_SIZE is big enough
    M_USED_VARIABLE(fullServiceNameSize);
 }
+
+void MProtocol::DoBuildPossiblyNumericComplexServiceName(MChars fullServiceName, MConstChars serviceName, MCOMNumberConstRef number, bool isHex, int par1, int par2) M_NO_THROW
+{
+   if ( number.IsNumeric() )
+   {
+      try
+      {
+         unsigned num = number.AsDWord(); // avoid signed/unsigned differences, have it always unsigned
+         size_t fullServiceNameSize;
+         if ( par1 == -1 && par2 == -1 )
+         {
+             if ( isHex )
+                fullServiceNameSize = MFormat(fullServiceName, MAXIMUM_SERVICE_NAME_STRING_SIZE, "%s(0x%X)", serviceName, num);
+             else
+                fullServiceNameSize = MFormat(fullServiceName, MAXIMUM_SERVICE_NAME_STRING_SIZE, "%s(%d)", serviceName, num);
+         }
+         else
+         {
+             if ( isHex )
+                fullServiceNameSize = MFormat(fullServiceName, MAXIMUM_SERVICE_NAME_STRING_SIZE, "%s(0x%X, %d, %d)", serviceName, num, par1, par2);
+             else
+                fullServiceNameSize = MFormat(fullServiceName, MAXIMUM_SERVICE_NAME_STRING_SIZE, "%s(%d, %d, %d)", serviceName, num, par1, par2);
+         }
+         M_ASSERT(fullServiceNameSize > 0 && fullServiceNameSize < MAXIMUM_SERVICE_NAME_STRING_SIZE); // Check if MAXIMUM_SERVICE_NAME_STRING_SIZE is big enough
+         M_USED_VARIABLE(fullServiceNameSize);
+         return; // success
+      }
+      catch ( ... )
+      {
+         // fall into default implementation
+      }
+   }
+   MProtocol::DoBuildComplexServiceName(fullServiceName, serviceName, number, par1, par2);
+}
 #endif // !M_NO_VERBOSE_ERROR_INFORMATION
 
 #if !M_NO_MCOM_COMMAND_QUEUE

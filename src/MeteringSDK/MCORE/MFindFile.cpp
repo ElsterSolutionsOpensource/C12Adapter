@@ -185,17 +185,16 @@ void MFindFile::DoPopulate(MStdStringVector& result, const MStdString& directory
             struct dirent *entry, *entryPtr;
             entry = (dirent*)malloc(sizeof(*entry) + NAME_MAX + 1);
             int error = readdir_r(dir, entry, &entryPtr);
-#else
-            struct dirent entry, *entryPtr;
-            int error = readdir_r(dir, &entry, &entryPtr);
-#endif
             if ( error != 0 || entryPtr == NULL )
             {
-#if (M_OS & M_OS_QNXNTO)
                free(entry);
-#endif
                break;
             }
+#else
+            struct dirent* entryPtr = readdir(dir);
+            if ( entryPtr == NULL )
+               break;
+#endif
             // using default search rules
             const char* name = entryPtr->d_name;
             if ( fnmatch(fileMask.c_str(), name, 0) == 0 )  // maybe found
