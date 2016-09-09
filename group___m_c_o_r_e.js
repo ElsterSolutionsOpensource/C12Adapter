@@ -502,8 +502,7 @@ var group___m_c_o_r_e =
       [ "~MFindFile", "class_m_find_file.html#a6fbe6c8fbb6138ffba25f80e3bf0ff8b", null ],
       [ "Close", "class_m_find_file.html#a5f5d1989400e211745d1a86a93d48ba8", null ],
       [ "FindNext", "class_m_find_file.html#ab54617553c79f71a314834defaef5b93", null ],
-      [ "Init", "class_m_find_file.html#ab27a5f626d420437a8939e445cc8b7df", null ],
-      [ "MLibrary", "class_m_find_file.html#ac676d3d3b5e119b02afe69652f7d5abc", null ]
+      [ "Init", "class_m_find_file.html#ab27a5f626d420437a8939e445cc8b7df", null ]
     ] ],
     [ "MGuid", "class_m_guid.html", [
       [ "GUID", "struct_m_guid_1_1_g_u_i_d.html", [
@@ -1837,6 +1836,7 @@ var group___m_c_o_r_e =
     [ "M_NO_TIME", "group___m_c_o_r_e.html#gaaaac9f98619a664445eb4917f7b6ea6c", null ],
     [ "M_NO_UNALIGNED_DATA", "group___m_c_o_r_e.html#gaeeed4d7cafd63c6c510705ef0f442b87", null ],
     [ "M_NO_VARIANT", "group___m_c_o_r_e.html#ga8b93dbe6d9959139ee00c224aa152a05", null ],
+    [ "M_NO_VERBOSE_ERROR_INFORMATION", "group___m_c_o_r_e.html#gaf8c70f0390fa930e9578100a19a70d8a", null ],
     [ "M_NO_WCHAR_T", "group___m_c_o_r_e.html#gafbc5bf588e6438930c0e1130b14093de", null ],
     [ "M_NO_XML", "group___m_c_o_r_e.html#ga7f742df62e1cbaad5420a0b056b8ccd8", null ],
     [ "M_NORETURN_FUNC", "group___m_c_o_r_e.html#gafa5db05369b35075474e232a5cb2fbae", null ],

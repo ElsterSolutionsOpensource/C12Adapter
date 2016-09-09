@@ -242,6 +242,7 @@ var searchData=
   ['m_5fno_5ftime',['M_NO_TIME',['../group___m_c_o_r_e.html#gaaaac9f98619a664445eb4917f7b6ea6c',1,'MCOREDefs.h']]],
   ['m_5fno_5funaligned_5fdata',['M_NO_UNALIGNED_DATA',['../group___m_c_o_r_e.html#gaeeed4d7cafd63c6c510705ef0f442b87',1,'MCOREDefs.h']]],
   ['m_5fno_5fvariant',['M_NO_VARIANT',['../group___m_c_o_r_e.html#ga8b93dbe6d9959139ee00c224aa152a05',1,'MCOREDefs.h']]],
+  ['m_5fno_5fverbose_5ferror_5finformation',['M_NO_VERBOSE_ERROR_INFORMATION',['../group___m_c_o_r_e.html#gaf8c70f0390fa930e9578100a19a70d8a',1,'MCOREDefs.h']]],
   ['m_5fno_5fwchar_5ft',['M_NO_WCHAR_T',['../group___m_c_o_r_e.html#gafbc5bf588e6438930c0e1130b14093de',1,'MCOREDefs.h']]],
   ['m_5fno_5fxml',['M_NO_XML',['../group___m_c_o_r_e.html#ga7f742df62e1cbaad5420a0b056b8ccd8',1,'MCOREDefs.h']]],
   ['m_5fnoreturn_5ffunc',['M_NORETURN_FUNC',['../group___m_c_o_r_e.html#gafa5db05369b35075474e232a5cb2fbae',1,'MCOREDefs.h']]],

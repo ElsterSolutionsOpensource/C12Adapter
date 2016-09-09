@@ -1,5 +1,8 @@
 var NAVTREEINDEX7 =
 {
+"class_m_serial_port.html#ac2272874ab27b08ca572395c1145f6d6":[0,1,101,17],
+"class_m_serial_port.html#ac3b70bb9e8cdbfde47cecc2387969a74":[0,1,101,2],
+"class_m_serial_port.html#ad511b555c2d0f639e9aea7d90285c718":[0,1,101,38],
 "class_m_serial_port.html#adaae6bae00059a9c4e947c4d41392b21":[0,1,101,4],
 "class_m_serial_port.html#ae1fa408a00a186470a01d0f79e332e33":[0,1,101,10],
 "class_m_serial_port.html#ae7765c4ce5a7315edaccb720a37a3f3c":[0,1,101,31],
@@ -246,8 +249,5 @@ var NAVTREEINDEX7 =
 "class_m_thread.html#aba56222ed8ad1d2baa67e61a5ffec088":[0,1,112,0],
 "class_m_thread.html#ae73d492612376f511f61a69f00169bd8":[0,1,112,4],
 "class_m_thread_current.html":[0,1,113],
-"class_m_thread_current.html#a397cda7fd8887adc89febb8227f9a8ad":[0,1,113,0],
-"class_m_thread_current.html#a75b8894f6cb780df6e6490af6e188562":[0,1,113,1],
-"class_m_thread_local_pointer.html":[0,1,114],
-"class_m_thread_local_pointer.html#a03b3a7ca615ba32ac8b44271cadcfad4":[0,1,114,5]
+"class_m_thread_current.html#a397cda7fd8887adc89febb8227f9a8ad":[0,1,113,0]
 };

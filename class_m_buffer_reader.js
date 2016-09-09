@@ -15,6 +15,8 @@ var class_m_buffer_reader =
     [ "GetTotalPtr", "class_m_buffer_reader.html#ace82e2b25b32d0bb2f612fa06b4ff6ec", null ],
     [ "GetTotalSize", "class_m_buffer_reader.html#a380e6dad69ad8f14f43a93a79137d182", null ],
     [ "IgnoreBytes", "class_m_buffer_reader.html#ac73bbdf78910579b0e1d2e2d269ce425", null ],
+    [ "Read", "class_m_buffer_reader.html#ad091d0ffc2fc3e5f922fe906511263bb", null ],
+    [ "Read", "class_m_buffer_reader.html#a66a0038453393772d9765a8e378f8a64", null ],
     [ "ReadBuffer", "class_m_buffer_reader.html#aa6140f2bd349c8b85e6bfc65123178eb", null ],
     [ "ReadBuffer", "class_m_buffer_reader.html#ae8291b85537bd9db42e6ab0606794cc3", null ],
     [ "ReadByte", "class_m_buffer_reader.html#aefee0ee6e5065b9d97be4451aab82753", null ],

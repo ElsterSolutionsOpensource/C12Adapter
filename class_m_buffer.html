@@ -152,6 +152,9 @@ const <a class="el" href="group___m_c_o_r_e.html#ga363125c7953be8fc668bee69228ef
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_buffer.html#aad0cf86d0d00702e799727f40fdd171e">Clear</a> ()</td></tr>
 <tr class="memdesc:aad0cf86d0d00702e799727f40fdd171e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Make buffer size equal to zero. <br /></td></tr>
 <tr class="separator:aad0cf86d0d00702e799727f40fdd171e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b3410e29429f90dd34f7c8bab635cce"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_buffer.html#a4b3410e29429f90dd34f7c8bab635cce">Assign</a> (unsigned size, char c)</td></tr>
+<tr class="memdesc:a4b3410e29429f90dd34f7c8bab635cce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assign the whole buffer with the given character of the given length.  <a href="#a4b3410e29429f90dd34f7c8bab635cce">More...</a><br /></td></tr>
+<tr class="separator:a4b3410e29429f90dd34f7c8bab635cce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae3c52215549126d14fd9347306ccc567"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_buffer.html#ae3c52215549126d14fd9347306ccc567">Assign</a> (const <a class="el" href="group___m_c_o_r_e.html#ga363125c7953be8fc668bee69228efe36">MByteString</a> &amp;data)</td></tr>
 <tr class="memdesc:ae3c52215549126d14fd9347306ccc567"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assign the whole buffer with the given data.  <a href="#ae3c52215549126d14fd9347306ccc567">More...</a><br /></td></tr>
 <tr class="separator:ae3c52215549126d14fd9347306ccc567"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -288,7 +291,7 @@ Protected Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_buffer.html#ae3c52215549126d14fd9347306ccc567">Assign(const MByteString&amp;)</a> - <a class="el" href="class_m_buffer.html#ae3c52215549126d14fd9347306ccc567" title="Assign the whole buffer with the given data. ">Assign</a> the whole buffer with the given data. </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_buffer.html#ae3c52215549126d14fd9347306ccc567">Assign(const MByteString&amp;)</a> - <a class="el" href="class_m_buffer.html#a4b3410e29429f90dd34f7c8bab635cce" title="Assign the whole buffer with the given character of the given length. ">Assign</a> the whole buffer with the given data. </dd></dl>
 
 </div>
 </div>
@@ -332,7 +335,7 @@ Protected Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_buffer.html#a7afea2c967403de968a67ee2c7532570">Assign(const char*, unsigned)</a> - <a class="el" href="class_m_buffer.html#ae3c52215549126d14fd9347306ccc567" title="Assign the whole buffer with the given data. ">Assign</a> the whole buffer with the given data. </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_buffer.html#a7afea2c967403de968a67ee2c7532570">Assign(const char*, unsigned)</a> - <a class="el" href="class_m_buffer.html#a4b3410e29429f90dd34f7c8bab635cce" title="Assign the whole buffer with the given character of the given length. ">Assign</a> the whole buffer with the given data. </dd></dl>
 
 </div>
 </div>
@@ -434,6 +437,49 @@ Protected Attributes</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">tag</td><td>BER object tag of the UID. </td></tr>
     <tr><td class="paramname">val</td><td>Value to add. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a4b3410e29429f90dd34f7c8bab635cce"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void MBuffer::Assign </td>
+          <td>(</td>
+          <td class="paramtype">unsigned&#160;</td>
+          <td class="paramname"><em>size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>c</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Assign the whole buffer with the given character of the given length. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">size</td><td>Count of characters to assign. </td></tr>
+    <tr><td class="paramname">c</td><td>Character value to assign to the buffer. </td></tr>
   </table>
   </dd>
 </dl>

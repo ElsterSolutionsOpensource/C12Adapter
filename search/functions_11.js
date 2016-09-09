@@ -2,7 +2,7 @@ var searchData=
 [
   ['rand',['Rand',['../class_m_math.html#a6b0c2e540ceec264963e5488657e8581',1,'MMath']]],
   ['randominrange',['RandomInRange',['../class_m_math.html#a90cc0867667055faa5eb107cd1c9fdf4',1,'MMath']]],
-  ['read',['Read',['../class_m_serial_port.html#aeb9b31c313b28df67017a5dcd4739216',1,'MSerialPort::Read()'],['../class_m_stream.html#a564535bfe6762868a06a82389b163fc8',1,'MStream::Read()'],['../class_m_xml_document.html#afe9e5894a72cd5ab8386bc33bfbc6456',1,'MXmlDocument::Read()']]],
+  ['read',['Read',['../class_m_buffer_reader.html#ad091d0ffc2fc3e5f922fe906511263bb',1,'MBufferReader::Read(T &amp;result)'],['../class_m_buffer_reader.html#a66a0038453393772d9765a8e378f8a64',1,'MBufferReader::Read()'],['../class_m_serial_port.html#aeb9b31c313b28df67017a5dcd4739216',1,'MSerialPort::Read()'],['../class_m_stream.html#a564535bfe6762868a06a82389b163fc8',1,'MStream::Read()'],['../class_m_xml_document.html#afe9e5894a72cd5ab8386bc33bfbc6456',1,'MXmlDocument::Read()']]],
   ['readall',['ReadAll',['../class_m_stream.html#a6e0114368db5f46a876cde46e1e875b5',1,'MStream']]],
   ['readallbytes',['ReadAllBytes',['../class_m_channel.html#aebf1fab92eb368655d0710863cc55fb8',1,'MChannel']]],
   ['readalllines',['ReadAllLines',['../class_m_stream.html#ab2a3ef537c84a47d83db2844f86f0d55',1,'MStream']]],

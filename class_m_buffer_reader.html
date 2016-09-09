@@ -167,6 +167,14 @@ unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="
 <tr class="memitem:aa6140f2bd349c8b85e6bfc65123178eb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_buffer_reader.html#aa6140f2bd349c8b85e6bfc65123178eb">ReadBuffer</a> (Muint8 *data, unsigned size)</td></tr>
 <tr class="memdesc:aa6140f2bd349c8b85e6bfc65123178eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read characters from the buffer into the given pointer and size.  <a href="#aa6140f2bd349c8b85e6bfc65123178eb">More...</a><br /></td></tr>
 <tr class="separator:aa6140f2bd349c8b85e6bfc65123178eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad091d0ffc2fc3e5f922fe906511263bb"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ad091d0ffc2fc3e5f922fe906511263bb"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_m_buffer_reader.html#ad091d0ffc2fc3e5f922fe906511263bb">Read</a> (T &amp;result)</td></tr>
+<tr class="memdesc:ad091d0ffc2fc3e5f922fe906511263bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read a typed value from the buffer, return the value.  <a href="#ad091d0ffc2fc3e5f922fe906511263bb">More...</a><br /></td></tr>
+<tr class="separator:ad091d0ffc2fc3e5f922fe906511263bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66a0038453393772d9765a8e378f8a64"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a66a0038453393772d9765a8e378f8a64"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_m_buffer_reader.html#a66a0038453393772d9765a8e378f8a64">Read</a> ()</td></tr>
+<tr class="memdesc:a66a0038453393772d9765a8e378f8a64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read a typed value from the buffer, return the value.  <a href="#a66a0038453393772d9765a8e378f8a64">More...</a><br /></td></tr>
+<tr class="separator:a66a0038453393772d9765a8e378f8a64"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae8291b85537bd9db42e6ab0606794cc3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_buffer_reader.html#ae8291b85537bd9db42e6ab0606794cc3">ReadBuffer</a> (char *data, unsigned size)</td></tr>
 <tr class="memdesc:ae8291b85537bd9db42e6ab0606794cc3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read bytes from the buffer into the given pointer and size.  <a href="#ae8291b85537bd9db42e6ab0606794cc3">More...</a><br /></td></tr>
 <tr class="separator:ae8291b85537bd9db42e6ab0606794cc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -516,6 +524,65 @@ unsigned&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="
 
 <p>Traverse the reader current position by ignoring the given number of bytes. </p>
 <p>Only debug level checks are present. </p>
+
+</div>
+</div>
+<a class="anchor" id="ad091d0ffc2fc3e5f922fe906511263bb"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void MBufferReader::Read </td>
+          <td>(</td>
+          <td class="paramtype">T &amp;&#160;</td>
+          <td class="paramname"><em>result</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Read a typed value from the buffer, return the value. </p>
+<p>If the type of such size does not fit in the remainder of the buffer, an exception is thrown.</p>
+<dl class="section return"><dt>Returns</dt><dd>Value of the given type as read from the buffer. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a66a0038453393772d9765a8e378f8a64"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">T MBufferReader::Read </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Read a typed value from the buffer, return the value. </p>
+<p>If the type of such size does not fit in the remainder of the buffer, an exception is thrown.</p>
+<dl class="section return"><dt>Returns</dt><dd>Value of the given type as read from the buffer. </dd></dl>
 
 </div>
 </div>

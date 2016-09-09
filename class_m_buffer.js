@@ -10,6 +10,7 @@ var class_m_buffer =
     [ "AppendIsoLength", "class_m_buffer.html#a5b046e0d5ab23d526e09fa145070127a", null ],
     [ "AppendUidIfPresent", "class_m_buffer.html#ae3885938cd4e9fc9d2b89e084680f417", null ],
     [ "AppendUnsigned", "class_m_buffer.html#a359c9e9cf7e92c28c8510a4ca988a42d", null ],
+    [ "Assign", "class_m_buffer.html#a4b3410e29429f90dd34f7c8bab635cce", null ],
     [ "Assign", "class_m_buffer.html#ae3c52215549126d14fd9347306ccc567", null ],
     [ "Assign", "class_m_buffer.html#a7afea2c967403de968a67ee2c7532570", null ],
     [ "Clear", "class_m_buffer.html#aad0cf86d0d00702e799727f40fdd171e", null ],

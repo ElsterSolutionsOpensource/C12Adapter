@@ -35,6 +35,7 @@ var searchData=
   ['divide',['Divide',['../class_m_time_span.html#af0365ed034f50931480025fb224179ab',1,'MTimeSpan']]],
   ['doaddref',['DoAddRef',['../class_m_shared_pointer.html#a02afe7c8ed301671740207f43c9223de',1,'MSharedPointer']]],
   ['dobuildcomplexservicename',['DoBuildComplexServiceName',['../class_m_protocol.html#ad5e1791d3e8f1439f0e4ba228cb50a24',1,'MProtocol']]],
+  ['dobuildpossiblynumericcomplexservicename',['DoBuildPossiblyNumericComplexServiceName',['../class_m_protocol.html#a171f571dc3c1a2f1e8f04f54d352c8c6',1,'MProtocol']]],
   ['doendsession',['DoEndSession',['../class_m_protocol.html#aa6362a4ce7b3e94cfb464f9f393cebe4',1,'MProtocol::DoEndSession()'],['../class_m_protocol_c1218.html#aa9f12222a06488962da5768fc970a83d',1,'MProtocolC1218::DoEndSession()']]],
   ['dofiledetach',['DoFileDetach',['../class_m_monitor_file.html#a2ab20995cdb8f08e1a79b3160d461e65',1,'MMonitorFile']]],
   ['dofinish',['DoFinish',['../class_m_monitor_file.html#a55940678de90d0299e8ec809a84ce806',1,'MMonitorFile']]],

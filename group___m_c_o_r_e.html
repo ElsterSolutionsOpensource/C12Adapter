@@ -511,6 +511,9 @@ Macros</h2></td></tr>
 <tr class="memitem:gac34fcce7f88129d8a27059001b86f707"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___m_c_o_r_e.html#gac34fcce7f88129d8a27059001b86f707">M_NO_DYNAMIC_LIBRARY</a>&#160;&#160;&#160;0</td></tr>
 <tr class="memdesc:gac34fcce7f88129d8a27059001b86f707"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag to enable or disable <a class="el" href="class_m_dynamic_library.html" title="Wrapper for shared object (dll) API. ">MDynamicLibrary</a> class - wrapper for shared object (dll) API.  <a href="#gac34fcce7f88129d8a27059001b86f707">More...</a><br /></td></tr>
 <tr class="separator:gac34fcce7f88129d8a27059001b86f707"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf8c70f0390fa930e9578100a19a70d8a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___m_c_o_r_e.html#gaf8c70f0390fa930e9578100a19a70d8a">M_NO_VERBOSE_ERROR_INFORMATION</a>&#160;&#160;&#160;0</td></tr>
+<tr class="memdesc:gaf8c70f0390fa930e9578100a19a70d8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">No verbose error information significantly decreases the size of the executable image.  <a href="#gaf8c70f0390fa930e9578100a19a70d8a">More...</a><br /></td></tr>
+<tr class="separator:gaf8c70f0390fa930e9578100a19a70d8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga7f742df62e1cbaad5420a0b056b8ccd8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___m_c_o_r_e.html#ga7f742df62e1cbaad5420a0b056b8ccd8">M_NO_XML</a>&#160;&#160;&#160;0</td></tr>
 <tr class="memdesc:ga7f742df62e1cbaad5420a0b056b8ccd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether or not to support XML classes.  <a href="#ga7f742df62e1cbaad5420a0b056b8ccd8">More...</a><br /></td></tr>
 <tr class="separator:ga7f742df62e1cbaad5420a0b056b8ccd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -655,7 +658,7 @@ Macros</h2></td></tr>
 <tr class="memdesc:ga9a75b0f26c093389c2dfb3b418b20817"><td class="mdescLeft">&#160;</td><td class="mdescRight">Third number in MeteringSDK version number. <br /></td></tr>
 <tr class="separator:ga9a75b0f26c093389c2dfb3b418b20817"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gad476cdb67a1206bfc5a7a296e2fa2560"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="gad476cdb67a1206bfc5a7a296e2fa2560"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___m_c_o_r_e.html#gad476cdb67a1206bfc5a7a296e2fa2560">M_SDK_VERSION_TAG</a>&#160;&#160;&#160;6969</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group___m_c_o_r_e.html#gad476cdb67a1206bfc5a7a296e2fa2560">M_SDK_VERSION_TAG</a>&#160;&#160;&#160;6991</td></tr>
 <tr class="memdesc:gad476cdb67a1206bfc5a7a296e2fa2560"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fourth number in MeteringSDK version number. <br /></td></tr>
 <tr class="separator:gad476cdb67a1206bfc5a7a296e2fa2560"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga961ef88ccdc345282ef311ac7aef0ef9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ga961ef88ccdc345282ef311ac7aef0ef9"></a>
@@ -4312,6 +4315,21 @@ const <a class="el" href="class_m_error_enum.html#ab02b61273b8cf77377deaef0854e3
 
 </div>
 </div>
+<a class="anchor" id="gaf8c70f0390fa930e9578100a19a70d8a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define M_NO_VERBOSE_ERROR_INFORMATION&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>No verbose error information significantly decreases the size of the executable image. </p>
+<p>Zero by default, error information is verbose. Defining it to one helps fit the executable image into a small memory device. </p>
+
+</div>
+</div>
 <a class="anchor" id="gafbc5bf588e6438930c0e1130b14093de"></a>
 <div class="memitem">
 <div class="memproto">
@@ -5021,7 +5039,7 @@ const <a class="el" href="class_m_error_enum.html#ab02b61273b8cf77377deaef0854e3
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">{# Property, <a class="code" href="class_m_variant.html#a8756bf657736cb48a0e46012354172fbaae5e54d615520fad1d1504c87a1bc27d">MVariant::VAR_STRING</a>, MClass::getMethodSignature, MClass::putMethodSignature, \</div><div class="line">       (MObject::Method)&amp;M ## Class::Get ## Property, NULL, (MObject::Method)&amp;M ## Class::Set ## Property, NULL, (<span class="keywordtype">void</span>*)(<a class="code" href="group___m_c_o_r_e.html#ga3a1550bdff57eb46be5e61d23a76c79b">MConstChars</a>)(defaultValue)},</div><div class="ttc" id="group___m_c_o_r_e_html_ga3a1550bdff57eb46be5e61d23a76c79b"><div class="ttname"><a href="group___m_c_o_r_e.html#ga3a1550bdff57eb46be5e61d23a76c79b">MConstChars</a></div><div class="ttdeci">const char * MConstChars</div><div class="ttdoc">Pointer to zero terminated constant character array. </div><div class="ttdef"><b>Definition:</b> MCOREDefs.h:937</div></div>
+<b>Value:</b><div class="fragment"><div class="line">{# Property, <a class="code" href="class_m_variant.html#a8756bf657736cb48a0e46012354172fbaae5e54d615520fad1d1504c87a1bc27d">MVariant::VAR_STRING</a>, MClass::getMethodSignature, MClass::putMethodSignature, \</div><div class="line">       (MObject::Method)&amp;M ## Class::Get ## Property, NULL, (MObject::Method)&amp;M ## Class::Set ## Property, NULL, (<span class="keywordtype">void</span>*)(<a class="code" href="group___m_c_o_r_e.html#ga3a1550bdff57eb46be5e61d23a76c79b">MConstChars</a>)(defaultValue)},</div><div class="ttc" id="group___m_c_o_r_e_html_ga3a1550bdff57eb46be5e61d23a76c79b"><div class="ttname"><a href="group___m_c_o_r_e.html#ga3a1550bdff57eb46be5e61d23a76c79b">MConstChars</a></div><div class="ttdeci">const char * MConstChars</div><div class="ttdoc">Pointer to zero terminated constant character array. </div><div class="ttdef"><b>Definition:</b> MCOREDefs.h:948</div></div>
 <div class="ttc" id="class_m_variant_html_a8756bf657736cb48a0e46012354172fbaae5e54d615520fad1d1504c87a1bc27d"><div class="ttname"><a href="class_m_variant.html#a8756bf657736cb48a0e46012354172fbaae5e54d615520fad1d1504c87a1bc27d">MVariant::VAR_STRING</a></div><div class="ttdoc">Variant has string value. </div><div class="ttdef"><b>Definition:</b> MVariant.h:34</div></div>
 </div><!-- fragment -->
 <p>Define the object string persistent property with default value. </p>

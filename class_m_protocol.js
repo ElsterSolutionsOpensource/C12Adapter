@@ -21,6 +21,7 @@ var class_m_protocol =
     [ "CreateRootProgressAction", "class_m_protocol.html#a5f1a1eeb1e19a54b2061e276d7248556", null ],
     [ "Disconnect", "class_m_protocol.html#a72c328afee944e7e977092b8da2887f8", null ],
     [ "DoBuildComplexServiceName", "class_m_protocol.html#ad5e1791d3e8f1439f0e4ba228cb50a24", null ],
+    [ "DoBuildPossiblyNumericComplexServiceName", "class_m_protocol.html#a171f571dc3c1a2f1e8f04f54d352c8c6", null ],
     [ "DoEndSession", "class_m_protocol.html#aa6362a4ce7b3e94cfb464f9f393cebe4", null ],
     [ "DoFunctionExecute", "class_m_protocol.html#a0ac4a0d11d9d0a767103abf7da4db49a", null ],
     [ "DoFunctionExecuteRequest", "class_m_protocol.html#a498d5dc0aecad07ce33fad05a051dffc", null ],
