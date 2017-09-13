@@ -32,6 +32,7 @@ var class_m_time_recurrent_yearly =
     [ "GetMonth", "class_m_time_recurrent_yearly.html#ab79f8ad78fe17214042eef87996920ac", null ],
     [ "GetOffsetType", "class_m_time_recurrent_yearly.html#a4048a83521498a7432074c452f818f5e", null ],
     [ "GetPertinent", "class_m_time_recurrent_yearly.html#a42263bbe03d54265ee02bfc9d63b0b94", null ],
+    [ "GetPertinentForYear", "class_m_time_recurrent_yearly.html#a394a5ed8b0f1991e2ab994ac15f53427", null ],
     [ "GetSeconds", "class_m_time_recurrent_yearly.html#ad339121bc985958630a6d23f81a2bfae", null ],
     [ "IsDayOfWeekIgnored", "class_m_time_recurrent_yearly.html#aab16dc4d33dd94bce3ff4fcc142db752", null ],
     [ "IsNull", "class_m_time_recurrent_yearly.html#aec6a50d613fee9f6ef39f22d4e267fe0", null ],

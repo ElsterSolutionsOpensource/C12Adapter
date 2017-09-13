@@ -167,7 +167,9 @@ Public Types</h2></td></tr>
 <br />
 &#160;&#160;<a class="el" href="class_m_e_c12_nok_response.html#a4836d39b780f3a31f6608f6819eee0aeac55f989808d2ff0e9e2b6afbddf2bea1">RESPONSE_SGNP</a> = 0x11, 
 <br />
-&#160;&#160;<a class="el" href="class_m_e_c12_nok_response.html#a4836d39b780f3a31f6608f6819eee0aeab35adbec2f8759318121a7445cdb8d46">RESPONSE_SGERR</a> = 0x12
+&#160;&#160;<a class="el" href="class_m_e_c12_nok_response.html#a4836d39b780f3a31f6608f6819eee0aeab35adbec2f8759318121a7445cdb8d46">RESPONSE_SGERR</a> = 0x12, 
+<br />
+&#160;&#160;<a class="el" href="class_m_e_c12_nok_response.html#a4836d39b780f3a31f6608f6819eee0aeaee4d7ac5a52fceced83c0f9f81a544ac">RESPONSE_NRY</a> = 0x1E
 <br />
  }<tr class="memdesc:a4836d39b780f3a31f6608f6819eee0ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Known response codes defined by a family of C12 protocols.  <a href="class_m_e_c12_nok_response.html#a4836d39b780f3a31f6608f6819eee0ae">More...</a><br /></td></tr>
 </td></tr>
@@ -721,6 +723,10 @@ static const <a class="el" href="class_m_class.html">MClass</a>&#160;</td><td cl
 <p>Segmentation error. </p>
 <p>Corresponds to <a class="el" href="class_m_exception.html#a645a78ecbde9817e152e4a224a5844c0">MException::GetCode</a> value <a class="el" href="class_m_error_enum.html#ab02b61273b8cf77377deaef0854e347fa3cd86abac7c676421ce41eec3d419949" title="Text: &quot;0x%02X Segmentation error (SGERR)&quot;. ">MErrorEnum::C12ServiceResponseSGERR</a></p>
 <p>Two parameters are sent with this exception: offset and size. They are both of the same size, from UINT8 to UINT24. </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="a4836d39b780f3a31f6608f6819eee0aeaee4d7ac5a52fceced83c0f9f81a544ac"></a>RESPONSE_NRY&#160;</td><td class="fielddoc">
+<p>Not registered to you, code not defined in C12 standard, specific to Elster. </p>
+<p>Corresponds to <a class="el" href="class_m_exception.html#a645a78ecbde9817e152e4a224a5844c0">MException::GetCode</a> value <a class="el" href="class_m_error_enum.html#ab02b61273b8cf77377deaef0854e347fa987c869e124e52e26ea73c242f6faf8a" title="Text: &quot;0x%02X Not registered to you (NRY)&quot;. ">MErrorEnum::C12ServiceResponseNRY</a> </p>
 </td></tr>
 </table>
 

@@ -344,6 +344,9 @@ virtual const char *&#160;</td><td class="memItemRight" valign="bottom"><a class
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a8fdbc283ca5c0a0f17f732d0101f9449"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_e_math.html#a8fdbc283ca5c0a0f17f732d0101f9449">ClearMathError</a> ()</td></tr>
+<tr class="memdesc:a8fdbc283ca5c0a0f17f732d0101f9449"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear the math related error.  <a href="#a8fdbc283ca5c0a0f17f732d0101f9449">More...</a><br /></td></tr>
+<tr class="separator:a8fdbc283ca5c0a0f17f732d0101f9449"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a637f9dd251d987180985f7e64b9bb9dd"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_e_math.html#a637f9dd251d987180985f7e64b9bb9dd">BeforeDoingMath</a> ()</td></tr>
 <tr class="memdesc:a637f9dd251d987180985f7e64b9bb9dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prepare for checking of math function parameters.  <a href="#a637f9dd251d987180985f7e64b9bb9dd">More...</a><br /></td></tr>
 <tr class="separator:a637f9dd251d987180985f7e64b9bb9dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -599,13 +602,40 @@ static const <a class="el" href="class_m_class.html">MClass</a>&#160;</td><td cl
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 <p>Prepare for checking of math function parameters. </p>
-<p>This has to be called before executing any math related operation. Operating system and compiler dependent implementation will clear the flags responsible for math error checking, so the mathematical call can be performed. </p>
+<p>This has to be called before executing any math related operation. Operating system and compiler dependent implementation will clear the flags responsible for math error checking, so the mathematical call can be performed.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_e_math.html#a8fdbc283ca5c0a0f17f732d0101f9449">ClearMathError</a> - underlying implementation of is call. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a8fdbc283ca5c0a0f17f732d0101f9449"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void MEMath::ClearMathError </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Clear the math related error. </p>
+<p>Operating system and compiler dependent implementation will clear the flags responsible for math error checking, so the mathematical call can be performed. </p>
 
 </div>
 </div>

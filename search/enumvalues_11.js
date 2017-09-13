@@ -1,11 +1,19 @@
 var searchData=
 [
-  ['weekdayfriday',['WeekdayFriday',['../class_m_time.html#a383d9a3217f08a639a3b55aaa762a42ca8799bbdf294604e20451bb34402a9ebf',1,'MTime']]],
-  ['weekdaymonday',['WeekdayMonday',['../class_m_time.html#a383d9a3217f08a639a3b55aaa762a42caeee64f94cb8d3708636a755d70b663d5',1,'MTime']]],
-  ['weekdaysaturday',['WeekdaySaturday',['../class_m_time.html#a383d9a3217f08a639a3b55aaa762a42ca2606790563fdefa16a645bc44b344657',1,'MTime']]],
-  ['weekdaysunday',['WeekdaySunday',['../class_m_time.html#a383d9a3217f08a639a3b55aaa762a42ca884e1d2d2c21b3040993325e6e8bd602',1,'MTime']]],
-  ['weekdaythursday',['WeekdayThursday',['../class_m_time.html#a383d9a3217f08a639a3b55aaa762a42ca7439046e720c7db979b38f2d6452216e',1,'MTime']]],
-  ['weekdaytuesday',['WeekdayTuesday',['../class_m_time.html#a383d9a3217f08a639a3b55aaa762a42ca1ab229f170cc39847d5bb810df370953',1,'MTime']]],
-  ['weekdaywednesday',['WeekdayWednesday',['../class_m_time.html#a383d9a3217f08a639a3b55aaa762a42cac543fab957a4de8afda81264271202f6',1,'MTime']]],
-  ['write_5fservice_5foverhead',['WRITE_SERVICE_OVERHEAD',['../class_m_protocol_c12.html#ab1b6db7136fb0112a71d300490bb5dc9a6e702878fd0384ba6715e15c73ca9d4c',1,'MProtocolC12']]]
+  ['var_5fbool',['VAR_BOOL',['../class_m_variant.html#a8756bf657736cb48a0e46012354172fba8bc00b670a68d47750b994b6a9781eab',1,'MVariant']]],
+  ['var_5fbyte',['VAR_BYTE',['../class_m_variant.html#a8756bf657736cb48a0e46012354172fba74ba28367c7f304ead25ea8c3abb0e1f',1,'MVariant']]],
+  ['var_5fbyte_5fstring',['VAR_BYTE_STRING',['../class_m_variant.html#a8756bf657736cb48a0e46012354172fba8ad6ed215c522ff8a7fd91df3cddeb94',1,'MVariant']]],
+  ['var_5fchar',['VAR_CHAR',['../class_m_variant.html#a8756bf657736cb48a0e46012354172fbafc0efef59e124f99353c8c2b741ccc93',1,'MVariant']]],
+  ['var_5fdouble',['VAR_DOUBLE',['../class_m_variant.html#a8756bf657736cb48a0e46012354172fba053cdbd4c8d0876bd861d9518a576b02',1,'MVariant']]],
+  ['var_5fempty',['VAR_EMPTY',['../class_m_variant.html#a8756bf657736cb48a0e46012354172fba3155ed3e3de66143efd2f31fe1bb00c7',1,'MVariant']]],
+  ['var_5fint',['VAR_INT',['../class_m_variant.html#a8756bf657736cb48a0e46012354172fbae996a7ccdb59d1df196bda97683315c0',1,'MVariant']]],
+  ['var_5fmap',['VAR_MAP',['../class_m_variant.html#a8756bf657736cb48a0e46012354172fba87ba3709865371ba4f8f0ea3c9f7976d',1,'MVariant']]],
+  ['var_5fobject',['VAR_OBJECT',['../class_m_variant.html#a8756bf657736cb48a0e46012354172fba7b28d181de01f302ea11c922a58fd862',1,'MVariant']]],
+  ['var_5fobject_5fembedded',['VAR_OBJECT_EMBEDDED',['../class_m_variant.html#a8756bf657736cb48a0e46012354172fba3c99a1bdf4bbcdaa793c9ea40907481e',1,'MVariant']]],
+  ['var_5fstring',['VAR_STRING',['../class_m_variant.html#a8756bf657736cb48a0e46012354172fbaae5e54d615520fad1d1504c87a1bc27d',1,'MVariant']]],
+  ['var_5fstring_5fcollection',['VAR_STRING_COLLECTION',['../class_m_variant.html#a8756bf657736cb48a0e46012354172fba93ad8e71f79e6f827053bd4033cb3a14',1,'MVariant']]],
+  ['var_5fuint',['VAR_UINT',['../class_m_variant.html#a8756bf657736cb48a0e46012354172fbae105635606f4ad9cd5c021b874352c6f',1,'MVariant']]],
+  ['var_5fvariant',['VAR_VARIANT',['../class_m_variant.html#a8756bf657736cb48a0e46012354172fbae2fbb184f69387f36806ce51db7734f9',1,'MVariant']]],
+  ['var_5fvariant_5fcollection',['VAR_VARIANT_COLLECTION',['../class_m_variant.html#a8756bf657736cb48a0e46012354172fbab7e417ad36403c6d8f73379ee9fb8a2f',1,'MVariant']]],
+  ['versionmaximumnumberofentries',['VersionMaximumNumberOfEntries',['../class_m_version.html#add5ca3b6e744d7c708095f672365cbf5ab76bb779832e1b5b27a4d0ff31d91019',1,'MVersion']]]
 ];

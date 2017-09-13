@@ -296,17 +296,17 @@ class M_CLASS&#160;</td><td class="memItemRight" valign="bottom"><b>MObject</b><
   <table class="params">
     <tr><td class="paramname">name</td><td>Name of the static service (method) to call.</td></tr>
     <tr><td class="paramname">params</td><td>Parameters to pass to the static service.<ul>
-<li>To pass no parameters, supply an empty <a class="el" href="class_m_variant.html" title="Variant data type, where the particular value type is dynamically determined at runtime. ">MVariant</a> as parameter, or more conveniently, use <a class="el" href="class_m_class.html#a18380993a70bf745e13dc3cb1ccf5ba1">Call0</a>.</li>
-<li>To pass a single non-empty non-collection <a class="el" href="class_m_variant.html" title="Variant data type, where the particular value type is dynamically determined at runtime. ">MVariant</a> using <a class="el" href="class_m_class.html#a7beb7866d9e1d242039414681b47e19b">Call</a>, give it directly as param, or use <a class="el" href="class_m_class.html#a5cf8054566dc5e8e7f7d366caadced8e">Call1</a>.</li>
-<li>To pass a single empty <a class="el" href="class_m_variant.html" title="Variant data type, where the particular value type is dynamically determined at runtime. ">MVariant</a> as parameter, enclose it into a collection, or use <a class="el" href="class_m_class.html#a5cf8054566dc5e8e7f7d366caadced8e">Call1</a>.</li>
-<li>To pass a couple of parameters, supply them in a collection of <a class="el" href="class_m_variant.html" title="Variant data type, where the particular value type is dynamically determined at runtime. ">MVariant</a> values.</li>
-<li>To pass a single parameter, which is a collection of <a class="el" href="class_m_variant.html" title="Variant data type, where the particular value type is dynamically determined at runtime. ">MVariant</a> value, enclose it into another collection.</li>
+<li>To pass no parameters, supply an empty <a class="el" href="class_m_variant.html" title="Variant data type, where a particular value type is dynamically determined at runtime. ">MVariant</a> as parameter, or more conveniently, use <a class="el" href="class_m_class.html#a18380993a70bf745e13dc3cb1ccf5ba1">Call0</a>.</li>
+<li>To pass a single non-empty non-collection <a class="el" href="class_m_variant.html" title="Variant data type, where a particular value type is dynamically determined at runtime. ">MVariant</a> using <a class="el" href="class_m_class.html#a7beb7866d9e1d242039414681b47e19b">Call</a>, give it directly as param, or use <a class="el" href="class_m_class.html#a5cf8054566dc5e8e7f7d366caadced8e">Call1</a>.</li>
+<li>To pass a single empty <a class="el" href="class_m_variant.html" title="Variant data type, where a particular value type is dynamically determined at runtime. ">MVariant</a> as parameter, enclose it into a collection, or use <a class="el" href="class_m_class.html#a5cf8054566dc5e8e7f7d366caadced8e">Call1</a>.</li>
+<li>To pass a couple of parameters, supply them in a collection of <a class="el" href="class_m_variant.html" title="Variant data type, where a particular value type is dynamically determined at runtime. ">MVariant</a> values.</li>
+<li>To pass a single parameter, which is a collection of <a class="el" href="class_m_variant.html" title="Variant data type, where a particular value type is dynamically determined at runtime. ">MVariant</a> value, enclose it into another collection.</li>
 </ul>
 </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Returns whatever the reflected service/method with the given name returns. If the called service has no return value, the returned <a class="el" href="class_m_variant.html" title="Variant data type, where the particular value type is dynamically determined at runtime. ">MVariant</a> is empty.</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns whatever the reflected service/method with the given name returns. If the called service has no return value, the returned <a class="el" href="class_m_variant.html" title="Variant data type, where a particular value type is dynamically determined at runtime. ">MVariant</a> is empty.</dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_class.html#a18380993a70bf745e13dc3cb1ccf5ba1" title="Call the static service of the object with no parameters. ">Call0</a> - calling service without parameters </dd>
 <dd>
 <a class="el" href="class_m_class.html#a5cf8054566dc5e8e7f7d366caadced8e" title="Call the static service of the object with one parameter. ">Call1</a> - calling service with one parameter </dd>
@@ -342,8 +342,8 @@ class M_CLASS&#160;</td><td class="memItemRight" valign="bottom"><b>MObject</b><
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Returns whatever the reflected service/method with the given name returns. If the called service has no return value, the returned <a class="el" href="class_m_variant.html" title="Variant data type, where the particular value type is dynamically determined at runtime. ">MVariant</a> is empty.</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_class.html#a7beb7866d9e1d242039414681b47e19b" title="Call the static service of the class with parameters, given as variant. ">Call</a> - generic call of the service with parameters given as generic <a class="el" href="class_m_variant.html" title="Variant data type, where the particular value type is dynamically determined at runtime. ">MVariant</a> </dd>
+<dl class="section return"><dt>Returns</dt><dd>Returns whatever the reflected service/method with the given name returns. If the called service has no return value, the returned <a class="el" href="class_m_variant.html" title="Variant data type, where a particular value type is dynamically determined at runtime. ">MVariant</a> is empty.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_class.html#a7beb7866d9e1d242039414681b47e19b" title="Call the static service of the class with parameters, given as variant. ">Call</a> - generic call of the service with parameters given as generic <a class="el" href="class_m_variant.html" title="Variant data type, where a particular value type is dynamically determined at runtime. ">MVariant</a> </dd>
 <dd>
 <a class="el" href="class_m_class.html#a5cf8054566dc5e8e7f7d366caadced8e" title="Call the static service of the object with one parameter. ">Call1</a> - calling service with one parameter </dd>
 <dd>
@@ -389,8 +389,8 @@ class M_CLASS&#160;</td><td class="memItemRight" valign="bottom"><b>MObject</b><
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Returns whatever the reflected service/method with the given name returns. If the called service has no return value, the returned <a class="el" href="class_m_variant.html" title="Variant data type, where the particular value type is dynamically determined at runtime. ">MVariant</a> is empty.</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_class.html#a7beb7866d9e1d242039414681b47e19b" title="Call the static service of the class with parameters, given as variant. ">Call</a> - generic call of the service with parameters given as generic <a class="el" href="class_m_variant.html" title="Variant data type, where the particular value type is dynamically determined at runtime. ">MVariant</a> </dd>
+<dl class="section return"><dt>Returns</dt><dd>Returns whatever the reflected service/method with the given name returns. If the called service has no return value, the returned <a class="el" href="class_m_variant.html" title="Variant data type, where a particular value type is dynamically determined at runtime. ">MVariant</a> is empty.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_class.html#a7beb7866d9e1d242039414681b47e19b" title="Call the static service of the class with parameters, given as variant. ">Call</a> - generic call of the service with parameters given as generic <a class="el" href="class_m_variant.html" title="Variant data type, where a particular value type is dynamically determined at runtime. ">MVariant</a> </dd>
 <dd>
 <a class="el" href="class_m_class.html#a18380993a70bf745e13dc3cb1ccf5ba1" title="Call the static service of the object with no parameters. ">Call0</a> - calling service with no parameters </dd>
 <dd>
@@ -443,8 +443,8 @@ class M_CLASS&#160;</td><td class="memItemRight" valign="bottom"><b>MObject</b><
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Returns whatever the reflected service/method with the given name returns. If the called service has no return value, the returned <a class="el" href="class_m_variant.html" title="Variant data type, where the particular value type is dynamically determined at runtime. ">MVariant</a> is empty.</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_class.html#a7beb7866d9e1d242039414681b47e19b" title="Call the static service of the class with parameters, given as variant. ">Call</a> - generic call of the service with parameters given as generic <a class="el" href="class_m_variant.html" title="Variant data type, where the particular value type is dynamically determined at runtime. ">MVariant</a> </dd>
+<dl class="section return"><dt>Returns</dt><dd>Returns whatever the reflected service/method with the given name returns. If the called service has no return value, the returned <a class="el" href="class_m_variant.html" title="Variant data type, where a particular value type is dynamically determined at runtime. ">MVariant</a> is empty.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_class.html#a7beb7866d9e1d242039414681b47e19b" title="Call the static service of the class with parameters, given as variant. ">Call</a> - generic call of the service with parameters given as generic <a class="el" href="class_m_variant.html" title="Variant data type, where a particular value type is dynamically determined at runtime. ">MVariant</a> </dd>
 <dd>
 <a class="el" href="class_m_class.html#a18380993a70bf745e13dc3cb1ccf5ba1" title="Call the static service of the object with no parameters. ">Call0</a> - calling service with no parameters </dd>
 <dd>
@@ -490,8 +490,8 @@ class M_CLASS&#160;</td><td class="memItemRight" valign="bottom"><b>MObject</b><
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Returns whatever the reflected service/method with the given name returns. If the called service has no return value, the returned <a class="el" href="class_m_variant.html" title="Variant data type, where the particular value type is dynamically determined at runtime. ">MVariant</a> is empty.</dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_class.html#a7beb7866d9e1d242039414681b47e19b" title="Call the static service of the class with parameters, given as variant. ">Call</a> - generic call of the service with parameters given as generic <a class="el" href="class_m_variant.html" title="Variant data type, where the particular value type is dynamically determined at runtime. ">MVariant</a> </dd>
+<dl class="section return"><dt>Returns</dt><dd>Returns whatever the reflected service/method with the given name returns. If the called service has no return value, the returned <a class="el" href="class_m_variant.html" title="Variant data type, where a particular value type is dynamically determined at runtime. ">MVariant</a> is empty.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_class.html#a7beb7866d9e1d242039414681b47e19b" title="Call the static service of the class with parameters, given as variant. ">Call</a> - generic call of the service with parameters given as generic <a class="el" href="class_m_variant.html" title="Variant data type, where a particular value type is dynamically determined at runtime. ">MVariant</a> </dd>
 <dd>
 <a class="el" href="class_m_class.html#a18380993a70bf745e13dc3cb1ccf5ba1" title="Call the static service of the object with no parameters. ">Call0</a> - calling service with no parameters </dd>
 <dd>

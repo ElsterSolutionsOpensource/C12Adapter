@@ -23,7 +23,7 @@ var searchData=
   ['number_5fof_5fsubexpressions',['NUMBER_OF_SUBEXPRESSIONS',['../class_m_regexp.html#afda8db68f80ee3407284f748544c1f2ea0a5750d90ae1dcb925125213a302cfc1',1,'MRegexp']]],
   ['numberoutofrange',['NumberOutOfRange',['../class_m_error_enum.html#ab02b61273b8cf77377deaef0854e347fab5c3661de960daa42f41fe491a7c8491',1,'MErrorEnum']]],
   ['numbertohexbyte',['NumberToHexByte',['../class_m_utilities.html#a23b557b2b7f9de451b8fc5a3d688a8bd',1,'MUtilities']]],
-  ['numbertohexchar',['NumberToHexChar',['../class_m_utilities.html#ad98d24ad812ad214cb9afcff9ba21e11',1,'MUtilities']]],
+  ['numbertohexchar',['NumberToHexChar',['../class_m_utilities.html#a63e8bf8195a9631a1c139635c6c0c87c',1,'MUtilities']]],
   ['numericbuffertobytes',['NumericBufferToBytes',['../class_m_utilities.html#a1d520c25bdd6b6d38e94a3f9d1285130',1,'MUtilities']]],
   ['numericstringtobytes',['NumericStringToBytes',['../class_m_utilities.html#ad5a8e8ec8cf7ba047296978c39e513d8',1,'MUtilities']]]
 ];

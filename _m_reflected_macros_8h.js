@@ -1,6 +1,7 @@
 var _m_reflected_macros_8h =
 [
     [ "M_CLASS_ENUMERATION", "group___m_c_o_r_e.html#gae04142ed2f3afc0880cbeb08476a6755", null ],
+    [ "M_CLASS_ENUMERATION_UINT", "group___m_c_o_r_e.html#ga9acb892f75078d770781ca1dfcf9f2ce", null ],
     [ "M_CLASS_FRIEND_SERVICE", "group___m_c_o_r_e.html#ga996482c00ee21bdb8f6d51fc4b1391f6", null ],
     [ "M_CLASS_FRIEND_SERVICE_OVERLOADED", "group___m_c_o_r_e.html#ga56bbfcce4c665b555e0b5b7e6a20a3d7", null ],
     [ "M_CLASS_PROPERTY_BOOL", "group___m_c_o_r_e.html#ga8080c6330136a935eb90f2be3adb7526", null ],

@@ -34,7 +34,7 @@ var class_m_protocol_c12 =
     [ "Logon", "class_m_protocol_c12.html#a4ca4e7b5d3ae6da1b160b520b2b1728e", null ],
     [ "ReceiveServiceByte", "class_m_protocol_c12.html#a03c52d5cf88970f3d7b9af93329c4afd", null ],
     [ "ReceiveServiceBytes", "class_m_protocol_c12.html#ad6b92f863b59fcac9b865a39b41a66dd", null ],
-    [ "ReceiveServiceCode", "class_m_protocol_c12.html#a80e449f54f53f85ec3e86026d1f2f874", null ],
+    [ "ReceiveServiceCode", "class_m_protocol_c12.html#aa40270465e55b828ff4484e3e27cea30", null ],
     [ "ReceiveServiceRemainingBytes", "class_m_protocol_c12.html#a5602d36bc610094386de8122b4d9f05f", null ],
     [ "ReceiveServiceUInt", "class_m_protocol_c12.html#adf12a9c3e16baf235353f449be5b77ab", null ],
     [ "Security", "class_m_protocol_c12.html#ad6fde8c7dc31790774993c984ea7b403", null ],

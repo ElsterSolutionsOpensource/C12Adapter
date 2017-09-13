@@ -171,17 +171,17 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a330d82a247925e1550a4563e2e09550d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disconnect brings down the data link, hangs up the phone, powers down the probe, etc.  <a href="#a330d82a247925e1550a4563e2e09550d">More...</a><br /></td></tr>
 <tr class="separator:a330d82a247925e1550a4563e2e09550d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a731c83d6eea5106729ec5ec45c38c404"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_channel.html#a731c83d6eea5106729ec5ec45c38c404">WriteBytes</a> (const <a class="el" href="group___m_c_o_r_e.html#ga363125c7953be8fc668bee69228efe36">MByteString</a> &amp;buffer)</td></tr>
-<tr class="memdesc:a731c83d6eea5106729ec5ec45c38c404"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the data to the channel, and returns when the last character has been sent by the software (but hardware might still need to do some work).  <a href="#a731c83d6eea5106729ec5ec45c38c404">More...</a><br /></td></tr>
+<tr class="memdesc:a731c83d6eea5106729ec5ec45c38c404"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the data to the channel, and returns when the last byte has been sent by the software.  <a href="#a731c83d6eea5106729ec5ec45c38c404">More...</a><br /></td></tr>
 <tr class="separator:a731c83d6eea5106729ec5ec45c38c404"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a17fd506dfc0edbd79a0f15d2723f9838"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_channel.html#a17fd506dfc0edbd79a0f15d2723f9838">WriteChar</a> (char buf)</td></tr>
-<tr class="memdesc:a17fd506dfc0edbd79a0f15d2723f9838"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the character to the channel, and returns when it has been sent.  <a href="#a17fd506dfc0edbd79a0f15d2723f9838">More...</a><br /></td></tr>
-<tr class="separator:a17fd506dfc0edbd79a0f15d2723f9838"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b88439ade55836f2e71b94080855460"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_channel.html#a2b88439ade55836f2e71b94080855460">WriteByte</a> (Muint8 b)</td></tr>
+<tr class="memdesc:a2b88439ade55836f2e71b94080855460"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a byte to the channel, and returns when it has been sent.  <a href="#a2b88439ade55836f2e71b94080855460">More...</a><br /></td></tr>
+<tr class="separator:a2b88439ade55836f2e71b94080855460"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3a06321f08963d1711b16433ffdad70b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_channel.html#a3a06321f08963d1711b16433ffdad70b">WriteBuffer</a> (const char *buf, unsigned len)</td></tr>
 <tr class="memdesc:a3a06321f08963d1711b16433ffdad70b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the data buffer to the channel, and returns when the last character has been sent by the software (but hardware might still need to do some work).  <a href="#a3a06321f08963d1711b16433ffdad70b">More...</a><br /></td></tr>
 <tr class="separator:a3a06321f08963d1711b16433ffdad70b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a83d5c72702850edd207309992bd3fb77"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_channel.html#a83d5c72702850edd207309992bd3fb77">ReadChar</a> ()</td></tr>
-<tr class="memdesc:a83d5c72702850edd207309992bd3fb77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read single character from the channel.  <a href="#a83d5c72702850edd207309992bd3fb77">More...</a><br /></td></tr>
-<tr class="separator:a83d5c72702850edd207309992bd3fb77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac043ee5beb8c292428f6cf2a987c27a4"><td class="memItemLeft" align="right" valign="top">Muint8&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_channel.html#ac043ee5beb8c292428f6cf2a987c27a4">ReadByte</a> ()</td></tr>
+<tr class="memdesc:ac043ee5beb8c292428f6cf2a987c27a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read a single byte from the channel.  <a href="#ac043ee5beb8c292428f6cf2a987c27a4">More...</a><br /></td></tr>
+<tr class="separator:ac043ee5beb8c292428f6cf2a987c27a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8095a7465924403cbad1efec5b192e6b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_channel.html#a8095a7465924403cbad1efec5b192e6b">ReadBuffer</a> (char *buf, unsigned numberToRead)</td></tr>
 <tr class="memdesc:a8095a7465924403cbad1efec5b192e6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read an exact number of characters from the channel.  <a href="#a8095a7465924403cbad1efec5b192e6b">More...</a><br /></td></tr>
 <tr class="separator:a8095a7465924403cbad1efec5b192e6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1263,6 +1263,24 @@ Available to <a class="el" href="class_m_channel_socket.html" title="MChannelSoc
 
 </div>
 </div>
+<a class="anchor" id="ac043ee5beb8c292428f6cf2a987c27a4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Muint8 MChannel::ReadByte </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Read a single byte from the channel. </p>
+<dl class="section pre"><dt>Precondition</dt><dd>The channel is open, otherwise the operation fails with an exception. The character is received within timeout period. Otherwise the timeout exception is thrown. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a805c7fd6339478512fa700f5a4b943aa"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1350,24 +1368,6 @@ Available to <a class="el" href="class_m_channel_socket.html" title="MChannelSoc
 <p>Read bytes from the channel until a specified sequence is read. </p>
 <dl class="section pre"><dt>Precondition</dt><dd>The channel is open, otherwise the operation fails with an exception.</dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_channel.html#a4e2c74fb3add32214e7a25958ddd2825">GetIntercharacterTimeout</a> - the number of milliseconds to wait for the byte to arrive before throwing a timeout exception. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a83d5c72702850edd207309992bd3fb77"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">char MChannel::ReadChar </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Read single character from the channel. </p>
-<dl class="section pre"><dt>Precondition</dt><dd>The channel is open, otherwise the operation fails with an exception. The character is received within timeout period. Otherwise the timeout exception is thrown. </dd></dl>
 
 </div>
 </div>
@@ -1800,6 +1800,34 @@ Available to <a class="el" href="class_m_channel_socket.html" title="MChannelSoc
 
 </div>
 </div>
+<a class="anchor" id="a2b88439ade55836f2e71b94080855460"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void MChannel::WriteByte </td>
+          <td>(</td>
+          <td class="paramtype">Muint8&#160;</td>
+          <td class="paramname"><em>b</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Writes a byte to the channel, and returns when it has been sent. </p>
+<p>After the method returns the hardware might still need to do some work to actually send the buffer. To ensure that all data is sent, use FlushOutputBuffer.</p>
+<p>Unusual variations of the protocol can be simulated by sending data to the meter using WriteBytes, then reading the meter's response with ReadBytes. Invalid packets or noise data can also be sent to the meter for test purposes.</p>
+<p>Just like Connect or Disconnect, WriteBytes is synchronous and is not queued. It should be used carefully when mixed with <a class="el" href="class_m_protocol.html" title="Abstraction of a communication protocol. ">MProtocol</a>'s Queue Methods, which are transmitted to the end device only when QCommit is called.</p>
+<dl class="section pre"><dt>Precondition</dt><dd>The channel is open, otherwise the operation fails with an exception.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">b</td><td>Byte to write to the channel. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a731c83d6eea5106729ec5ec45c38c404"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1814,8 +1842,8 @@ Available to <a class="el" href="class_m_channel_socket.html" title="MChannelSoc
       </table>
 </div><div class="memdoc">
 
-<p>Writes the data to the channel, and returns when the last character has been sent by the software (but hardware might still need to do some work). </p>
-<p>To ensure that all data is sent, use FlushOutputBuffer.</p>
+<p>Writes the data to the channel, and returns when the last byte has been sent by the software. </p>
+<p>After the method returns the hardware might still need to do some work to actually send the buffer. To ensure that all data is sent, use FlushOutputBuffer.</p>
 <p>Unusual variations of the protocol can be simulated by sending data to the meter using WriteBytes, then reading the meter's response with ReadBytes. Invalid packets or noise data can also be sent to the meter for test purposes.</p>
 <p>Just like Connect or Disconnect, WriteBytes is synchronous and is not queued. It should be used carefully when mixed with <a class="el" href="class_m_protocol.html" title="Abstraction of a communication protocol. ">MProtocol</a>'s Queue Methods, which are transmitted to the end device only when QCommit is called.</p>
 <dl class="section pre"><dt>Precondition</dt><dd>The channel is open, otherwise the operation fails with an exception.</dd></dl>
@@ -1825,25 +1853,6 @@ Available to <a class="el" href="class_m_channel_socket.html" title="MChannelSoc
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
-<a class="anchor" id="a17fd506dfc0edbd79a0f15d2723f9838"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void MChannel::WriteChar </td>
-          <td>(</td>
-          <td class="paramtype">char&#160;</td>
-          <td class="paramname"><em>buf</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Writes the character to the channel, and returns when it has been sent. </p>
-<dl class="section pre"><dt>Precondition</dt><dd>The channel is open, otherwise the operation fails with an exception. The buffer is initialized correctly. </dd></dl>
 
 </div>
 </div>

@@ -39,7 +39,6 @@ var searchData=
   ['default_5finitial_5fcapacity',['DEFAULT_INITIAL_CAPACITY',['../class_m_buffer_circular.html#a3340008f21a4ea76e77ffc207796637fa3bd2ee5eaa17ca75f9001e6f2597a67d',1,'MBufferCircular']]],
   ['defaultlinewidth',['DefaultLineWidth',['../class_m_str.html#a22e6c308f1916170cf8e00be8df3f2cbaab57acd02ef909ee7e45a879d2594c7a',1,'MStr']]],
   ['deletefile',['DeleteFile',['../class_m_monitor_file.html#a3f49a73a0576dd947663b427ace3125f',1,'MMonitorFile::DeleteFile()'],['../class_m_utilities.html#a83a5609440aca67b27d7d7390c1bb1fe',1,'MUtilities::DeleteFile()']]],
-  ['destroy',['Destroy',['../class_m_thread.html#a597b3a68de771af4c8a236e5e7c91139',1,'MThread']]],
   ['destroysecuredata',['DestroySecureData',['../class_m_aes.html#a8bd3f045399a3d28ffb94c0200619d57',1,'MAes::DestroySecureData(MByteString &amp;data)'],['../class_m_aes.html#a7f27d6d250a3e74be2bc6e65b56ac979',1,'MAes::DestroySecureData(MByteStringVector &amp;data)'],['../class_m_aes.html#ab208d6c6bd1a1dce05d2354dbfb11a75',1,'MAes::DestroySecureData(Muint8 *data, unsigned size)'],['../class_m_aes.html#ab6021ec9cd5bc04986c4b5b947861662',1,'MAes::DestroySecureData(char *data, unsigned size)']]],
   ['detach',['Detach',['../class_m_monitor.html#ac88e59ca7b590cc3aff5719cc124cdb0',1,'MMonitor::Detach()'],['../class_m_monitor_file.html#a24656e3fb6840a8a347a0aa7795ec64f',1,'MMonitorFile::Detach()']]],
   ['devicereportedbadpacketcrc',['DeviceReportedBadPacketCRC',['../class_m_error_enum.html#ab02b61273b8cf77377deaef0854e347faff4ee4784876f5ac6d05c684ecea5424',1,'MErrorEnum']]],

@@ -19,7 +19,8 @@ var class_m_e_c12_nok_response =
       [ "RESPONSE_RQTL", "class_m_e_c12_nok_response.html#a4836d39b780f3a31f6608f6819eee0aea30101724d8eb2571c1b073c9e3efa9e4", null ],
       [ "RESPONSE_RSTL", "class_m_e_c12_nok_response.html#a4836d39b780f3a31f6608f6819eee0aea9a1a0c7fda3f88f310f4971042b12002", null ],
       [ "RESPONSE_SGNP", "class_m_e_c12_nok_response.html#a4836d39b780f3a31f6608f6819eee0aeac55f989808d2ff0e9e2b6afbddf2bea1", null ],
-      [ "RESPONSE_SGERR", "class_m_e_c12_nok_response.html#a4836d39b780f3a31f6608f6819eee0aeab35adbec2f8759318121a7445cdb8d46", null ]
+      [ "RESPONSE_SGERR", "class_m_e_c12_nok_response.html#a4836d39b780f3a31f6608f6819eee0aeab35adbec2f8759318121a7445cdb8d46", null ],
+      [ "RESPONSE_NRY", "class_m_e_c12_nok_response.html#a4836d39b780f3a31f6608f6819eee0aeaee4d7ac5a52fceced83c0f9f81a544ac", null ]
     ] ],
     [ "MEC12NokResponse", "class_m_e_c12_nok_response.html#aa6a52fce1c377618ef26c8cf372305d0", null ],
     [ "MEC12NokResponse", "class_m_e_c12_nok_response.html#a25ce078eebf059d38b8d13b7f9a0c21e", null ],

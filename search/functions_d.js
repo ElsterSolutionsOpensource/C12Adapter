@@ -6,7 +6,7 @@ var searchData=
   ['newlocalbytearray',['NewLocalByteArray',['../class_m_java_env.html#a2baac009502bcd0e2246c18002b535df',1,'MJavaEnv::NewLocalByteArray(int size)'],['../class_m_java_env.html#a5c45377d9cd43ca349b6f1e1ed6e7643',1,'MJavaEnv::NewLocalByteArray(const char *buff, int size)']]],
   ['newlocalstringutf',['NewLocalStringUTF',['../class_m_java_env.html#a52c56817ebfad43f675b17ca6ab82ee7',1,'MJavaEnv::NewLocalStringUTF(const char *str)'],['../class_m_java_env.html#a090b4d59d8e3a55c16c22a59962d4b82',1,'MJavaEnv::NewLocalStringUTF(const MStdString &amp;str)']]],
   ['numbertohexbyte',['NumberToHexByte',['../class_m_utilities.html#a23b557b2b7f9de451b8fc5a3d688a8bd',1,'MUtilities']]],
-  ['numbertohexchar',['NumberToHexChar',['../class_m_utilities.html#ad98d24ad812ad214cb9afcff9ba21e11',1,'MUtilities']]],
+  ['numbertohexchar',['NumberToHexChar',['../class_m_utilities.html#a63e8bf8195a9631a1c139635c6c0c87c',1,'MUtilities']]],
   ['numericbuffertobytes',['NumericBufferToBytes',['../class_m_utilities.html#a1d520c25bdd6b6d38e94a3f9d1285130',1,'MUtilities']]],
   ['numericstringtobytes',['NumericStringToBytes',['../class_m_utilities.html#ad5a8e8ec8cf7ba047296978c39e513d8',1,'MUtilities']]]
 ];

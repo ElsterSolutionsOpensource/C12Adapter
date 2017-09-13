@@ -208,8 +208,11 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memdesc:ae69851042900e9de571f5564c206f589"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set all the parameters of the recurrent yearly time in a single call.  <a href="#ae69851042900e9de571f5564c206f589">More...</a><br /></td></tr>
 <tr class="separator:ae69851042900e9de571f5564c206f589"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a42263bbe03d54265ee02bfc9d63b0b94"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="class_m_time.html">MTime</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_time_recurrent_yearly.html#a42263bbe03d54265ee02bfc9d63b0b94">GetPertinent</a> (const <a class="el" href="class_m_time.html">MTime</a> &amp;) const </td></tr>
-<tr class="memdesc:a42263bbe03d54265ee02bfc9d63b0b94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the event pertinent to a given time period.  <a href="#a42263bbe03d54265ee02bfc9d63b0b94">More...</a><br /></td></tr>
+<tr class="memdesc:a42263bbe03d54265ee02bfc9d63b0b94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the time event pertinent to a given time period.  <a href="#a42263bbe03d54265ee02bfc9d63b0b94">More...</a><br /></td></tr>
 <tr class="separator:a42263bbe03d54265ee02bfc9d63b0b94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a394a5ed8b0f1991e2ab994ac15f53427"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_m_time.html">MTime</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_time_recurrent_yearly.html#a394a5ed8b0f1991e2ab994ac15f53427">GetPertinentForYear</a> (int year) const </td></tr>
+<tr class="memdesc:a394a5ed8b0f1991e2ab994ac15f53427"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the time event pertinent to a given year.  <a href="#a394a5ed8b0f1991e2ab994ac15f53427">More...</a><br /></td></tr>
+<tr class="separator:a394a5ed8b0f1991e2ab994ac15f53427"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f87c22a12a26dff21ec52a915823a77"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_time_recurrent_yearly.html#a8f87c22a12a26dff21ec52a915823a77">CheckIsValid</a> () const </td></tr>
 <tr class="memdesc:a8f87c22a12a26dff21ec52a915823a77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether the recurrent date is valid, and whether all its values are within their proper range.  <a href="#a8f87c22a12a26dff21ec52a915823a77">More...</a><br /></td></tr>
 <tr class="separator:a8f87c22a12a26dff21ec52a915823a77"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -830,11 +833,32 @@ static const <a class="el" href="class_m_class.html">MClass</a>&#160;</td><td cl
 </table>
 </div><div class="memdoc">
 
-<p>Get the event pertinent to a given time period. </p>
+<p>Get the time event pertinent to a given time period. </p>
 <p>The returned time will use a given time as a hint to return the moment, which represents this recurrent event. The time given is expected to be in UTC or Standard, and the the recurring moment will be in the correspondent UTC or standard time.</p>
-<p>For example, in case of a yearly recurring event, a given time is used to extract a year, for which the event shall be returned. </p>
+<p>For example, in case of a yearly recurring event, a given time is used to extract a year, for which the event shall be returned.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_time_recurrent_yearly.html#a394a5ed8b0f1991e2ab994ac15f53427">GetPertinentForYear</a> - method more specific for yearly recurrent time that only takes a year </dd></dl>
 
 <p>Implements <a class="el" href="class_m_time_recurrent.html#a9fa112ff1149280a0bcc3b43d1ec1f86">MTimeRecurrent</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a394a5ed8b0f1991e2ab994ac15f53427"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_m_time.html">MTime</a> MTimeRecurrentYearly::GetPertinentForYear </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>year</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the time event pertinent to a given year. </p>
+<p>The time given is expected to be in UTC or Standard, and the the recurring moment will be in the correspondent UTC or standard time.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="class_m_time_recurrent_yearly.html#a42263bbe03d54265ee02bfc9d63b0b94">GetPertinent</a> - generic method that fits behaviors of all recurrent time types </dd></dl>
 
 </div>
 </div>

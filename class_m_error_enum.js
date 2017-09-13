@@ -31,6 +31,7 @@ var class_m_error_enum =
       [ "C12ServiceResponseRSTL", "class_m_error_enum.html#ab02b61273b8cf77377deaef0854e347fac9e48fd90c63ec8cb8191c1f756ea4b6", null ],
       [ "C12ServiceResponseSGNP", "class_m_error_enum.html#ab02b61273b8cf77377deaef0854e347fad001e22fc35c46d6fd0a6aee0d7475bd", null ],
       [ "C12ServiceResponseSGERR", "class_m_error_enum.html#ab02b61273b8cf77377deaef0854e347fa3cd86abac7c676421ce41eec3d419949", null ],
+      [ "C12ServiceResponseNRY", "class_m_error_enum.html#ab02b61273b8cf77377deaef0854e347fa987c869e124e52e26ea73c242f6faf8a", null ],
       [ "NoSuchProperty", "class_m_error_enum.html#ab02b61273b8cf77377deaef0854e347fa95ad120f1facf6729347043c0fd4820d", null ],
       [ "InvalidChecksum", "class_m_error_enum.html#ab02b61273b8cf77377deaef0854e347fa6c5ccd84299a70e7885fce8149d9582f", null ],
       [ "ChannelReadTimeout", "class_m_error_enum.html#ab02b61273b8cf77377deaef0854e347fa8477cd0a1c514f9b6dce2de233d9afd4", null ],

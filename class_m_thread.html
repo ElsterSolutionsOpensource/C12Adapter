@@ -130,12 +130,10 @@ Inheritance diagram for MThread:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a09d185667f27f25e322a0bf0212b755d"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_thread.html#a09d185667f27f25e322a0bf0212b755d">~MThread</a> ()</td></tr>
-<tr class="memdesc:a09d185667f27f25e322a0bf0212b755d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor, destroys the thread object.  <a href="#a09d185667f27f25e322a0bf0212b755d">More...</a><br /></td></tr>
+<tr class="memitem:a09d185667f27f25e322a0bf0212b755d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a09d185667f27f25e322a0bf0212b755d"></a>
+virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_thread.html#a09d185667f27f25e322a0bf0212b755d">~MThread</a> ()</td></tr>
+<tr class="memdesc:a09d185667f27f25e322a0bf0212b755d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor, destroys the thread object. <br /></td></tr>
 <tr class="separator:a09d185667f27f25e322a0bf0212b755d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a597b3a68de771af4c8a236e5e7c91139"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_thread.html#a597b3a68de771af4c8a236e5e7c91139">Destroy</a> ()</td></tr>
-<tr class="memdesc:a597b3a68de771af4c8a236e5e7c91139"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys a thread object.  <a href="#a597b3a68de771af4c8a236e5e7c91139">More...</a><br /></td></tr>
-<tr class="separator:a597b3a68de771af4c8a236e5e7c91139"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae73d492612376f511f61a69f00169bd8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae73d492612376f511f61a69f00169bd8"></a>
 unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_thread.html#ae73d492612376f511f61a69f00169bd8">GetThreadId</a> () const </td></tr>
 <tr class="memdesc:ae73d492612376f511f61a69f00169bd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get thread identifier, a number that is guaranteed to be unique per thread. <br /></td></tr>
@@ -195,52 +193,6 @@ volatile InternalHandleType&#160;</td><td class="memItemRight" valign="bottom"><
 
 <p>Operating system dependent internal handle type. </p>
 <p>Thread protected constructor. Its behavior is specific to the concrete object which inherits from it. </p>
-
-</div>
-</div>
-<a class="anchor" id="a09d185667f27f25e322a0bf0212b755d"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual MThread::~MThread </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Destructor, destroys the thread object. </p>
-<p>Its behavior is specific to the concrete object which inherits from it.</p>
-<dl class="section pre"><dt>Precondition</dt><dd>This object inherits preconditions from children. This concrete object does not have any preconditions. </dd></dl>
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a597b3a68de771af4c8a236e5e7c91139"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void MThread::Destroy </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Destroys a thread object. </p>
-<p>It is not the case that Destroy will lead to termination of the thread. </p>
 
 </div>
 </div>

@@ -127,7 +127,7 @@ var searchData=
   ['m_5flastpageindex',['m_lastPageIndex',['../struct_m_log_file_1_1_log_file_page.html#a56cde050a7bfcecb5bda3fd57fb9bd67',1,'MLogFile::LogFilePage']]],
   ['m_5flength',['m_length',['../struct_m_log_file_1_1_packet_header.html#aec73a804ad0e75943962381213f66501',1,'MLogFile::PacketHeader']]],
   ['m_5fmessage',['m_message',['../class_m_exception.html#a8465e7f2c05f09f6db4aa88974dac23e',1,'MException']]],
-  ['m_5fname',['m_name',['../class_m_property_definition.html#a9615540aa522d809a4b95046baabab23',1,'MPropertyDefinition::m_name()'],['../class_m_service_definition.html#a343f72d1b4cf656bc925a4f4da12442e',1,'MServiceDefinition::m_name()']]],
+  ['m_5fname',['m_name',['../class_m_property_definition.html#aa918a1df3274e8fac906fc4cbd0b3276',1,'MPropertyDefinition::m_name()'],['../class_m_service_definition.html#ad7b3d9dfbd83441500b87b400cc0c9fc',1,'MServiceDefinition::m_name()']]],
   ['m_5fobjectmethod',['m_objectMethod',['../class_m_service_definition.html#a48a7e7c9939c02a9a9b3f2a1f3e8e5a3',1,'MServiceDefinition']]],
   ['m_5foverloadednumberofparameters',['m_overloadedNumberOfParameters',['../class_m_service_definition.html#a3cdb113bb5caa96c8c9a521a9dae34fb',1,'MServiceDefinition']]],
   ['m_5fpagecounter',['m_pageCounter',['../struct_m_log_file_1_1_log_file_page.html#ab08ac2992713f54e15f0ded63daa8a4c',1,'MLogFile::LogFilePage']]],

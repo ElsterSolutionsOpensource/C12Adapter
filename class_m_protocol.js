@@ -97,7 +97,7 @@ var class_m_protocol =
     [ "QTableWrite", "class_m_protocol.html#a71251f6cbda5a70e1072e4cf78fcea5c", null ],
     [ "QTableWritePartial", "class_m_protocol.html#a1568dcd0e0af9c30043f9179fc527632", null ],
     [ "QWriteToMonitor", "class_m_protocol.html#a7480f82e6934a8535760cf325af5bb35", null ],
-    [ "ReadStartByte", "class_m_protocol.html#ae0a325cbf5b8a9df536131dc7aeeb2fb", null ],
+    [ "ReadStartByte", "class_m_protocol.html#afc54b21cfb84791a8e1d9132b33b8a64", null ],
     [ "ResetCounts", "class_m_protocol.html#adb502e0b67a62153f70d818e0fec138a", null ],
     [ "SetChannel", "class_m_protocol.html#a742a84d23ad0eb514b1438877caaf546", null ],
     [ "SetIsChannelOwned", "class_m_protocol.html#a4244ee4024965a0ccdc5e374a4f4ce4b", null ],
@@ -126,7 +126,7 @@ var class_m_protocol =
     [ "MProtocolC1222", "class_m_protocol.html#ac5b44173cc5f793da66a89e5ebce46fc", null ],
     [ "MProtocolServiceWrapper", "class_m_protocol.html#afff68429611bf6076c6200a8e5884e2e", null ],
     [ "MProtocolThread", "class_m_protocol.html#af613209882d237ef936ef2e102817421", null ],
-    [ "MServerProtocolC12", "class_m_protocol.html#a8f95e1a82033e9c58ba38e167fab777e", null ],
+    [ "MServerProtocol", "class_m_protocol.html#adcd74eb912592221f5a8c0ec33c3fdc7", null ],
     [ "MServerProtocolC1222", "class_m_protocol.html#a40be0a5015d0d05154cbe4e5ca89f55f", null ],
     [ "MSessionKeeper", "class_m_protocol.html#a91c58778234a55c031e69bd4654929fc", null ]
 ];
