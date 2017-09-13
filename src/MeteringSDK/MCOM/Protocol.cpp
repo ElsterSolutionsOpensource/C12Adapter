@@ -441,7 +441,7 @@ void MProtocol::DoBuildPossiblyNumericComplexServiceName(MChars fullServiceName,
 bool MProtocol::QNeedToCommit() const
 {
    if ( m_backgroundCommunicationIsProgressing && m_protocolThread != NULL )
-      return m_protocolThread->IsFinished();
+      return !m_protocolThread->IsRunning();
    return false;
 }
 
@@ -452,7 +452,7 @@ bool MProtocol::QIsDone()
    if ( QNeedToCommit() )
    {
       QCommit(false); // synchronize, possibly throw an exception...
-      M_ASSERT(!m_backgroundCommunicationIsProgressing || (m_protocolThread == NULL || m_protocolThread->IsFinished()));
+      M_ASSERT(!m_backgroundCommunicationIsProgressing || (m_protocolThread == NULL || !m_protocolThread->IsRunning()));
       return true;
    }
    return !m_backgroundCommunicationIsProgressing;
@@ -1213,9 +1213,9 @@ void MProtocol::DoTryPasswordOrPasswordList()
 #endif
 }
 
-char MProtocol::ReadStartByte(const MByteString& validStartBytes, unsigned trafficTimeout)
+Muint8 MProtocol::ReadStartByte(const MByteString& validStartBytes, unsigned trafficTimeout)
 {
-    return DoReadStartCharacter(validStartBytes.c_str(), trafficTimeout, UINT_MAX);
+    return static_cast<Muint8>(DoReadStartCharacter(validStartBytes.c_str(), trafficTimeout, UINT_MAX));
 }
 
 char MProtocol::DoReadStartCharacter(const char* validStartCharacters, unsigned trafficTimeout, unsigned lastTurnAroundSize)
@@ -1312,16 +1312,17 @@ void MProtocol::DoTableWritePartial(MCOMNumberConstRef, const MByteString&, int)
 
 void MProtocol::DoFunctionExecute(MCOMNumberConstRef number)
 {
-   MByteString response;  // this implementation fits majority of cases, put in the root class
-   DoFunctionExecuteRequestResponse(number, MByteString(), response);
-   M_ASSERT(response.empty()); // debug only. The use is questionable, but it is not an error
+   DoFunctionExecuteRequest(number, MByteString());
 }
 
 void MProtocol::DoFunctionExecuteRequest(MCOMNumberConstRef number, const MByteString& request)
 {
    MByteString response;  // this implementation fits majority of cases, put in the root class
    DoFunctionExecuteRequestResponse(number, request, response);
-   M_ASSERT(response.empty());  // debug only. The use is questionable, but it is not an error
+   #if !M_NO_MCOM_MONITOR
+      if ( !response.empty() )
+         WriteToMonitor(MGetStdString("Unexpected function response, %u bytes", static_cast<unsigned>(response.size())));
+   #endif
 }
 
 void MProtocol::DoFunctionExecuteResponse(MCOMNumberConstRef number, MByteString& response)

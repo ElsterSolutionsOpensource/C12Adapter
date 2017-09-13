@@ -99,17 +99,17 @@
          return M_NEW MStreamFile(str, flags, sharing);
       }
 
-#endif
+   #endif
 
 M_START_PROPERTIES(StreamFile)
-   M_CLASS_ENUMERATION              (StreamFile, FlagCreate)
-   M_CLASS_ENUMERATION              (StreamFile, FlagNoReplace)
-   M_CLASS_ENUMERATION              (StreamFile, FlagTruncate)
-   M_CLASS_ENUMERATION              (StreamFile, FlagAppend)
-   M_CLASS_ENUMERATION              (StreamFile, SharingAllowNone)
-   M_CLASS_ENUMERATION              (StreamFile, SharingAllowRead)
-   M_CLASS_ENUMERATION              (StreamFile, SharingAllowWrite)
-   M_CLASS_ENUMERATION              (StreamFile, SharingAllowAll)
+   M_CLASS_ENUMERATION_UINT         (StreamFile, FlagCreate)
+   M_CLASS_ENUMERATION_UINT         (StreamFile, FlagNoReplace)
+   M_CLASS_ENUMERATION_UINT         (StreamFile, FlagTruncate)
+   M_CLASS_ENUMERATION_UINT         (StreamFile, FlagAppend)
+   M_CLASS_ENUMERATION_UINT         (StreamFile, SharingAllowNone)
+   M_CLASS_ENUMERATION_UINT         (StreamFile, SharingAllowRead)
+   M_CLASS_ENUMERATION_UINT         (StreamFile, SharingAllowWrite)
+   M_CLASS_ENUMERATION_UINT         (StreamFile, SharingAllowAll)
 #if !M_NO_CONSOLE
    M_CLASS_PROPERTY_READONLY_OBJECT (StreamFile, StdIn)
    M_CLASS_PROPERTY_READONLY_OBJECT (StreamFile, StdOut)

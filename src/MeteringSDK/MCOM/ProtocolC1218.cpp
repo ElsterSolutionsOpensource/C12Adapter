@@ -33,7 +33,7 @@ M_START_METHODS(ProtocolC1218)
    M_OBJECT_SERVICE(ProtocolC1218, Identify,    ST_X)
    M_OBJECT_SERVICE(ProtocolC1218, Negotiate,   ST_X)
    M_OBJECT_SERVICE(ProtocolC1218, ServerStart, ST_X)
-   M_OBJECT_SERVICE(ProtocolC1218, ServerEnd,   ST_X_byte_constMByteStringA)
+   M_OBJECT_SERVICE(ProtocolC1218, ServerEnd,   ST_X_char_constMByteStringA)
 M_END_CLASS_TYPED(ProtocolC1218, ProtocolC12, "PROTOCOL_ANSI_C12_18")
 
    const char CHAR_START = '\xEE';
@@ -258,7 +258,6 @@ void MProtocolC1218::Negotiate()
    }
 }
 
-
 #if !M_NO_MCOM_IDENTIFY_METER
 MStdString MProtocolC1218::DoIdentifyMeter(bool sessionIsStarted, TableRawDataVector* tablesRead)
 {
@@ -290,7 +289,7 @@ void MProtocolC1218::DoStartSession()
    m_negotiatedPropertiesPresent = false;
    if ( m_wakeUpSharedOpticalPort )
    {
-      m_channel->WriteChar('\x55'); 
+      m_channel->WriteByte('\x55');
       MUtilities::Sleep(50);
    }
 
@@ -537,7 +536,7 @@ bool MProtocolC1218::DoApplicationLayerWrite(char command, const MByteString* da
                   }
                   wrapper.NotifyRetry(M_OPT_STR("Received packet when the acknowledgement is expected"));
                   Sleep(m_turnAroundDelay);
-                  m_channel->WriteChar(CHAR_ACK); // <ACK> anyway, even if the CRC is bad. Don't care for duplicate packet
+                  m_channel->WriteByte(CHAR_ACK); // <ACK> anyway, even if the CRC is bad. Don't care for duplicate packet
                }
                if ( ch == CHAR_ACK )
                   break; // successfully received 06
@@ -640,7 +639,7 @@ MEC12NokResponse::ResponseCode MProtocolC1218::DoFullApplicationLayerRead()
                   {
                      // don't send ack only if there is no multipacket transmission and incomingDataFormat is not null; this is 12.21 specification
                      if ( (ctrl & 0x80) != 0 || m_incomingDataFormat == 0 )
-                        m_channel->WriteChar(CHAR_ACK);
+                        m_channel->WriteByte(CHAR_ACK);
                      wrapper.NotifyRetry(M_OPT_STR("Received packet toggle bit failure"));
                      if ( retries == 0 )
                         MCOMException::Throw(M_CODE_STR(M_ERR_DID_NOT_GET_A_VALID_BYTE_AMONG_D1_GARBAGE_BYTES_LAST_ONE_HAD_CODE_X2, M_I("Received packet toggle bit failure")));
@@ -671,7 +670,7 @@ MEC12NokResponse::ResponseCode MProtocolC1218::DoFullApplicationLayerRead()
 
             Sleep(m_turnAroundDelay);
             if ( m_channel->IsConnected() )
-               m_channel->WriteChar(CHAR_NAK); // <NAK>, the packet was not received
+               m_channel->WriteByte(CHAR_NAK); // <NAK>, the packet was not received
 
             wrapper.NotifyOrThrowRetry(ex, retries);
          }
@@ -680,7 +679,7 @@ MEC12NokResponse::ResponseCode MProtocolC1218::DoFullApplicationLayerRead()
       m_incomingIdentity = (unsigned)(Muint8)packet[1]; //identity is the first byte of incoming packet according to 12.21
 
       if ( (ctrl & 0x80) != 0 || m_incomingDataFormat == 0 ) // don't send ack only if there is no multipacket transmission and incomingDataFormat is not null; this is 12.21 specification
-         m_channel->WriteChar(CHAR_ACK); // <ACK>, as the CRC is correct
+         m_channel->WriteByte(CHAR_ACK); // <ACK>, as the CRC is correct
 
       sequenceNumber = (unsigned)(unsigned char)packet[3];
       if ( !retryAppLayer ) // otherwise accept anything but do nothing
@@ -768,7 +767,7 @@ void MProtocolC1218::ServerStart()
       responseCode = DoFullApplicationLayerRead();
       if ( responseCode != (MEC12NokResponse::ResponseCode)-1 )
          break;
-      m_channel->WriteChar(CHAR_ACK);
+      m_channel->WriteByte(CHAR_ACK);
    }
 }
 

@@ -58,7 +58,7 @@ public: // Services (property getters and setters):
 
    /// Checks whether the monitor host is a local address or not.
    ///
-   bool IsAddressLocal();
+   bool IsAddressLocal() const;
 
    ///@{
    /// Client IP address or host name.

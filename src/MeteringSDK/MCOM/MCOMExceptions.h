@@ -311,6 +311,12 @@ public: // Types:
       ///
       RESPONSE_SGERR = 0x12,
 
+
+      /// Not registered to you, code not defined in C12 standard, specific to Elster.
+      ///
+      /// Corresponds to \refprop{MException::GetCode,Exception::Code} value MErrorEnum::C12ServiceResponseNRY
+      ///
+      RESPONSE_NRY = 0x1E
    };
 
 /// \cond SHOW_INTERNAL
@@ -626,7 +632,7 @@ public:
    ///     MEC12BadProcedureResult::Throw(code);
    /// \endcode
    ///
-   static void M_NORETURN_FUNC Throw(ResultCodeEnum resultCode);
+   static M_NORETURN_FUNC void Throw(ResultCodeEnum resultCode);
 
 private: // Attributes:
 

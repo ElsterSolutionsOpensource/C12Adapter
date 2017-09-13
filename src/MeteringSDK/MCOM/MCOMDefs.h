@@ -25,7 +25,7 @@
    #error "MCOM: Support for RAS Dial is only available on Windows for interactive GUI based applications"
 #endif
 
-/// Whether or not to include MCOM Monitor feature
+/// Whether or not to include MCOM Monitor feature.
 ///
 #ifndef M_NO_MCOM_MONITOR
    #define M_NO_MCOM_MONITOR (M_NO_SOCKETS || M_NO_TIME)
@@ -33,16 +33,16 @@
    #error "MCOM: Support for the communications monitor requires support for the sockets and time"
 #endif
 
-/// Whether or not clients should use shared pointer to access to MCOM Monitor
+/// Whether or not clients should use shared pointer to access to MCOM Monitor.
 ///
 #ifndef M_NO_MCOM_MONITOR_SHARED_POINTER
    #define M_NO_MCOM_MONITOR_SHARED_POINTER M_NO_MCOM_MONITOR
 #endif
 
-/// Whether or not to include syslog based monitor
+/// Whether or not to include syslog based monitor.
 ///
 /// By default syslog monitor is enabled for UNIX-like operating systems
-/// when the generic monitor is enabled (\ref M_NO_MCOM_MONITOR = 0)
+/// when the generic monitor is enabled (\ref M_NO_MCOM_MONITOR = 0).
 ///
 #ifndef M_NO_MCOM_MONITOR_SYSLOG
    #ifdef M_DOXYGEN
@@ -54,7 +54,7 @@
    #endif
 #endif
 
-/// Whether or not to include MCOM ChannelSocket feature, include by default
+/// Whether or not to include MCOM ChannelSocket feature, included by default.
 ///
 #ifndef M_NO_MCOM_CHANNEL_SOCKET
    #define M_NO_MCOM_CHANNEL_SOCKET M_NO_SOCKETS
@@ -62,7 +62,7 @@
    #error "MCOM: Socket channel needs sockets support to be enabled"
 #endif
 
-/// Whether or not to include MCOM ChannelSocket feature, include by default
+/// Whether or not to include MCOM ChannelSocket feature, included by default.
 ///
 #ifndef M_NO_MCOM_CHANNEL_SOCKET_UDP
    #define M_NO_MCOM_CHANNEL_SOCKET_UDP M_NO_SOCKETS_UDP
@@ -70,7 +70,7 @@
    #error "MCOM: UDP Socket channel needs UDP sockets support to be enabled"
 #endif
 
-/// Whether or not to include special handling of FIN that is arriving to a socket channel from a peer socket
+/// Whether or not to include special handling of FIN that is arriving to a socket channel from a peer socket.
 ///
 #ifndef M_NO_MCOM_HANDLE_PEER_DISCONNECT
    #define M_NO_MCOM_HANDLE_PEER_DISCONNECT (M_NO_MCOM_CHANNEL_SOCKET || M_NO_MULTITHREADING)
@@ -79,21 +79,21 @@
 #endif
 
 
-/// Whether or not to include MCOM ChannelModem feature, include by default.
+/// Whether or not to include MCOM ChannelModem feature, included by default.
 ///
 #ifndef M_NO_MCOM_CHANNEL_MODEM
    #define M_NO_MCOM_CHANNEL_MODEM (M_NO_TIME || M_NO_SERIAL_PORT)
 #elif !M_NO_MCOM_CHANNEL_MODEM && (M_NO_TIME || M_NO_SERIAL_PORT)
-   #error "MCOM: Modem channel needs time support to be enabled"
+   #error "MCOM: Modem channel needs time and serial port enabled"
 #endif
 
-/// Whether or not to include ANSI C12.18 protocol support, class MProtocolC1218
+/// Whether or not to include ANSI C12.18 protocol support, class MProtocolC1218.
 ///
 #ifndef M_NO_MCOM_PROTOCOL_C1218
    #define M_NO_MCOM_PROTOCOL_C1218 0
 #endif
 
-/// Whether or not to include ANSI C12.21 protocol support, class MProtocolC1221
+/// Whether or not to include ANSI C12.21 protocol support, class MProtocolC1221.
 ///
 #ifndef M_NO_MCOM_PROTOCOL_C1221
    #define M_NO_MCOM_PROTOCOL_C1221 0
@@ -101,7 +101,7 @@
    #error "MCOM: Either disable C12.21, or enable C12.18 protocol"
 #endif
 
-/// Whether or not to include ANSI C12.22 protocol support, class MProtocolC1222
+/// Whether or not to include ANSI C12.22 protocol support, class MProtocolC1222.
 ///
 #ifndef M_NO_MCOM_PROTOCOL_C1222
    #define M_NO_MCOM_PROTOCOL_C1222 0
@@ -115,7 +115,7 @@
    #error "MCOM: MCOMFactory needs reflection support to be enabled"
 #endif
 
-/// Whether or not to include Command queue feature (Q commands). Include by default.
+/// Whether or not to include Command queue feature (Q commands). Included by default.
 ///
 #ifndef M_NO_MCOM_COMMAND_QUEUE
    #define M_NO_MCOM_COMMAND_QUEUE 0
@@ -123,7 +123,7 @@
    #error "MCOM: ANSI C12.22 implementation requires command queue support"
 #endif
 
-/// Whether or not to have protocol threading capability. Include by default.
+/// Whether or not to have protocol threading capability. Included by default.
 /// One can have it only if command queue and multithreading are both enabled.
 ///
 #ifndef M_NO_MCOM_PROTOCOL_THREAD
@@ -144,7 +144,7 @@
 
 /// Whether or not to have protocol method Protocol.IdentifyMeter and related.
 ///
-/// By default, include Protocol.IdentifyMeter
+/// By default, include Protocol.IdentifyMeter.
 ///
 #ifndef M_NO_MCOM_IDENTIFY_METER
    #define M_NO_MCOM_IDENTIFY_METER 0
@@ -157,7 +157,7 @@
 /// exportable and importable from/to DLL in Windows.
 /// Only non-template classes are defined MCOM_CLASS since
 /// only those can be meaningfully shared.
-/// Redefine this stuff for various modes of MS Windows
+/// Redefine this stuff for various modes of MS Windows.
 ///
 #if M_DYNAMIC != 0
    #if MCOM_PROJECT_COMPILING

@@ -124,7 +124,7 @@ void MCOMObject::DoMakeMCOMPropertyNames(MStdStringVector& vec)
             result += *iit;
          }
          else
-            result += (MChar)m_toupper(*iit);
+            result += (char)m_toupper(*iit);
       }
       (*it) = result;
    }

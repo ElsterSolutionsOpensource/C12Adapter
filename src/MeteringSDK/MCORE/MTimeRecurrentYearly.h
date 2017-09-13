@@ -282,7 +282,8 @@ public: // Services:
       m_value.m_field.m_filler     = 0; // has to be assigned for the equality comparison to work correctly
    }
 
-   /// Get the event pertinent to a given time period.
+   /// Get the time event pertinent to a given time period.
+   ///
    /// The returned time will use a given time as a hint to return the moment,
    /// which represents this recurrent event.
    /// The time given is expected to be in UTC or Standard, and the
@@ -291,7 +292,18 @@ public: // Services:
    /// For example, in case of a yearly recurring event, a given time is used to
    /// extract a year, for which the event shall be returned.
    ///
+   /// \see \ref GetPertinentForYear - method more specific for yearly recurrent time that only takes a year
+   ///
    virtual MTime GetPertinent(const MTime&) const;
+
+   /// Get the time event pertinent to a given year.
+   ///
+   /// The time given is expected to be in UTC or Standard, and the
+   /// the recurring moment will be in the correspondent UTC or standard time.
+   ///
+   /// \see \ref GetPertinent - generic method that fits behaviors of all recurrent time types
+   ///
+   MTime GetPertinentForYear(int year) const;
 
    /// Checks whether the recurrent date is valid, and whether all its values are within their proper range.
    ///

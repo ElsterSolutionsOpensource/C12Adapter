@@ -8,11 +8,11 @@
 #include "MAesEax.h"
 
 M_START_PROPERTIES(Stream)
-   M_CLASS_ENUMERATION                  (Stream, FlagReadOnly)
-   M_CLASS_ENUMERATION                  (Stream, FlagWriteOnly)
-   M_CLASS_ENUMERATION                  (Stream, FlagReadWrite)
-   M_CLASS_ENUMERATION                  (Stream, FlagText)
-   M_CLASS_ENUMERATION                  (Stream, FlagBuffered)
+   M_CLASS_ENUMERATION_UINT             (Stream, FlagReadOnly)
+   M_CLASS_ENUMERATION_UINT             (Stream, FlagWriteOnly)
+   M_CLASS_ENUMERATION_UINT             (Stream, FlagReadWrite)
+   M_CLASS_ENUMERATION_UINT             (Stream, FlagText)
+   M_CLASS_ENUMERATION_UINT             (Stream, FlagBuffered)
    M_OBJECT_PROPERTY_READONLY_STRING    (Stream, Name,           ST_MStdString_X)
    M_OBJECT_PROPERTY_UINT               (Stream, Position)
    M_OBJECT_PROPERTY_UINT               (Stream, Size)
@@ -459,9 +459,9 @@ int MStream::ReadRawInt()
    return DoReadRaw<int>(*this);
 }
 
-MChar MStream::ReadRawChar()
+char MStream::ReadRawChar()
 {
-   return DoReadRaw<MChar>(*this);
+   return DoReadRaw<char>(*this);
 }
 
 bool MStream::ReadRawBool()
@@ -546,9 +546,9 @@ void MStream::WriteRawInt(int value)
    DoWriteRaw<int>(*this, value);
 }
 
-void MStream::WriteRawChar(MChar value)
+void MStream::WriteRawChar(char value)
 {
-   DoWriteRaw<MChar>(*this, value);
+   DoWriteRaw<char>(*this, value);
 }
 
 void MStream::WriteRawBool(bool value)
@@ -578,9 +578,9 @@ void MStream::WriteRawString(const MStdString& value)
    if ( value.size() > 0 )
 #ifdef M_USE_USTL
       WriteBytes(reinterpret_cast<const char*>(const_cast<MStdString&>(value).data()),
-                 M_64_CAST(unsigned, value.size() * sizeof(MChar)));
+                 M_64_CAST(unsigned, value.size() * sizeof(char)));
 #else
-      WriteBytes(reinterpret_cast<const char*>(value.data()), M_64_CAST(unsigned, value.size() * sizeof(MChar)));
+      WriteBytes(reinterpret_cast<const char*>(value.data()), M_64_CAST(unsigned, value.size() * sizeof(char)));
 #endif
 }
 
@@ -808,10 +808,10 @@ M_FUNC MStream& operator<<(MStream& stream, char c)
 #if !M_NO_WCHAR_T
 M_FUNC MStream& operator<<(MStream& stream, wchar_t c)
 {
-   char buffer [ 6 ];
-   size_t i = MFormat(buffer, 6, "%lc", c);
-   M_ASSERT(i > 0);
-   stream.WriteBytes(buffer, static_cast<unsigned>(i));
+   char buff [ 8 ];
+   size_t size = MFormat(buff, sizeof(buff), "%lc", c);
+   M_ASSERT(size > 0 && size < sizeof(buff)); // check if the supplied buffer fits (due to the supplied format it does)
+   stream.WriteBytes(buff, static_cast<unsigned>(size));
    return stream;
 }
 #endif

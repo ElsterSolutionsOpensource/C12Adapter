@@ -514,9 +514,9 @@ public: // Services:
    ///
    /// \pre If the number is bigger than 0xF, an exception is thrown.
    ///
-   static MChar NumberToHexChar(unsigned n)
+   static char NumberToHexChar(unsigned n)
    {
-      return (MChar)NumberToHexByte(n);
+      return (char)NumberToHexByte(n);
    }
 
    /// Return a single hexadecimal byte that represents the given unsigned number.
@@ -537,7 +537,7 @@ public: // Services:
    ///
    /// \pre If the number is not a hex char, an error is thrown.
    ///
-   static unsigned HexCharToNumber(MChar c);
+   static unsigned HexCharToNumber(char c);
 
    /// Return a number for a single hexadecimal byte given.
    ///
@@ -550,7 +550,7 @@ public: // Services:
    ///
    static unsigned HexByteToNumber(Muint8 c)
    {
-      return HexCharToNumber((MChar)c);
+      return HexCharToNumber((char)c);
    }
 
    ///@{

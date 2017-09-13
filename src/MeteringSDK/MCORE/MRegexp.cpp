@@ -56,7 +56,7 @@
    // The first byte of the regexp internal "program" is actually this magic
    // number; the start node begins in the second byte.
    //
-   const MChar MAGIC = ((MChar)'\234');
+   const char MAGIC = ((char)'\234');
 
 // The "internal use only" fields in regexp are present to pass info from
 // compile to execute that permits the execute phase to run lots faster on
@@ -149,7 +149,7 @@ enum
 
 // All of the functions required to directly access the 'program'
 
-inline MChar OP(MChars p)
+inline char OP(MChars p)
    {
       return *p;
    }
@@ -248,7 +248,7 @@ protected:
    //
    MChars regatom(int *flagp);
 
-   bool ISREPN(MChar c)
+   bool ISREPN(char c)
    {
       return c == '*' || c == '+' || c == '?';
    }
@@ -264,7 +264,7 @@ protected:
    // Insert an operator in front of already-emitted operand.
    // Means relocating the operand.
    //
-   virtual void reginsert(MChar op, MChars opnd) = 0;
+   virtual void reginsert(char op, MChars opnd) = 0;
 
    // Set the next-pointer at the end of a node chain
    //
@@ -378,7 +378,7 @@ MChars MRegCompilerBase::regpiece(int *flagp)
    if ( ret == NULL )
       return NULL;
 
-   MChar op = *regparse;
+   char op = *regparse;
    if ( !ISREPN(op) )
    {
       *flagp = flags;
@@ -386,21 +386,21 @@ MChars MRegCompilerBase::regpiece(int *flagp)
    }
 
    MChars next;
-   if ( !(flags & HASWIDTH) && op != (MChar)'?' )
+   if ( !(flags & HASWIDTH) && op != (char)'?' )
    {
       MException::Throw(M_CODE_STR(M_ERR_REGEXP_OP_COULD_BE_EMPTY, M_I("Regular expression operand '*+' could be empty")));
       M_ENSURED_ASSERT(0);
    }
    switch ( op )
    {
-      case (MChar)'*': *flagp = WORST|SPSTART;           break;
-      case (MChar)'+': *flagp = WORST|SPSTART|HASWIDTH;  break;
-      case (MChar)'?': *flagp = WORST;                   break;
+      case (char)'*': *flagp = WORST|SPSTART;           break;
+      case (char)'+': *flagp = WORST|SPSTART|HASWIDTH;  break;
+      case (char)'?': *flagp = WORST;                   break;
    }
 
-   if ( op == (MChar)'*' && (flags&SIMPLE) )
+   if ( op == (char)'*' && (flags&SIMPLE) )
       reginsert(STAR, ret);
-   else if ( op == (MChar)'*' )
+   else if ( op == (char)'*' )
    {
       // Emit x* as (x&|), where & means "self".
       reginsert(BRANCH, ret);          // Either x
@@ -409,9 +409,9 @@ MChars MRegCompilerBase::regpiece(int *flagp)
       regtail(ret, CreateRegNode(BRANCH));      // or
       regtail(ret, CreateRegNode(NOTHING));     // null.
    }
-   else if ( op == (MChar)'+' && (flags & SIMPLE) )
+   else if ( op == (char)'+' && (flags & SIMPLE) )
       reginsert(PLUS, ret);
-   else if ( op == (MChar)'+' )
+   else if ( op == (char)'+' )
    {
       // Emit x+ as x(&|), where & means "self".
       next = CreateRegNode(BRANCH);          // Either
@@ -420,7 +420,7 @@ MChars MRegCompilerBase::regpiece(int *flagp)
       regtail(next, CreateRegNode(BRANCH));     // or
       regtail(ret, CreateRegNode(NOTHING));     // null.
    }
-   else if ( op == (MChar)'?' )
+   else if ( op == (char)'?' )
    {
       // Emit x? as (x|)
       reginsert(BRANCH, ret);          // Either x
@@ -483,8 +483,8 @@ MChars MRegCompilerBase::regatom(int* flagp)
                regc('-');
             else
             {
-               int range = (MChar)*(regparse-2);
-               int rangeEnd = (MChar)c;
+               int range = (char)*(regparse-2);
+               int rangeEnd = (char)c;
                if ( range > rangeEnd )
                {
                   MException::Throw(M_CODE_STR(M_ERR_REGEXP_INVALID_RANGE, M_I("Regular expression has invalid range within '[]'")));
@@ -559,7 +559,7 @@ MChars MRegCompilerBase::regatom(int* flagp)
       // flags |= SIMPLE at the end.
       {
          MConstChars regprev;
-         MChar ch;
+         char ch;
 
          regparse--;       // Look at cur char
          ret = CreateRegNode(EXACTLY);
@@ -636,10 +636,10 @@ public:
    int regsize;         // Code size
 
 protected:
-   MChar regdummy[5];   // NOTHING, 0 next ptr
+   char regdummy[5];   // NOTHING, 0 next ptr
    virtual MChars CreateRegNode(int) { regsize += 5; return regdummy; }
    virtual void regc(int) { regsize++; }
-   virtual void reginsert(MChar, MChars) { regsize += 5; }
+   virtual void reginsert(char, MChars) { regsize += 5; }
    virtual void regtail(MChars, MChars) { }
    virtual void regoptail(MChars, MChars) { }
    virtual void SetLastOperandLength(MChars) {}
@@ -664,11 +664,11 @@ protected:
 
    virtual void regc(int b)
    {
-      *regcode++ = (MChar)b;
+      *regcode++ = (char)b;
    }
 
    virtual MChars CreateRegNode(int op);
-   virtual void reginsert(MChar op, MChars opnd);
+   virtual void reginsert(char op, MChars opnd);
    virtual void regtail(MChars p, MChars val);
    virtual void regoptail(MChars p, MChars val);
    virtual void SetLastOperandLength(MChars opStart);
@@ -678,7 +678,7 @@ MChars MRegCompiler::CreateRegNode(int op)
 {
    MChars const ret = regcode;
    MChars ptr = ret;
-   *ptr++ = (MChar)op;
+   *ptr++ = (char)op;
    *ptr++ = '\0';    // Null next pointer
    *ptr++ = '\0';
    *ptr++ = '\0';    // length of the operand
@@ -687,9 +687,9 @@ MChars MRegCompiler::CreateRegNode(int op)
    return ret;
 }
 
-void MRegCompiler::reginsert(MChar op, MChars opnd)
+void MRegCompiler::reginsert(char op, MChars opnd)
 {
-   memmove(opnd + 5, opnd, (size_t)((regcode - opnd) * sizeof(MChar)));
+   memmove(opnd + 5, opnd, (size_t)((regcode - opnd) * sizeof(char)));
    regcode += 5;
    MChars place = opnd;     // Op node, where operand used to be.
    *place++ = op;
@@ -822,7 +822,7 @@ bool MRegExecutor::regmatch(MConstChars prog)
             {
             int len = OPERANDLEN(scan);
             if ( len > regeol - reginput || // even length is bigger
-                 memcmp(OPERAND(scan), reginput, len * sizeof(MChar)) != 0 )
+                 memcmp(OPERAND(scan), reginput, len * sizeof(char)) != 0 )
                return false;
             reginput += len;
             break;
@@ -911,7 +911,7 @@ bool MRegExecutor::regmatch(MConstChars prog)
          case STAR:
          case PLUS:
             {
-            MChar nextChar = 0;
+            char nextChar = 0;
             bool nextCharExists = (OP(next) == EXACTLY);
             if ( nextCharExists )
                nextChar = *OPERAND(next);
@@ -945,7 +945,7 @@ size_t MRegExecutor::regrepeat(MChars node)
       return regeol - reginput;
    case EXACTLY:
       {
-      MChar ch = *OPERAND(node);
+      char ch = *OPERAND(node);
       size_t count = 0;
       for ( MConstChars scan = reginput; scan != regeol && *scan == ch; ++scan )
          count++;
@@ -953,12 +953,12 @@ size_t MRegExecutor::regrepeat(MChars node)
       }
    case ANYOF: // cannot use strspn, as it can have \0
       {
-      MChar* set = OPERAND(node);
-      MChar* setEnd = set + OPERANDLEN(node);
+      char* set = OPERAND(node);
+      char* setEnd = set + OPERANDLEN(node);
       size_t count = 0;
       for ( MConstChars scan = reginput; scan != regeol; ++scan )
       {
-         for ( MChar* s = set; ; ++s )
+         for ( char* s = set; ; ++s )
          {
             if ( s == setEnd )
                return count; // end by nonmatching character
@@ -971,12 +971,12 @@ size_t MRegExecutor::regrepeat(MChars node)
       }
    case ANYBUT: // cannot use strspn, as it can have \0
       {
-      MChar* set = OPERAND(node);
-      MChar* setEnd = set + OPERANDLEN(node);
+      char* set = OPERAND(node);
+      char* setEnd = set + OPERANDLEN(node);
       size_t count = 0;
       for ( MConstChars scan = reginput; scan != regeol; ++scan )
       {
-         for ( MChar* s = set; ; ++s )
+         for ( char* s = set; ; ++s )
          {
             if ( s == setEnd )
                return count; // end by nonmatching character
@@ -1158,7 +1158,7 @@ void MRegexp::Compile(const MStdString& exp, bool ignoreCase)
       MStdString::const_iterator itEnd = exp.end();
       for ( ; it < itEnd; ++it )
       {
-         MChar c = *it;
+         char c = *it;
          if ( c == '[' )
             inRange = true;
          if ( c == ']' )
@@ -1166,8 +1166,8 @@ void MRegexp::Compile(const MStdString& exp, bool ignoreCase)
          if ( !inRange && m_isalpha(c) )
          {
             m_pattern += '[';
-            m_pattern += (MChar)m_toupper(c);
-            m_pattern += (MChar)m_tolower(c);
+            m_pattern += (char)m_toupper(c);
+            m_pattern += (char)m_tolower(c);
             m_pattern += ']';
          }
          else
@@ -1190,7 +1190,7 @@ void MRegexp::Compile(const MStdString& exp, bool ignoreCase)
          M_ENSURED_ASSERT(0);
       }
 
-      m_program = M_NEW MChar [ tester.regsize ]; // program size
+      m_program = M_NEW char [ tester.regsize ]; // program size
 
       MRegCompiler comp(m_pattern, m_program);
       // Second pass: emit code.
@@ -1265,7 +1265,7 @@ bool MRegexp::Match(const MStdString& s)
       return executor.regtry(strPtr);
 
    // Messy cases: unanchored match
-   if ( m_regstartExists )  // We know what MChar it must start with
+   if ( m_regstartExists )  // We know what char it must start with
    {
       for ( MStdString::size_type i = 0; (i = m_str.find(m_regstart, i)) != MStdString::npos; ++i )
          if ( executor.regtry(strPtr + i) )
@@ -1296,17 +1296,17 @@ MStdString MRegexp::GetReplaceString(const MStdString& replaceExp) const
    MStdString::const_iterator itEnd = replaceExp.end();
    while ( it != itEnd ) // zero characters can be within the string
    {
-      MChar c = *it++;
+      char c = *it++;
       int no;
-      if ( c == MChar('&') )
+      if ( c == char('&') )
          no = 0;
-      else if ( c == MChar('\\') && m_isdigit(*it) )
-         no = *it++ - MChar('0');
+      else if ( c == char('\\') && m_isdigit(*it) )
+         no = *it++ - char('0');
       else
          no = -1;
       if ( no < 0 )
       {  // Ordinary character.
-         if ( c == MChar('\\') && (it != itEnd) && (*it == MChar('\\') || *it == MChar('&')) )
+         if ( c == char('\\') && (it != itEnd) && (*it == char('\\') || *it == char('&')) )
             c = *it++; // backslashed '\\' or '\&'
          buf += c;
       }

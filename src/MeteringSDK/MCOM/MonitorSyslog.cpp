@@ -40,8 +40,8 @@
 
 M_START_PROPERTIES(MonitorSyslog)
 M_START_METHODS(MonitorSyslog)
-   M_CLASS_FRIEND_SERVICE_OVERLOADED(MonitorFile, New, DoNew1, 1, ST_MObjectP_S_constMStdStringA)
-   M_CLASS_FRIEND_SERVICE_OVERLOADED(MonitorFile, New, DoNew0, 0, ST_MObjectP_S)
+   M_CLASS_FRIEND_SERVICE_OVERLOADED(MonitorSyslog, New, DoNew1, 1, ST_MObjectP_S_constMStdStringA)
+   M_CLASS_FRIEND_SERVICE_OVERLOADED(MonitorSyslog, New, DoNew0, 0, ST_MObjectP_S)
 M_END_CLASS(MonitorSyslog, Monitor)
 
 MMonitorSyslog::MMonitorSyslog(const MStdString& prefix, int verbose)

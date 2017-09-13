@@ -75,8 +75,8 @@ MVariant MObject::GetProperty(const MStdString& name) const
          result.DoAssignToEmpty((this->*((Method_byte_X)def->m_getObjectMethod))());
          break;
       case MVariant::VAR_CHAR:
-         M_ENSURED_ASSERT(def->m_getServiceType == MClass::ST_MChar_X);
-         result.DoAssignToEmpty((this->*((Method_MChar_X)def->m_getObjectMethod))());
+         M_ENSURED_ASSERT(def->m_getServiceType == MClass::ST_char_X);
+         result.DoAssignToEmpty((this->*((Method_char_X)def->m_getObjectMethod))());
          break;
       case MVariant::VAR_INT:
          M_ENSURED_ASSERT(def->m_getServiceType == MClass::ST_int_X);
@@ -177,8 +177,8 @@ void MObject::SetProperty(const MStdString& name, const MVariant& value)
          (this->*((Method_X_byte)def->m_setObjectMethod))(value.AsByte());
          return;
       case MVariant::VAR_CHAR:
-         M_ENSURED_ASSERT(def->m_setServiceType == MClass::ST_X_MChar);
-         (this->*((Method_X_MChar)def->m_setObjectMethod))(value.AsChar());
+         M_ENSURED_ASSERT(def->m_setServiceType == MClass::ST_X_char);
+         (this->*((Method_X_char)def->m_setObjectMethod))(value.AsChar());
          return;
       case MVariant::VAR_INT:
          M_ENSURED_ASSERT(def->m_setServiceType == MClass::ST_X_int);

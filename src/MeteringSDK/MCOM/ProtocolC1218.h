@@ -96,7 +96,6 @@ public: // Specific C12.18 commands.
    ///
    virtual void Identify();
 
-
    /// Perform ANSI C12 Negotiate request.
    ///
    /// This service is called from StartSession, but it can also be called
@@ -955,7 +954,7 @@ protected: // Attributes:
    unsigned m_maximumNumberOfPackets;
 
    // Initial baud of the protocol.
-   // For C12.19 it is always 9600, but C12.21 is able to change it.
+   // For C12.18 it is always 9600, but C12.21 is able to change it.
    // This is an implementation convenience to hold this property here.
    //
    unsigned m_initialBaud;

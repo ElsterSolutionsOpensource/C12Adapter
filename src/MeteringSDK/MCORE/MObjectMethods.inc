@@ -95,9 +95,9 @@ _M_FUNCTION0(ST_byte_X,
     result.DoAssignToEmpty((this->*((Method_byte_X)def->m_objectMethod))()),
    _M_NULL, MVariant::VAR_BYTE)
 
-_M_FUNCTION0(ST_MChar_X,
-   MChar (MObject::*Method_MChar_X)() const,
-    result.DoAssignToEmpty((this->*((Method_MChar_X)def->m_objectMethod))()),
+_M_FUNCTION0(ST_char_X,
+   char (MObject::*Method_char_X)() const,
+    result.DoAssignToEmpty((this->*((Method_char_X)def->m_objectMethod))()),
    _M_NULL, MVariant::VAR_CHAR)
 
 _M_FUNCTION0(ST_int_X,
@@ -193,9 +193,9 @@ _M_PROCEDURE1(ST_X_byte,
    (this->*((Method_X_byte)def->m_objectMethod))(p[0].AsByte()),
    {MVariant::VAR_BYTE})
 
-_M_PROCEDURE1(ST_X_MChar,
-   void (MObject::*Method_X_MChar)(MChar),
-   (this->*((Method_X_MChar)def->m_objectMethod))(p[0].AsChar()),
+_M_PROCEDURE1(ST_X_char,
+   void (MObject::*Method_X_char)(char),
+   (this->*((Method_X_char)def->m_objectMethod))(p[0].AsChar()),
    {MVariant::VAR_CHAR})
 
 _M_PROCEDURE1(ST_X_int,
@@ -278,10 +278,10 @@ _M_FUNCTION1(ST_bool_X_constMVariantA,
    result.DoAssignToEmpty((this->*((Method_bool_X_constMVariantA)def->m_objectMethod))(p[0])),
    {MVariant::VAR_VARIANT}, MVariant::VAR_BOOL)
 
-_M_FUNCTION1(ST_byte_X_unsigned,
-   Muint8 (MObject::*Method_byte_X_unsigned)(unsigned),
-   result.DoAssignToEmpty((this->*((Method_byte_X_unsigned)def->m_objectMethod))(p[0].AsUInt())),
-   {MVariant::VAR_UINT}, MVariant::VAR_BYTE)
+_M_FUNCTION1(ST_char_X_unsigned,
+   char (MObject::*Method_char_X_unsigned)(unsigned),
+   result.DoAssignToEmpty((this->*((Method_char_X_unsigned)def->m_objectMethod))(p[0].AsUInt())),
+   {MVariant::VAR_UINT}, MVariant::VAR_CHAR)
 
 _M_FUNCTION1(ST_bool_X_unsigned,
    bool (MObject::*Method_bool_X_unsigned)(unsigned),
@@ -363,6 +363,11 @@ _M_FUNCTION1(ST_constMByteStringA_X_unsigned,
    result.DoAssignByteStringToEmpty((this->*((Method_constMByteStringA_X_unsigned)def->m_objectMethod))(p[0].AsUInt())),
    {MVariant::VAR_UINT}, MVariant::VAR_BYTE_STRING)
 
+_M_FUNCTION1(ST_MByteString_X_int,
+   MByteString (MObject::*Method_MByteString_X_int)(int),
+   result.DoAssignByteStringToEmpty((this->*((Method_MByteString_X_int)def->m_objectMethod))(p[0].AsInt())),
+   {MVariant::VAR_INT}, MVariant::VAR_BYTE_STRING)
+
 _M_FUNCTION1(ST_MByteString_X_unsigned,
    MByteString (MObject::*Method_MByteString_X_unsigned)(unsigned),
    result.DoAssignByteStringToEmpty((this->*((Method_MByteString_X_unsigned)def->m_objectMethod))(p[0].AsUInt())),
@@ -428,6 +433,11 @@ _M_FUNCTION1(ST_MStdString_X_MObjectP,
    result.DoAssignToEmpty((this->*((Method_MStdString_X_MObjectP)def->m_objectMethod))(p[0].AsObject())),
    {MVariant::VAR_OBJECT}, MVariant::VAR_STRING)
 
+_M_FUNCTION1(ST_MVariant_X_constMByteStringA,
+   MVariant (MObject::*Method_Variant_X_constMByteStringA)(const MByteString&),
+   result.DoAssignToEmpty((this->*((Method_Variant_X_constMByteStringA)def->m_objectMethod))(p[0].AsByteString())),
+   {MVariant::VAR_BYTE_STRING}, MVariant::VAR_VARIANT)
+
 _M_FUNCTION1(ST_MVariant_X_constMStdStringA,
    MVariant (MObject::*Method_Variant_X_constMStdStringA)(const MStdString&),
    result.DoAssignToEmpty((this->*((Method_Variant_X_constMStdStringA)def->m_objectMethod))(p[0].AsString())),
@@ -476,10 +486,10 @@ _M_FUNCTION1(ST_constMVariantA_X_constMVariantA,
 
    // Two-parameter procedures and functions
 
-_M_PROCEDURE2(ST_X_byte_constMByteStringA,
-   void (MObject::*Method_X_byte_constMByteStringA)(Muint8, const MByteString&),
-   (this->*((Method_X_byte_constMByteStringA)def->m_objectMethod))(p[0].AsByte(), p[1].AsByteString()),
-   (MVariant::VAR_BYTE, MVariant::VAR_BYTE_STRING))
+_M_PROCEDURE2(ST_X_char_constMByteStringA,
+   void (MObject::*Method_X_char_constMByteStringA)(char, const MByteString&),
+   (this->*((Method_X_char_constMByteStringA)def->m_objectMethod))(p[0].AsChar(), p[1].AsByteString()),
+   (MVariant::VAR_CHAR, MVariant::VAR_BYTE_STRING))
 
 _M_PROCEDURE2(ST_X_bool_int,
    void (MObject::*Method_X_bool_int)(bool, int),
@@ -491,10 +501,10 @@ _M_PROCEDURE2(ST_X_int_int,
    (this->*((Method_X_int_int)def->m_objectMethod))(p[0].AsInt(), p[1].AsInt()),
    (MVariant::VAR_INT, MVariant::VAR_INT))
 
-_M_PROCEDURE2(ST_X_unsigned_byte,
-   void (MObject::*Method_X_unsigned_byte)(unsigned, Muint8),
-   (this->*((Method_X_unsigned_byte)def->m_objectMethod))(p[0].AsUInt(), p[1].AsByte()),
-   (MVariant::VAR_UINT, MVariant::VAR_BYTE))
+_M_PROCEDURE2(ST_X_unsigned_char,
+   void (MObject::*Method_X_unsigned_char)(unsigned, char),
+   (this->*((Method_X_unsigned_char)def->m_objectMethod))(p[0].AsUInt(), p[1].AsChar()),
+   (MVariant::VAR_UINT, MVariant::VAR_CHAR))
 
 _M_PROCEDURE2(ST_X_unsigned_unsigned,
    void (MObject::*Method_X_unsigned_unsigned)(unsigned, unsigned),
@@ -621,6 +631,11 @@ _M_FUNCTION2(ST_unsigned_X_int_bool,
    result.DoAssignToEmpty((this->*((Method_unsigned_X_int_bool)def->m_objectMethod))(p[0].AsInt(), p[1].AsBool())),
    (MVariant::VAR_INT, MVariant::VAR_BOOL), MVariant::VAR_UINT)
 
+_M_FUNCTION2(ST_int_X_unsigned_unsigned,
+   int (MObject::*Method_int_X_unsigned_unsigned)(unsigned, unsigned),
+   result.DoAssignToEmpty((this->*((Method_int_X_unsigned_unsigned)def->m_objectMethod))(p[0].AsUInt(), p[1].AsUInt())),
+   (MVariant::VAR_UINT, MVariant::VAR_UINT), MVariant::VAR_INT)
+
 _M_FUNCTION2(ST_unsigned_X_unsigned_unsigned,
    unsigned (MObject::*Method_unsigned_X_unsigned_unsigned)(unsigned, unsigned),
    result.DoAssignToEmpty((this->*((Method_unsigned_X_unsigned_unsigned)def->m_objectMethod))(p[0].AsUInt(), p[1].AsUInt())),
@@ -686,10 +701,10 @@ _M_FUNCTION2(ST_MByteString_X_unsigned_unsigned,
    result.DoAssignByteStringToEmpty((this->*((Method_MByteString_X_unsigned_unsigned)def->m_objectMethod))(p[0].AsUInt(), p[1].AsUInt())),
    (MVariant::VAR_UINT, MVariant::VAR_UINT), MVariant::VAR_BYTE_STRING)
 
-_M_FUNCTION2(ST_MByteString_X_byte_constMByteStringA,
-   MByteString (MObject::*Method_MByteString_X_byte_constMByteStringA)(Muint8, const MByteString&),
-   result.DoAssignByteStringToEmpty((this->*((Method_MByteString_X_byte_constMByteStringA)def->m_objectMethod))(p[0].AsByte(), p[1].AsByteString())),
-   (MVariant::VAR_BYTE, MVariant::VAR_BYTE_STRING), MVariant::VAR_BYTE_STRING)
+_M_FUNCTION2(ST_MByteString_X_char_constMByteStringA,
+   MByteString (MObject::*Method_MByteString_X_char_constMByteStringA)(char, const MByteString&),
+   result.DoAssignByteStringToEmpty((this->*((Method_MByteString_X_char_constMByteStringA)def->m_objectMethod))(p[0].AsChar(), p[1].AsByteString())),
+   (MVariant::VAR_CHAR, MVariant::VAR_BYTE_STRING), MVariant::VAR_BYTE_STRING)
 
 _M_FUNCTION2(ST_MByteString_X_constMStdStringA_int,
    MByteString (MObject::*Method_MByteString_X_constMStdStringA_int)(const MStdString&, int),
@@ -843,10 +858,10 @@ _M_PROCEDURE3(ST_X_int_int_int,
    (this->*((Method_X_int_int_int)def->m_objectMethod))(p[0].AsInt(), p[1].AsInt(), p[2].AsInt()),
    (MVariant::VAR_INT, MVariant::VAR_INT, MVariant::VAR_INT))
 
-_M_PROCEDURE3(ST_X_unsigned_unsigned_unsigned,
-   void (MObject::*Method_X_unsigned_unsigned_unsigned)(unsigned, unsigned, unsigned),
-   (this->*((Method_X_unsigned_unsigned_unsigned)def->m_objectMethod))(p[0].AsUInt(), p[1].AsUInt(), p[2].AsUInt()),
-   (MVariant::VAR_UINT, MVariant::VAR_UINT, MVariant::VAR_UINT))
+_M_PROCEDURE3(ST_X_int_unsigned_unsigned,
+   void (MObject::*Method_X_int_unsigned_unsigned)(int, unsigned, unsigned),
+   (this->*((Method_X_int_unsigned_unsigned)def->m_objectMethod))(p[0].AsInt(), p[1].AsUInt(), p[2].AsUInt()),
+   (MVariant::VAR_INT, MVariant::VAR_UINT, MVariant::VAR_UINT))
 
 _M_PROCEDURE3(ST_X_int_int_constMVariantA,
    void (MObject::*Method_X_int_int_constMVariantA)(int, int, const MVariant&),
@@ -897,6 +912,11 @@ _M_FUNCTION3(ST_MObjectP_X_bool_bool_bool,
    MObject* (MObject::*Method_MObjectP_X_bool_bool_bool)(bool, bool, bool),
    result.DoAssignToEmpty((this->*((Method_MObjectP_X_bool_bool_bool)def->m_objectMethod))(p[0].AsBool(), p[1].AsBool(), p[2].AsBool())),
    (MVariant::VAR_BOOL, MVariant::VAR_BOOL, MVariant::VAR_BOOL), MVariant::VAR_OBJECT)
+
+_M_FUNCTION3(ST_MByteString_X_char_unsigned_unsigned,
+   MByteString (MObject::*Method_MByteString_X_char_unsigned_unsigned)(char, unsigned, unsigned),
+   result.DoAssignByteStringToEmpty((this->*((Method_MByteString_X_char_unsigned_unsigned)def->m_objectMethod))(p[0].AsChar(), p[1].AsUInt(), p[2].AsUInt())),
+   (MVariant::VAR_CHAR, MVariant::VAR_UINT, MVariant::VAR_UINT), MVariant::VAR_BYTE_STRING)
 
 _M_FUNCTION3(ST_MByteString_X_constMVariantA_int_int,
    MByteString (MObject::*Method_MByteString_X_constMVariantA_int_int)(const MVariant&, int, int),

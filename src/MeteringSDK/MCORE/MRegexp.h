@@ -369,7 +369,7 @@ private: // Attributes:
 
    // Char that must begin a match, irrelevant if m_regstartExists is false
    //
-   MChar m_regstart;
+   char m_regstart;
 
    // String (pointer into m_program) that the match must include, or NULL
    //

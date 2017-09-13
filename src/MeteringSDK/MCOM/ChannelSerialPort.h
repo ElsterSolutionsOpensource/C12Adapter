@@ -337,11 +337,11 @@ public: // Properties:
    ///  - "D" : disable
    ///  - "H" : handshake
    ///
-   MChar GetDtrControl() const
+   char GetDtrControl() const
    {
       return m_port.GetDtrControl();
    }
-   void SetDtrControl(MChar dtrControl)
+   void SetDtrControl(char dtrControl)
    {
       m_port.SetDtrControl(dtrControl);
       m_port.UpdatePortParametersOrTimeoutsIfChanged();
@@ -367,11 +367,11 @@ public: // Properties:
    ///  - "H" : handshake
    ///  - "T" : toggle
    ///
-   MChar GetRtsControl() const
+   char GetRtsControl() const
    {
       return m_port.GetRtsControl();
    }
-   void SetRtsControl(MChar rtsControl)
+   void SetRtsControl(char rtsControl)
    {
       m_port.SetRtsControl(rtsControl);
       m_port.UpdatePortParametersOrTimeoutsIfChanged();

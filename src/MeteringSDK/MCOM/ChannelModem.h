@@ -159,7 +159,7 @@ public: // Property handling routines:
    {
       return m_autoAnswerString;
    }
-   void SetAutoAnswerString(const MByteString &autoAnswerString)
+   void SetAutoAnswerString(const MByteString& autoAnswerString)
    {
       m_autoAnswerString = autoAnswerString;
    }
@@ -407,7 +407,7 @@ public: // Modem specific calls:
    ///
    /// \pre Modem is in command mode.
    ///
-   void SendCommandCheckOK(const MByteString &command);
+   void SendCommandCheckOK(const MByteString& command);
 
 private: // Methods:
 

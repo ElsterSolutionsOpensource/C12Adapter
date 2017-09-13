@@ -104,7 +104,7 @@ M_START_PROPERTIES(StreamSocketBase)
    M_OBJECT_PROPERTY_READONLY_STRING    (StreamSocketBase, LocalSocketName,    ST_MStdString_X)
    M_OBJECT_PROPERTY_READONLY_UINT      (StreamSocketBase, LocalSocketPort)
    M_CLASS_PROPERTY_READONLY_STRING     (StreamSocketBase, LocalName,          ST_MStdString_S)
-   M_CLASS_PROPERTY_READONLY_UINT       (StreamSocketBase, LocalAddress)
+   M_CLASS_PROPERTY_READONLY_STRING     (StreamSocketBase, LocalAddress,       ST_MStdString_S)
    M_OBJECT_PROPERTY_READONLY_STRING    (StreamSocketBase, PeerSocketName,     ST_MStdString_X)
    M_OBJECT_PROPERTY_READONLY_UINT      (StreamSocketBase, PeerSocketPort)
    M_OBJECT_PROPERTY_UINT               (StreamSocketBase, ReceiveTimeout)
@@ -215,8 +215,8 @@ void MStreamSocketBase::Bind(unsigned port, const MStdString& address)
    try
    {
       hints.ai_family = (address.empty() || IsAddressLocalIPv4(address))
-         ? AF_INET
-         : AF_UNSPEC;
+                      ? AF_INET
+                      : AF_UNSPEC;
 
       const char* hostname = NULL;
       if ( !address.empty() )
@@ -232,6 +232,8 @@ void MStreamSocketBase::Bind(unsigned port, const MStdString& address)
       {
          try
          {
+            DoAdjustAddress(ai);
+
             OsSocketHandleHolder sh;
             sh.m_socketHandle = DoOsSocket(ai->ai_family, ai->ai_socktype, ai->ai_protocol);
 
@@ -343,21 +345,21 @@ void MStreamSocketBase::DoCloseImpl()
    }
 }
 
-bool MStreamSocketBase::IsAddressLocalIPv4(const MStdString& address)
-{
-   return ( address == "localhost"
-         || address == "127.0.0.1"
-         || address == GetLocalName()
-         || address == GetLocalAddress() );
-}
-
-bool MStreamSocketBase::IsAddressLocalIPv6(const MStdString& address)
-{
-   return ( address == "localhost"
-         || address == "::1"
-         || address == "0:0:0:0:0:0:0:1"
-         || address == "::ffff:127.0.0.1" );
-}
+bool MStreamSocketBase::IsAddressLocalIPv4(const MStdString& address)  	
+{  	
+   return ( address == "localhost"  	
+       || address == "127.0.0.1"  	
+       || address == GetLocalName()  	  	 
+       || address == GetLocalAddress() );  	  	 
+}  	
+	  	
+bool MStreamSocketBase::IsAddressLocalIPv6(const MStdString& address)  	
+{  	
+   return ( address == "localhost"  	
+       || address == "::1"  	
+       || address == "0:0:0:0:0:0:0:1"  	
+       || address == "::ffff:127.0.0.1" );  	  	 
+} 
 
 int MStreamSocketBase::GetSockOpt(int level, int option)
 {
@@ -670,38 +672,48 @@ bool MStreamSocketBase::DoNonblockingReceiveWait(SocketHandleType sockfd, unsign
 
 void MStreamSocketBase::DoAdjustAddress(addrinfo* ai)
 {
-#if (M_OS & M_OS_WINDOWS) == 0 || (_WIN32_WINNT >= 0x0600) // support of if_nametoindex() is added in Vista, 0x0600
+#if (M_OS & M_OS_WINDOWS) == 0 || (_WIN32_WINNT >= 0x0600) // support of if_nametoindex() is added to Windows Vista, 0x0600
    if ( ai->ai_family == AF_INET6 )
    {
       struct sockaddr_in6* ai6 = reinterpret_cast<struct sockaddr_in6*>(ai->ai_addr);
-      if ( IN6_IS_ADDR_LINKLOCAL(&ai6->sin6_addr) )  // Link local address
+      if ( ai6 != NULL 
+#if (M_OS & M_OS_ANDROID) == 0 // in case of Android alyways attempt to set the network card index as Android does not have DHCPv6
+           && IN6_IS_ADDR_LINKLOCAL(&ai6->sin6_addr)
+#endif
+           && ai6->sin6_scope_id == 0 ) // Link local address, with the interface that is not set
       {
-         if ( ai6->sin6_scope_id == 0 ) // not set
-         {
-            struct ifaddrs* ifaddresses;
-            struct ifaddrs* linkLocalAddress = NULL;
+         struct ifaddrs* ifaddresses;
+         struct ifaddrs* addr = NULL;
+         struct ifaddrs* addrBestMatch = NULL;
 
-            getifaddrs(&ifaddresses);
-            for ( struct ifaddrs* ifa = ifaddresses; ifa != NULL; ifa = ifa->ifa_next )
+         int result = getifaddrs(&ifaddresses);
+         if ( result != 0 )
+            return; // cannot do anything in such case
+         for ( struct ifaddrs* ifa = ifaddresses; ifa != NULL; ifa = ifa->ifa_next )
+         {
+            if ( ifa->ifa_addr != NULL && ifa->ifa_addr->sa_family == AF_INET6 && (ifa->ifa_flags & IFF_UP) != 0 && (ifa->ifa_flags & IFF_LOOPBACK) == 0 )
             {
-               if ( ifa->ifa_addr->sa_family == AF_INET6 && (ifa->ifa_flags & IFF_UP) != 0 && (ifa->ifa_flags & IFF_LOOPBACK) == 0 )
+               struct sockaddr_in6* ai6i = reinterpret_cast<struct sockaddr_in6*>(ifa->ifa_addr);
+               if ( IN6_IS_ADDR_LINKLOCAL(&ai6i->sin6_addr) )
                {
-                  struct sockaddr_in6* ai6i = reinterpret_cast<struct sockaddr_in6*>(ifa->ifa_addr);
-                  if ( ai6i != NULL && IN6_IS_ADDR_LINKLOCAL(&ai6i->sin6_addr) )
+                  addr = ifa; // if more than one interface has link local address the last one will be selected, cannot do any better
+                  if ( memcmp(&ai6i->sin6_addr, &ai6->sin6_addr, 16) == 0 ) // this is the exact address we are searching for, link local (compare only the IPv6 address part of an address)
                   {
-                     if ( linkLocalAddress != NULL ) // second interface, give up helping chose the index
-                     {
-                        freeifaddrs(ifaddresses);
-                        return;
-                     }
-                     linkLocalAddress = ifa;
+                     addrBestMatch = addr;
+                     break; // immediately proceed with modifying the address with the interface index
                   }
+                  if ( addrBestMatch == NULL && strncmp(addr->ifa_name, "wlan", 4) == 0 )
+                     addrBestMatch = addr; // first wlan interface will be effective
                }
             }
-            if ( linkLocalAddress != NULL )
-               ai6->sin6_scope_id = if_nametoindex(linkLocalAddress->ifa_name); // here it is, setting the interface index
-            freeifaddrs(ifaddresses);
          }
+         if ( addr != NULL )
+         {
+            if ( addrBestMatch != NULL )
+               addr = addrBestMatch;
+            ai6->sin6_scope_id = if_nametoindex(addr->ifa_name); // here it is, setting the interface index
+         }
+         freeifaddrs(ifaddresses);
       }
    }
 #else

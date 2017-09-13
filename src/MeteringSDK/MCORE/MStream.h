@@ -467,7 +467,7 @@ public: // Raw data readers and writers:
 
 #if !M_NO_VARIANT
    int ReadRawInt();
-   MChar ReadRawChar();
+   char ReadRawChar();
    bool ReadRawBool();
    Muint8 ReadRawByte();
    double ReadRawDouble();
@@ -482,7 +482,7 @@ public: // Raw data readers and writers:
    }
 
    void WriteRawInt(int value);
-   void WriteRawChar(MChar value);
+   void WriteRawChar(char value);
    void WriteRawBool(bool value);
    void WriteRawDouble(double value);
    void WriteRawByteString(const MByteString& value);

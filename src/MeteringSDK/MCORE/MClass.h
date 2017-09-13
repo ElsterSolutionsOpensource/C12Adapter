@@ -587,12 +587,12 @@ public: // Attributes:
    ///
    /// The name of a class MTime will be "Time", as the common prefix letter will be discarded.
    ///
-   MChar m_name [ MAXIMUM_CLASS_NAME_LENGTH ];
+   char m_name [ MAXIMUM_CLASS_NAME_LENGTH ];
 
    /// Type name of the class, typically the same as the class name.
    /// The difference is due to historic names in MCOM component.
    ///
-   MChar m_typeName [ MAXIMUM_CLASS_NAME_LENGTH ];
+   char m_typeName [ MAXIMUM_CLASS_NAME_LENGTH ];
 
    /// The pointer to the list of properties.
    /// The list is terminated with a special property with no name.

@@ -444,11 +444,11 @@ public: // Services:
    ///     There is a check that the given offset is within range of -3 to 3 hours (range -10800 .. 10800),
    ///     and it should be divisible by 5 minutes (300 seconds), or an exception will be raised.
    /// \param switchToDaylightTime
-   ///     Yearly recurring switch time, at which the daylight time starts.
+   ///     Yearly recurring local switch time, at which the daylight time starts.
    ///     On the northern hemisphere this would typically be in March or April,
    ///     while on the southern this is September or October.
    /// \param switchToStandardTime
-   ///     Yearly recurring switch time, at which the daylight time ends.
+   ///     Yearly recurring local switch time, at which the daylight time ends.
    ///     On the northern hemisphere this would typically be in September or October,
    ///     while on the southern this is March or April.
    ///
@@ -472,11 +472,11 @@ public: // Services:
    ///     There is a check that the given offset is within range of -3 to 3 hours (range -10800 .. 10800),
    ///     and it should be divisible by 5 minutes (300 seconds), or an exception will be raised.
    /// \param switchToDaylightTime
-   ///     Yearly recurring switch time, at which the daylight time starts.
+   ///     Yearly recurring local switch time, at which the daylight time starts.
    ///     On the northern hemisphere this would typically be in March or April,
    ///     while on the southern this is September or October.
    /// \param switchToStandardTime
-   ///     Yearly recurring switch time, at which the daylight time ends.
+   ///     Yearly recurring local switch time, at which the daylight time ends.
    ///     On the northern hemisphere this would typically be in September or October,
    ///     while on the southern this is March or April.
    /// \param standardName
@@ -575,7 +575,7 @@ public: // Important static properties and services:
 
    /// Timezone name separator, as used to separate name from display name.
    ///
-   static const MChar s_timezoneNameSeparator[];
+   static const char s_timezoneNameSeparator[];
 
    /// Number of characters of timezone name separator, s_timezoneNameSeparator.
    ///
@@ -798,17 +798,17 @@ public: // Time extracting properties:
    ///
    bool IsDST(const MTime& time, bool isTimeUtc = false) const;
 
-   /// The recurring date where time goes from Standard to DST.
+   /// The recurring local time where time goes from Standard to DST.
    ///
-   /// This property does not mean that the timezone does not have any switches,
-   /// rather it means there is information on recurring dates in the time zone definition.
-   /// Some operating systems, such as Linux or Android, do not offer such information,
-   /// and it is recommended to use \ref GetNextSwitchTime.
+   /// Many timezones regularly change their DST rules,
+   /// and when this property returns null time it does not mean there are no DST switches.
+   /// Furthermore, this recurring local switch time can be calculated internally
+   /// based on the switch time data in the coming three years from currennt date.
    ///
-   /// Null time will be returned if DST transfer time does not exist in the timezone, this is a convention.
-   ///
-   /// \seeprop{GetSwitchToStandardTime, SwitchToStandardTime} for the switch to standard from DST time in recurring format.
+   /// \seeprop{GetSwitchToStandardTime, SwitchToStandardTime} for the switch to standard from DST local time in recurring format.
    /// \see \ref GetNextSwitchTime returns \ref MTime object with the DST switch time that will be occurring in the future.
+   /// \see \ref HasSwitchTimes tells if the timezone has any transitions, regular or not, in the past or in the future.
+   /// \see \ref SupportsDST tells if the timezone has DST related switches currently or in the future.
    ///
    MTimeRecurrentYearly& GetSwitchToDaylightTime();
 
@@ -819,17 +819,17 @@ public: // Time extracting properties:
       return const_cast<MTimeZone*>(this)->GetSwitchToDaylightTime();
    }
 
-   /// The recurring date where time goes from DST back to normal in a year of this time.
+   /// The recurring local time where time goes from DST back to Standard.
    ///
-   /// This property does not mean that the timezone does not have any switches,
-   /// rather it means there is information on recurring dates in the time zone definition.
-   /// Some operating systems, such as Linux or Android, do not offer such information,
-   /// and it is recommended to use \ref GetNextSwitchTime.
+   /// Many timezones regularly change their DST rules,
+   /// and when this property returns null time it does not mean there are no DST switches.
+   /// Furthermore, this recurring local switch time can be calculated internally
+   /// based on the switch time data in the coming three years from currennt date.
    ///
-   /// Null time will mean DST transfer time does not exist in the timezone, this is a convention.
-   ///
-   /// \seeprop{GetSwitchToDaylightTime, SwitchToDaylightTime} for the switch from standard to DST time in recurring format.
+   /// \seeprop{GetSwitchToDaylightTime, SwitchToDaylightTime} for the switch from standard to DST local time in recurring format.
    /// \see \ref GetNextSwitchTime returns \ref MTime object with the DST switch time that will be occurring in the future.
+   /// \see \ref HasSwitchTimes tells if the timezone has any transitions, regular or not, in the past or in the future.
+   /// \see \ref SupportsDST tells if the timezone has DST related switches currently or in the future.
    ///
    MTimeRecurrentYearly& GetSwitchToStandardTime();
 

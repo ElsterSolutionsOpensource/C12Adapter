@@ -20,7 +20,7 @@
 
 /// Error enumeration
 ///
-class MErrorEnum : public MObject
+class M_CLASS MErrorEnum : public MObject
 {
 public: // Types:
 
@@ -235,6 +235,12 @@ public: // Types:
       /// Thrown by C12 protocol service
       ///
       C12ServiceResponseSGERR = 0x800404A2,
+
+      /// Text: "0x%02X Not registered to you (NRY)"
+      ///
+      /// Not registered to you, code not defined in C12 standard, specific to Elster cNIC devices
+      ///
+      C12ServiceResponseNRY = 0x800404B0,
 
       // MCOREErrors.inc
 

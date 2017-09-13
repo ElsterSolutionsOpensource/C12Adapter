@@ -309,7 +309,7 @@ void MChannelSocketBase::RasDisconnect() M_NO_THROW
 MStdString MChannelSocketBase::GetMediaIdentification() const
 {
    MStdString result;
-   MChar str [ 32 ];
+   char str [ 32 ];
    result.reserve(128); // helps 90% of cases
    result = MUtilities::GetLocalHostName();
    bool isUdp = MChannelSocketUdp::GetStaticClass() == GetClass();
@@ -349,6 +349,7 @@ MStdString MChannelSocketBase::GetMediaIdentification() const
          size_t uniq = reinterpret_cast<size_t>((void*)this); // Create memory-unique number from object's address.
          uniq /= sizeof(MChannelSocketBase);                      // Make it smaller for presentation convenience, still unique
          size_t size = MFormat(str, sizeof(str), "#%X", (unsigned)uniq); // convert to unsigned, in hopes this one is still unique
+         M_ASSERT(size < sizeof(str)); // check if the supplied buffer fits (due to used format this is the case)
          result.append(str, size);
       }
       else

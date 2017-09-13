@@ -215,8 +215,9 @@ public: // Destructor and services
    ///
    virtual void Disconnect() = 0;
 
-   /// Writes the data to the channel, and returns when the last character
-   /// has been sent by the software (but hardware might still need to do some work).
+   /// Writes the data to the channel, and returns when the last byte has been sent by the software.
+   ///
+   /// After the method returns the hardware might still need to do some work to actually send the buffer.
    /// To ensure that all data is sent, use FlushOutputBuffer.
    ///
    /// Unusual variations of the protocol can be simulated by sending data to the meter using
@@ -229,18 +230,30 @@ public: // Destructor and services
    ///
    /// \pre The channel is open, otherwise the operation fails with an exception.
    ///
-   /// \param buffer An array of bytes to pass to the channel. The byte in the lower bound of the
-   /// array is the first byte to be transmitted and the byte in the upper bound of the array is
-   /// the last byte to be transmitted.
+   /// \param buffer An array of bytes to pass to the channel.
+   ///               The byte in the lower bound of the array is the first byte to be transmitted
+   ///               and the byte in the upper bound of the array is the last byte to be transmitted.
    ///
    void WriteBytes(const MByteString& buffer);
 
-   /// Writes the character to the channel, and returns when it has been sent.
+   /// Writes a byte to the channel, and returns when it has been sent.
    ///
-   /// \pre The channel is open, otherwise the operation fails with
-   /// an exception. The buffer is initialized correctly.
+   /// After the method returns the hardware might still need to do some work to actually send the buffer.
+   /// To ensure that all data is sent, use FlushOutputBuffer.
    ///
-   void WriteChar(char buf);
+   /// Unusual variations of the protocol can be simulated by sending data to the meter using
+   /// WriteBytes, then reading the meter's response with ReadBytes. Invalid packets or noise
+   /// data can also be sent to the meter for test purposes.
+   ///
+   /// Just like Connect or Disconnect, WriteBytes is synchronous and is not queued. It should be
+   /// used carefully when mixed with MProtocol's Queue Methods, which are transmitted to the end
+   /// device only when QCommit is called.
+   ///
+   /// \pre The channel is open, otherwise the operation fails with an exception.
+   ///
+   /// \param b Byte to write to the channel.
+   ///
+   void WriteByte(Muint8 b);
  
    /// Writes the data buffer to the channel, and returns when the last character
    /// has been sent by the software (but hardware might still need to do some work).
@@ -252,14 +265,14 @@ public: // Destructor and services
    ///
    void WriteBuffer(const char* buf, unsigned len);
 
-   /// Read single character from the channel.
+   /// Read a single byte from the channel.
    ///
    /// \pre The channel is open, otherwise the
    /// operation fails with an exception.
    /// The character is received within timeout period.
    /// Otherwise the timeout exception is thrown.
    ///
-   char ReadChar();
+   Muint8 ReadByte();
 
    /// Read an exact number of characters from the channel.
    ///

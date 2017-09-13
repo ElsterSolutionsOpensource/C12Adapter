@@ -241,28 +241,57 @@ void MAes::DestroySecureData(MByteStringVector& data)
       DestroySecureData(*it);
 }
 
+   template
+       <class T>
+   inline void DoSecureAssign(T& v1, const T& v2)
+   {
+      // Temporary variable provides constant time operation
+      // dependless on whether v1 and v2 are the same object or not
+      T tmp1 = v2;
+      if ( &v1 != &v2 ) // real assignment, simply destroy the temporary
+      {
+         MAes::DestroySecureData(tmp1);
+         v1 = v2;
+      }
+      else // assignment to self, use temporary variable
+      {
+         MAes::DestroySecureData(v1);
+         v1 = tmp1;
+         MAes::DestroySecureData(tmp1);
+      }
+   }
+
 void MAes::AssignSecureData(MByteString& destination, const MByteString& source)
 {
-   DestroySecureData(destination);
-   destination = source; // hope this assignment does not leave key material in memory
+   DoSecureAssign(destination, source);
 }
 
 void MAes::AssignSecureData(MByteStringVector& destination, const MByteStringVector& source)
 {
-   DestroySecureData(destination);
-   destination = source; // hope this assignment does not leave key material in memory
+   DoSecureAssign(destination, source);
 }
+
+   template
+       <class T>
+   inline void DoSecureMove(T& v1, T& v2)
+   {
+      // Temporary variable provides constant time operation
+      // dependless on whether v1 and v2 are the same object or not
+      T tmp1 = v2;
+      MAes::DestroySecureData(v1);
+      MAes::DestroySecureData(v2);
+      v1 = tmp1;
+      MAes::DestroySecureData(tmp1);
+   }
 
 void MAes::MoveSecureData(MByteString& destination, MByteString& source)
 {
-   AssignSecureData(destination, source);
-   DestroySecureData(source);
+   DoSecureMove(destination, source);
 }
 
 void MAes::MoveSecureData(MByteStringVector& destination, MByteStringVector& source)
 {
-   AssignSecureData(destination, source);
-   DestroySecureData(source);
+   DoSecureMove(destination, source);
 }
 
    template

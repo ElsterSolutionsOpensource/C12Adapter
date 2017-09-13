@@ -1085,7 +1085,7 @@ public:
    /// \param command
    ///     C12 command or status code that has to be sent.
    ///
-   void SendService(Muint8 command);
+   void SendService(char command);
 
    /// Send service with command and data.
    ///
@@ -1096,7 +1096,7 @@ public:
    /// \param data
    ///     Data associated with the command.
    ///
-   void SendServiceWithData(Muint8 command, const MByteString& data);
+   void SendServiceWithData(char command, const MByteString& data);
 
    /// Receive service length.
    ///
@@ -1113,7 +1113,7 @@ public:
    ///
    /// \return Service code or status code.
    ///
-   Muint8 ReceiveServiceCodeIgnoreLength();
+   char ReceiveServiceCodeIgnoreLength();
 
    ///@{
    /// Process PSEM with C12 Logon service.
@@ -1467,7 +1467,7 @@ protected: // Attributes:
    MBuffer m_incomingApdu;
 
 #if !M_NO_MCOM_MONITOR
-   MChar m_logHeaderChar;
+   char m_logHeaderChar;
 #endif
 
    unsigned m_maximumApduSizeIncoming;

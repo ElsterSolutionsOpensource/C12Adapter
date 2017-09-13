@@ -186,7 +186,7 @@ MProtocolServiceWrapper::MProtocolServiceWrapper(MProtocol* proto, MConstChars s
 #if !M_NO_VERBOSE_ERROR_INFORMATION
    M_ASSERT(serviceName != NULL && serviceName[0] != '\0');
 
-   MChar name [ MProtocol::MAXIMUM_SERVICE_NAME_STRING_SIZE ];
+   char name [ MProtocol::MAXIMUM_SERVICE_NAME_STRING_SIZE ];
    m_protocol->DoBuildComplexServiceName(name, serviceName, number, i1, i2);
    m_name = name;
    M_ASSERT(m_name.size() < MProtocol::MAXIMUM_SERVICE_NAME_STRING_SIZE); // Check if MAXIMUM_SERVICE_NAME_STRING_SIZE is big enough

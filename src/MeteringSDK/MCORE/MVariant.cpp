@@ -28,7 +28,7 @@
       // Reflected variation of enumerations defined in MVariant.
       // This type has no use outside reflection.
       //
-      class MVariantEnum : public MObject
+      class M_CLASS MVariantEnum : public MObject
       {
       public: // Type:
 
@@ -372,6 +372,24 @@ MVariant& MVariant::operator=(const MStdString& s)
    return *this;
 }
 
+#if !M_NO_WCHAR_T
+
+MVariant& MVariant::operator=(const wchar_t* s)
+{
+   DoCleanup();
+   DoAssignToEmpty(s);
+   return *this;
+}
+
+MVariant& MVariant::operator=(const MWideString& s)
+{
+   DoCleanup();
+   DoAssignToEmpty(s);
+   return *this;
+}
+
+#endif
+
 MVariant& MVariant::operator=(const MStdStringVector& v)
 {
    DoCleanup();
@@ -439,15 +457,57 @@ void MVariant::AssignString(MConstChars p, unsigned size)
    DoAssignToEmpty(p, size);
 }
 
+#if !M_NO_WCHAR_T
+
+void MVariant::AssignString(const wchar_t* p, unsigned size)
+{
+   DoCleanup();
+   DoAssignToEmpty(p, size);
+}
+
+MWideString MVariant::AsWideString() const
+{
+   return MToWideString(AsString());
+}
+
+MWideString MVariant::AsWideString(unsigned mask) const
+{
+   return MToWideString(AsString(mask));
+}
+
+MWideString MVariant::AsEscapedWideString() const
+{
+   return MToWideString(AsEscapedString());
+}
+
+#endif
+
 const char* MVariant::AsConstChars() const
 {
    switch ( m_type )
    {
+   case VAR_EMPTY:
+      MException::ThrowNoValue();
+      M_ENSURED_ASSERT(0);
+   case VAR_BOOL:
+      m_placeholder[0] = (m_int32 != 0) ? '1' : '0';
+      m_placeholder[1] = '\0';
+      break;
    case VAR_CHAR:
    case VAR_BYTE:
       // Use placeholder temporarily to return the result
       m_placeholder[0] = static_cast<char>(m_int32);
       m_placeholder[1] = '\0';
+      break;
+   case VAR_INT:
+      MENumberOutOfRange::CheckIntegerRange(-999999, 9999999, m_int32); // can hold only 7 digits
+      MToChars(m_int32, m_placeholder);
+      M_ASSERT(strlen(m_placeholder) < 8); // paranoid check
+      break;
+   case VAR_UINT:
+      MENumberOutOfRange::CheckUnsignedRange(0u, 9999999u, m_uint32); // can hold only 7 digits
+      MToChars(m_uint32, m_placeholder);
+      M_ASSERT(strlen(m_placeholder) < 8); // paranoid check
       break;
    case VAR_BYTE_STRING:
    case VAR_STRING:
@@ -493,7 +553,7 @@ bool MVariant::AsBool() const
    case VAR_STRING_COLLECTION:
    case VAR_VARIANT_COLLECTION:
    case VAR_MAP:
-      return m_int32 == 0;  // convention
+      return m_int32 != 0;  // convention
    case VAR_OBJECT:
    case VAR_OBJECT_EMBEDDED:
       return m_object != NULL;  // convention
@@ -531,16 +591,16 @@ bool MVariant::AsBool() const
       #endif
    }
 
-MChar MVariant::AsChar() const
+char MVariant::AsChar() const
 {
-   MChar str [ 32 ];
+   char str [ 32 ];
 
    switch ( m_type )
    {
    case VAR_BYTE:
    case VAR_BOOL: // by convention...
    case VAR_CHAR:
-      return static_cast<MChar>(m_uint32);
+      return static_cast<char>(m_uint32);
    case VAR_INT:
    case VAR_UINT:
       {
@@ -550,7 +610,7 @@ MChar MVariant::AsChar() const
             MException::Throw(MException::ErrorSoftware, MErrorEnum::BadConversion, M_I("Could not convert '%s' to a single character"), MToChars(val, str));
             M_ENSURED_ASSERT(0);
          }
-         return (MChar)val;
+         return (char)val;
       }
    case VAR_DOUBLE:
       {
@@ -560,7 +620,7 @@ MChar MVariant::AsChar() const
             MException::Throw(MException::ErrorSoftware, MErrorEnum::BadConversion, M_I("Could not convert '%s' to a single character"), MToChars(val, str));
             M_ENSURED_ASSERT(0);
          }
-         return M_ROUND_TO(MChar, val);
+         return M_ROUND_TO(char, val);
       }
    case VAR_BYTE_STRING:
    case VAR_STRING:
@@ -660,7 +720,7 @@ int MVariant::AsInt() const
    {
       if ( m_int32 < 0 ) // unsigned integer bigger than maximum long
       {
-         MChar str [ 64 ];
+         char str [ 64 ];
          MException::Throw(MException::ErrorSoftware, MErrorEnum::BadConversion, M_I("Could not convert '%s' to integer"), MToChars(m_uint32, str));
          M_ENSURED_ASSERT(0);
       }
@@ -685,7 +745,7 @@ unsigned MVariant::AsUInt() const
    {
       if ( m_int32 < 0 )
       {
-         MChar str [ 64 ];
+         char str [ 64 ];
          MException::Throw(MException::ErrorSoftware, MErrorEnum::BadConversion, M_I("Could not convert '%s' to unsigned integer"), MToChars(m_int32, str));
          M_ENSURED_ASSERT(0);
       }
@@ -698,7 +758,7 @@ unsigned MVariant::AsUInt() const
       double val = MMath::Round(m_double);
       if ( val < 0.0 || val > (double)UINT_MAX )
       {
-         MChar str [ 64 ];
+         char str [ 64 ];
          MException::Throw(MException::ErrorSoftware, MErrorEnum::BadConversion, M_I("Could not convert '%s' to unsigned integer"), MToChars(val, str));
          M_ENSURED_ASSERT(0);
       }
@@ -744,7 +804,7 @@ Muint64 MVariant::AsUInt64() const
    {
       if ( m_int32 < 0 )
       {
-         MChar str [ 64 ];
+         char str [ 64 ];
          MException::Throw(MException::ErrorSoftware, MErrorEnum::BadConversion, M_I("Could not convert '%s' to unsigned integer"), MToChars(m_int32, str));
          M_ENSURED_ASSERT(0);
       }
@@ -908,7 +968,7 @@ MSharedString MVariant::AsSharedString() const
       break;
    case VAR_BYTE:
    case VAR_CHAR:
-      result.assign(1, static_cast<MChar>(m_uint32));
+      result.assign(1, static_cast<char>(m_uint32));
       break;
    case VAR_BYTE_STRING:
    case VAR_STRING:
@@ -952,7 +1012,7 @@ MStdString MVariant::AsString(unsigned mask) const
    switch ( m_type )
    {
    case VAR_CHAR:
-      result = MStr::CharToEscapedString(static_cast<MChar>(m_uint32));
+      result = MStr::CharToEscapedString(static_cast<char>(m_uint32));
       break;
    default:
       result = MStr::ToString(AsString(), mask);
@@ -1664,7 +1724,7 @@ MVariant MVariant::operator|(const MVariant& v) const
       result.DoAssignToEmpty((Muint8)(AsByte() | v.AsByte()));
       break;
    case VAR_CHAR:
-      result.DoAssignToEmpty((MChar)(AsChar() | v.AsChar()));
+      result.DoAssignToEmpty((char)(AsChar() | v.AsChar()));
       break;
    case VAR_BYTE_STRING:
       DoAndOrXorOnVariants(result, *this, v, DoOr);
@@ -1692,7 +1752,7 @@ MVariant MVariant::operator&(const MVariant& v) const
       result.DoAssignToEmpty((Muint8)(AsByte() & v.AsByte()));
       break;
    case VAR_CHAR:
-      result.DoAssignToEmpty((MChar)(AsChar() & v.AsChar()));
+      result.DoAssignToEmpty((char)(AsChar() & v.AsChar()));
       break;
    case VAR_BYTE_STRING:
       DoAndOrXorOnVariants(result, *this, v, DoAnd);
@@ -1720,7 +1780,7 @@ MVariant MVariant::operator^(const MVariant& v) const
       result.DoAssignToEmpty((Muint8)(AsByte() ^ v.AsByte()));
       break;
    case VAR_CHAR:
-      result.DoAssignToEmpty((MChar)(AsChar() ^ v.AsChar()));
+      result.DoAssignToEmpty((char)(AsChar() ^ v.AsChar()));
       break;
    case VAR_BYTE_STRING:
       DoAndOrXorOnVariants(result, *this, v, DoXor);
@@ -1754,7 +1814,7 @@ MVariant MVariant::operator!() const
       result.DoAssignToEmpty((Muint8)~AsByte());
       break;
    case VAR_CHAR:
-      result.DoAssignToEmpty((MChar)~AsChar());
+      result.DoAssignToEmpty((char)~AsChar());
       break;
    default: // VAR_UINT, all the others....
       result.DoAssignToEmpty(static_cast<unsigned>(~AsDWord()));
@@ -1803,7 +1863,7 @@ MVariant MVariant::operator-() const
          break;
       case MVariant::VAR_CHAR:
          if ( result >= -128.0 && result <= 256.0 ) // hard-code range here, do not use defines
-            return (MChar)(char)result;
+            return (char)(char)result;
          break;
       case MVariant::VAR_UINT:
          if ( result >= 0.0 && result <= (double)UINT_MAX )
@@ -2214,7 +2274,7 @@ MVariant MVariant::operator>>(const MVariant& v) const
       return AsInt() >> val;
 }
 
-   const MChar OPERATOR_AUTOINCREMENT_STRING[] = "++";
+   const char OPERATOR_AUTOINCREMENT_STRING[] = "++";
 
 MVariant& MVariant::operator++()
 {
@@ -2275,7 +2335,7 @@ MVariant& MVariant::operator++()
    return *this;
 }
 
-   const MChar OPERATOR_AUTODECREMENT_STRING[] = "--";
+   const char OPERATOR_AUTODECREMENT_STRING[] = "--";
 
 MVariant& MVariant::operator--()
 {
@@ -2422,6 +2482,37 @@ void MVariant::AddToVariantCollection(const MVariant& v)
    DoAccessVariantItem(oldCount).DoAssignToEmpty(v);
 }
 
+#if !M_NO_WCHAR_T
+
+void MVariant::DoAssignToEmpty(wchar_t c)
+{
+   M_ASSERT(m_type == VAR_EMPTY);
+   if ( isascii(c) )
+   {
+      M_ASSERT(c >= 0 && c <= 127); // paranod check of isascii call
+      DoAssignToEmpty(static_cast<char>(c));
+   }
+   else
+      DoAssignToEmpty(&c, 1); // interpret as string otherwise
+}
+
+void MVariant::DoAssignToEmpty(const wchar_t* s)
+{
+   DoAssignToEmpty(s, static_cast<unsigned>(wcslen(s)));
+}
+
+void MVariant::DoAssignToEmpty(const wchar_t* s, unsigned len)
+{
+   DoAssignToEmpty(MToStdString(s, len));
+}
+
+void MVariant::DoAssignToEmpty(const MWideString& str)
+{
+   DoAssignToEmpty(MToStdString(str));
+}
+
+#endif
+
 void MVariant::DoAssignToEmpty(MConstChars s)
 {
    DoAssignToEmpty(s, static_cast<unsigned>(m_strlen(s)));
@@ -2477,7 +2568,9 @@ void MVariant::DoAssignToEmpty(const VariantVector& v)
 void MVariant::DoAssignToEmpty(const MVariant& other)
 {
    M_ASSERT(m_type == VAR_EMPTY);
-   *(Muint64*)this = *(Muint64*)&other; // copy first quadword
+   m_type = other.m_type;
+   m_bufferType = other.m_bufferType;
+   m_uint32 = other.m_uint32;
    if ( m_bufferType != BUFFERTYPE_NONE )
    {
       if ( m_bufferType == BUFFERTYPE_COPY )

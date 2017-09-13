@@ -5,9 +5,9 @@
 
 M_START_PROPERTIES(Iso8825)
 M_START_METHODS(Iso8825)
-   M_CLASS_SERVICE                  (Iso8825, IsTagRelative,         ST_bool_S_byte)
+   M_CLASS_SERVICE                  (Iso8825, IsTagRelative,         ST_bool_S_char)
    M_CLASS_SERVICE                  (Iso8825, IsUidRelative,         ST_bool_S_constMStdStringA)
-   M_CLASS_SERVICE                  (Iso8825, DecodeShortLength,     ST_unsigned_S_byte)
+   M_CLASS_SERVICE                  (Iso8825, DecodeShortLength,     ST_unsigned_S_char)
    M_CLASS_SERVICE                  (Iso8825, DecodeLength,          ST_unsigned_S_constMByteStringA)
    M_CLASS_SERVICE                  (Iso8825, DecodedLengthByteSize, ST_unsigned_S_constMByteStringA)
    M_CLASS_SERVICE                  (Iso8825, EncodeLength,          ST_MByteString_S_unsigned)
@@ -155,12 +155,12 @@ void MIso8825::DecodeUidFromBuffer(MStdString& result, const char* uid, unsigned
    result.clear();
    result.reserve(length * 2); // this is always the case for GUID
 
-   MChar buffer [ 64 ];
+   char buffer [ 64 ];
    const char* uidLast = uid + length;
    if ( !isRelative )
    {
       Muint8 b = (Muint8)*uid;
-      result += MChar(unsigned(b / 40u) + unsigned('0')); // we know range, know we are ASCII...
+      result += char(unsigned(b / 40u) + unsigned('0')); // we know range, know we are ASCII...
       b %= 40u; // second digit 0 .. 39 is encoded with base 40
       result += '.';
       result += MToChars((unsigned long)b, buffer);

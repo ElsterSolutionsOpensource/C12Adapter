@@ -36,8 +36,8 @@
          MException::Throw(MException::ErrorSoftware, M_CODE_STR_P2(M_ERR_BAD_VERSION_NUMBER_FORMAT_S1, M_I("Version shall consist of up to %d numbers in range 0 to %d, separated by period"), MVersion::VersionMaximumNumberOfEntries, maxVal));
       else
       {
-         MChar format [ 32 ];
-         MChar* c = format;
+         char format [ 32 ];
+         char* c = format;
          for ( --count; count != 0; --count )
          {
             *c++ = '0';
@@ -85,7 +85,7 @@
       ///           two-fraction versions as double precision numbers as they can be converted into string
       ///           representation similar that of MVersion.
       ///
-      static MVariant DoNew1(MVariant& versionOrString)
+      static MVariant DoNew1(const MVariant& versionOrString)
       {
          MVersion ver;
          MVersion* parVer = DoGetVersionObjectOrNull(versionOrString);
@@ -109,7 +109,7 @@
       ///       - Otherwise the parameter is interpreted as format string, see
       ///         \ref MVersion_Format "version class description" for details.
       ///
-      static MVariant DoNew2(MVariant& s, MVariant& readonlyOrFormat)
+      static MVariant DoNew2(const MVariant& s, const MVariant& readonlyOrFormat)
       {
          MVersion ver;
          if ( readonlyOrFormat.GetType() != MVariant::VAR_BOOL ) // 2nd parameter is possibly a string
@@ -210,9 +210,9 @@ MStdString MVersion::GetFormat() const
    Muint8 digits = (m_flags & VersionMaskNumberOfEntries);
    if ( digits != 0 )
 #ifdef M_USE_USTL
-      result.append(1, MChar(digits + '0'));
+      result.append(1, char(digits + '0'));
 #else
-      result.assign(1, MChar(digits + '0'));
+      result.assign(1, char(digits + '0'));
 #endif
    if ( m_flags & VersionFlagByteEntries )
       result += 'b';
@@ -234,7 +234,7 @@ void MVersion::SetFormat(const MStdString& format)
    MStdString::const_iterator itEnd = format.end();
    for ( ; it != itEnd; ++it )
    {
-      MChar c = *it;
+      char c = *it;
       if ( m_isdigit(c) )
       {
          m_flags &= ~VersionMaskNumberOfEntries;
@@ -298,7 +298,7 @@ MStdString MVersion::AsString() const
    int last = (int)m_count - 1; // use "last" instead of "size" due to an "if" below
    for ( int i = 0; i <= last; ++i ) // also use int, not unsigned, because "last" can be -1.
    {
-      MChar buff [ 16 ];
+      char buff [ 16 ];
       MToChars((int)m_entries[i], buff);
       str.append(buff);
       if ( i == last )
@@ -316,7 +316,7 @@ void MVersion::SetAsString(const MStdString& s)
    if ( !s.empty() ) // empty string becomes an empty version
    {
       unsigned numDigits = 0;
-      MChar buff [ 8 ];
+      char buff [ 8 ];
       MStdString::const_iterator it = s.begin();
       MStdString::const_iterator itEnd = s.end();
       for ( ; ; ++it )
@@ -338,8 +338,8 @@ void MVersion::SetAsString(const MStdString& s)
          }
          else
          {
-            MChar c = *it;
-            if ( !m_isdigit(c) || numDigits >= (sizeof(buff) / sizeof(MChar) - 1) )
+            char c = *it;
+            if ( !m_isdigit(c) || numDigits >= (sizeof(buff) / sizeof(char) - 1) )
             {
                DoThrowBadVersionNumber(m_flags);
                M_ENSURED_ASSERT(0);

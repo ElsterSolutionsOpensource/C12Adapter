@@ -96,25 +96,25 @@ public: // Methods:
    ///
    /// See \ref EaxEncrypt() for detailed description.
    ///
-   /// \return Muint32 - 32-bit MAC, message authentication code of clear text.
+   /// \return 32-bit MAC, message authentication code of clear text.
    ///
-   Muint32 EaxEncryptBuffer(const char* clearText, unsigned clearTextSize, char* cipherText, unsigned cipherTextSize);
+   unsigned EaxEncryptBuffer(const char* clearText, unsigned clearTextSize, char* cipherText, unsigned cipherTextSize);
 
    /// Performance sensitive version of EaxDecrypt that accepts pointers and lengths of the data.
    ///
    /// See \ref EaxDecrypt() for detailed description.
    ///
-   /// \return Muint32 - 32-bit MAC, message authentication code of clear text.
+   /// \return 32-bit MAC, message authentication code of clear text.
    ///
-   Muint32 EaxDecryptBuffer(const char* clearText, unsigned clearTextSize, char* cipherText, unsigned cipherTextSize);
+   unsigned EaxDecryptBuffer(const char* clearText, unsigned clearTextSize, char* cipherText, unsigned cipherTextSize);
 
    /// Performance sensitive version of EaxAuthenticate that accepts pointers and lengths of the data.
    ///
    /// See \ref EaxAuthenticate() for detailed description.
    ///
-   /// \return Muint32 - 32-bit MAC, message authentication code of clear text.
+   /// \return 32-bit MAC, message authentication code of clear text.
    ///
-   Muint32 EaxAuthenticateBuffer(const char* clearText, unsigned clearTextSize);
+   unsigned EaxAuthenticateBuffer(const char* clearText, unsigned clearTextSize);
 
    /// Performance sensitive version of EaxDecrypt that avoids returning a string.
    ///
@@ -276,9 +276,9 @@ public: // Methods:
    /// \param clearText
    ///     Message to authenticate
    ///
-   /// \return Muint32 - 32-bit message authentication code, MAC.
+   /// \return 32-bit message authentication code, MAC.
    ///
-   Muint32 EaxAuthenticate(const MByteString& clearText);
+   unsigned EaxAuthenticate(const MByteString& clearText);
 
    /// Static version of MAesEax::EaxAuthenticate that accepts key as parameter.
    ///
@@ -292,9 +292,9 @@ public: // Methods:
    /// \param clearText
    ///     Message to authenticate
    ///
-   /// \return Muint32 - 32-bit message authentication code, MAC.
+   /// \return 32-bit message authentication code, MAC.
    ///
-   static Muint32 StaticEaxAuthenticate(const MByteString& key, const MByteString& clearText);
+   static unsigned StaticEaxAuthenticate(const MByteString& key, const MByteString& clearText);
 
 private: // Methods:
 

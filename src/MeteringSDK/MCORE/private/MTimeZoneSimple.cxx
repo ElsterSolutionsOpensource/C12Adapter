@@ -28,22 +28,26 @@ bool MTimeZone::DoSetByName(const MStdString& name)
       if ( pos != NULL )
       {
          pos += 3; // skip
-         if ( pos[0] == '\0' ) // accept GMT as a valid input
+         if ( pos[0] == '\0' ) // accept GMT/UTC as a valid input, no offset
          {
             m_standardName = name;
             return true;
          }
-         else if ( (pos[0] == '-' || pos[0] == '+' || pos[0] == ' ') && isdigit(pos[1]) && isdigit(pos[2]) )
+         else if ( pos[0] == '-' || pos[0] == '+' || pos[0] == ' ' )
          {
-            int offset = (pos[1] - '0') + (pos[2] - '0');
+            int hours;
+            int minutes = 0;
+            if ( sscanf(pos + 1, "%d:%d", &hours, &minutes) < 1 )
+                return false;
+            if ( minutes < 0 || minutes >= 60 || hours < 0 ) // expect positive values. Also, upper range for hours will be checked later
+                return false;
             if ( pos[0] == '-' )
-               offset = -offset;
-            if ( offset >= s_startTimeZoneHr && offset <= s_endTimeZoneHr )
-            {
-               m_standardName = name;
-               m_standardOffset = offset;
-               return true;
-            }
+               hours = -hours;
+            if ( hours < s_startTimeZoneHr || hours > s_endTimeZoneHr )
+                return false;
+            m_standardOffset = (hours * 60 + minutes) * 60;
+            m_standardName = name;
+            return true;
          }
       }
    }
@@ -91,7 +95,12 @@ MStdStringVector MTimeZone::GetAllTimeZoneNames()
 {
    MStdStringVector result;
    for ( int i = s_startTimeZoneHr; i <= s_endTimeZoneHr; ++i ) // inclusive range
-      result.push_back(MGetStdString("GMT%+d:00", i));
+   {
+      if ( i == 0 )
+         result.push_back(MStdString("GMT", 3));
+      else
+         result.push_back(MGetStdString("GMT%+03d:00", i));
+   }
    return result;
 }
 

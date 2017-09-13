@@ -9,10 +9,10 @@
 
 #if !M_NO_VARIANT
 
-/// Variant data type, where the particular value type is dynamically determined at runtime.
+/// Variant data type, where a particular value type is dynamically determined at runtime.
 ///
 /// The uninitialized variant variable would be of empty type, and should not
-/// participate in operations other than the assignment into it, or an exception is thrown.
+/// participate in operations other than the assignment into it, or else an exception is thrown.
 /// When performing value based operations, the class performs type conversions.
 ///
 class M_CLASS MVariant
@@ -46,28 +46,28 @@ public: // Types:
    ///
    enum AcceptByteStringType
    {
-      ACCEPT_BYTE_STRING
+      ACCEPT_BYTE_STRING  ///< Single value of the tag
    };
 
    /// Tag that allows telling byte string constructor from the standard string constructor.
    ///
    enum AcceptByteStringCollectionType
    {
-      ACCEPT_BYTE_STRING_COLLECTION
+      ACCEPT_BYTE_STRING_COLLECTION  ///< Single value of the tag
    };
 
    /// Tag that allows telling string constructor from the byte string constructor.
    ///
    enum AcceptStringType
    {
-      ACCEPT_STRING
+      ACCEPT_STRING  ///< Single value of the tag
    };
 
    /// Tag that allows telling an embedded object from an ordinary object.
    ///
    enum AcceptObjectEmbedded
    {
-      ACCEPT_OBJECT_EMBEDDED
+      ACCEPT_OBJECT_EMBEDDED  ///< Single value of the tag
    };
 
    /// Externally visible collection of variants.
@@ -119,7 +119,9 @@ private: // Types and constants:
 
 public: // Constructor and destructor:
 
-   /// Default object constructor.
+   /// Default constructor.
+   ///
+   /// The result type of the variant is \ref MVariant::VAR_EMPTY.
    ///
    MVariant()
    :
@@ -128,7 +130,18 @@ public: // Constructor and destructor:
    {
    }
 
-   /// Object constructor that creates an empty object of a given type.
+   /// Create an empty object of a given type.
+   ///
+   /// The result type of the variant is the one given.
+   /// The result value of the variant depends on the type:
+   ///   - For \ref MVariant::VAR_BOOL it is False.
+   ///   - For \ref MVariant::VAR_CHAR it is '\0'.
+   ///   - For all numeric types it is zero.
+   ///   - For strings and byte strings it is an empty string.
+   ///   - For collection types it is an empty collection.
+   ///   - For object types it is null.
+   ///
+   /// \param type Type of the variant
    ///
    MVariant(Type type) // SWIG_HIDE
    :
@@ -138,7 +151,11 @@ public: // Constructor and destructor:
       SetToNull(type);
    }
 
-   /// Construct the value of type bool with the value specified.
+   /// Construct the value of type bool.
+   ///
+   /// The result type of the variant is \ref MVariant::VAR_BOOL.
+   ///
+   /// \param n Boolean value, true or false.
    ///
    MVariant(bool n)
    :
@@ -149,6 +166,10 @@ public: // Constructor and destructor:
 
    /// Construct the value of type char with the value specified.
    ///
+   /// The result type of the variant is \ref MVariant::VAR_CHAR.
+   ///
+   /// \param c Character value.
+   ///
    MVariant(char c)
    :
       m_type(VAR_EMPTY)
@@ -157,7 +178,15 @@ public: // Constructor and destructor:
    }
 
 #if !M_NO_WCHAR_T
-   /// Construct the value of type char with the value specified.
+
+   /// Construct the variant from a wide character.
+   ///
+   /// The result type of the variant will depend on the given value as follows:
+   ///   - If c is an ASCII character, range 0 to 127, the result variant will be \ref MVariant::VAR_CHAR.
+   ///   - Otherwise, for non-ASCII character the result will be a string, \ref MVariant::VAR_STRING.
+   /// The method will work correctly only if the current code page is UTF-8, which correstonds to \ref M_UNICODE = 1.
+   ///
+   /// \param c Character value.
    ///
    MVariant(wchar_t c) // SWIG_HIDE
    :
@@ -165,9 +194,14 @@ public: // Constructor and destructor:
    {
       DoAssignToEmpty(c);
    }
+
 #endif
 
-   /// Construct the value of type Muint8 with the value specified.
+   /// Construct the variant of byte type with the value specified.
+   ///
+   /// The result type of the variant is \ref MVariant::VAR_BYTE.
+   ///
+   /// \param b Byte unsigned value, 0 to 255.
    ///
    MVariant(Muint8 b)
    :
@@ -176,7 +210,12 @@ public: // Constructor and destructor:
       DoAssignToEmpty(b);
    }
 
-   /// Construct the value of type int with the value specified.
+   /// Construct the variant of type int with the value specified.
+   ///
+   /// The result type of the variant is \ref MVariant::VAR_INT,
+   /// which will always be a signed 32-bit value.
+   ///
+   /// \param n Integer value.
    ///
    MVariant(int n)
    :
@@ -185,7 +224,12 @@ public: // Constructor and destructor:
       DoAssignToEmpty(n);
    }
 
-   /// Construct the value of type unsigned int with the value specified.
+   /// Construct the variant of type unsigned int with the value specified.
+   ///
+   /// The result type of the variant is \ref MVariant::VAR_UINT,
+   /// which will always be an unsigned 32-bit value.
+   ///
+   /// \param n Unsigned integer value.
    ///
    MVariant(unsigned n)
    :
@@ -194,7 +238,15 @@ public: // Constructor and destructor:
       DoAssignToEmpty(n);
    }
 
-   /// Construct the value of type long with the value specified.
+   /// Construct the variant with the long integer value.
+   ///
+   /// If the given value fits within range of 32-bits integer
+   /// the result type will be \ref MVariant::VAR_INT.
+   /// Otherwise, and it is only possible on platforms where
+   /// a long integer is 64-bits, this will produce
+   /// a variant of type \ref MVariant::VAR_DOUBLE.
+   ///
+   /// \param n Long integer value.
    ///
    MVariant(long n) // SWIG_HIDE
    :
@@ -203,7 +255,15 @@ public: // Constructor and destructor:
       DoAssignToEmpty(n);
    }
 
-   /// Construct the value of type unsigned long with the value specified.
+   /// Construct the variant with the unsigned long integer value.
+   ///
+   /// If the given value fits within range of 32-bits unsigned integer
+   /// the result type will be \ref MVariant::VAR_UINT.
+   /// Otherwise, and it is only possible on platforms where
+   /// an unsigned long integer is 64-bits, this will produce
+   /// a variant of type \ref MVariant::VAR_DOUBLE.
+   ///
+   /// \param n Unsigned long integer value.
    ///
    MVariant(unsigned long n) // SWIG_HIDE
    :
@@ -212,7 +272,13 @@ public: // Constructor and destructor:
       DoAssignToEmpty(n);
    }
 
-   /// Construct the value from 64-bit signed integer.
+   /// Construct the variant from 64-bit signed integer.
+   ///
+   /// If the given value fits within range of 32-bits integer
+   /// the result type will be \ref MVariant::VAR_INT.
+   /// Otherwise, this will produce a variant of type \ref MVariant::VAR_DOUBLE.
+   ///
+   /// \param n 64-bit integer value.
    ///
    MVariant(Mint64 n)  // SWIG_HIDE
    :
@@ -221,7 +287,13 @@ public: // Constructor and destructor:
       DoAssignToEmpty(n);
    }
 
-   /// Construct the value from 64-bit signed integer.
+   /// Construct the variant from 64-bit unsigned integer.
+   ///
+   /// If the given value fits within range of 32-bits unsigned integer
+   /// the result type will be \ref MVariant::VAR_UINT.
+   /// Otherwise, this will produce a variant of type \ref MVariant::VAR_DOUBLE.
+   ///
+   /// \param n 64-bit integer value.
    ///
    MVariant(Muint64 n) // SWIG_HIDE
    :
@@ -230,7 +302,11 @@ public: // Constructor and destructor:
       DoAssignToEmpty(n);
    }
 
-   /// Construct the value of type double with the value specified.
+   /// Construct the variant of type double.
+   ///
+   /// This will produce a variant of type \ref MVariant::VAR_DOUBLE.
+   ///
+   /// \param n Double precision floating point value.
    ///
    MVariant(double n)
    :
@@ -239,9 +315,11 @@ public: // Constructor and destructor:
       DoAssignToEmpty(n);
    }
 
-   ///@{
-   /// Construct the value of type string with the value specified
-   /// as the constant character pointer.
+   /// Construct the variant of type string.
+   ///
+   /// This will produce a variant of type \ref MVariant::VAR_STRING.
+   ///
+   /// \param s Zero terminated constant character string given as pointer to the first character.
    ///
    MVariant(MConstChars s) // SWIG_HIDE
    :
@@ -249,18 +327,40 @@ public: // Constructor and destructor:
    {
       DoAssignToEmpty(s);
    }
-   MVariant(MConstChars s, unsigned len, AcceptStringType) // SWIG_HIDE
+
+   /// Construct the variant of type string.
+   ///
+   /// This will produce a variant of type \ref MVariant::VAR_STRING.
+   /// The tag parameter is necessary to distinguish this constructor from
+   /// the one that creates a byte string.
+   /// Use \ref MVariant(const char*, unsigned, AcceptByteStringType)
+   /// to construct a byte string.
+   ///
+   /// \param s Constant character string given as pointer to the first character.
+   /// \param len Explicitly given length of the character string.
+   /// \param tag The only accepted value is \ref MVariant::ACCEPT_STRING
+   ///
+   MVariant(MConstChars s, unsigned len, AcceptStringType tag) // SWIG_HIDE
    :
       m_type(VAR_EMPTY)
    {
+      M_USED_VARIABLE(tag);
       DoAssignToEmpty(s, len);
    }
-   ///@}
 
 #if !M_NO_WCHAR_T
-   ///@{
-   /// Construct the value of type string with the value specified
-   /// as the constant character pointer.
+
+   /// Construct the variant of type string.
+   ///
+   /// This will produce a variant of type \ref MVariant::VAR_STRING.
+   /// The conversion from wide character string to regular string
+   /// will be done according to the following rules:
+   ///   - Only on Windows when \ref M_UNICODE is false
+   ///     the current system 8-bit codepage will be used.
+   ///   - Otherwise UTF-8 codepage will be used. Newer applications
+   ///     should assume this to be default on all platforms.
+   ///
+   /// \param s Zero terminated constant wide character string given as pointer to the first wide character.
    ///
    MVariant(const wchar_t* s) // SWIG_HIDE
    :
@@ -268,25 +368,59 @@ public: // Constructor and destructor:
    {
       DoAssignToEmpty(s);
    }
-   MVariant(const wchar_t* s, unsigned len, AcceptStringType = ACCEPT_STRING) // SWIG_HIDE
+
+   /// Construct the variant of type string.
+   ///
+   /// This will produce a variant of type \ref MVariant::VAR_STRING.
+   /// The conversion from wide character string to regular string
+   /// will be done according to the following rules:
+   ///   - Only on Windows when \ref M_UNICODE is false
+   ///     the current system 8-bit codepage will be used.
+   ///   - Otherwise UTF-8 codepage will be used. Newer applications
+   ///     should assume this to be default on all platforms.
+   ///
+   /// \param s   Constant wide character string given as pointer to the first wide character.
+   /// \param len Explicitly given length of the character string.
+   /// \param tag The only accepted value is \ref MVariant::ACCEPT_STRING,
+   ///            and it can be ommitted since there is no clash with the byte string version.
+   ///
+   MVariant(const wchar_t* s, unsigned len, AcceptStringType tag = MVariant::ACCEPT_STRING) // SWIG_HIDE
    :
       m_type(VAR_EMPTY)
    {
+      M_USED_VARIABLE(tag);
       DoAssignToEmpty(s, len);
    }
+
+   /// Construct the variant of type string.
+   ///
+   /// This will produce a variant of type \ref MVariant::VAR_STRING.
+   /// The conversion from wide character string to regular string
+   /// will be done according to the following rules:
+   ///   - Only on Windows when \ref M_UNICODE is false
+   ///     the current system 8-bit codepage will be used.
+   ///   - Otherwise UTF-8 codepage will be used. Newer applications
+   ///     should assume this to be default on all platforms.
+   ///
+   /// \param s Wide character string value.
+   ///
    MVariant(const MWideString& s) // SWIG_HIDE
    :
       m_type(VAR_EMPTY)
    {
       DoAssignToEmpty(s);
    }
-   ///@}
+
 #endif
 
-   /// Construct the value of type string with the value specified
-   /// as MStdString. Note that MByteString might have the same implementation
-   /// as MStdString, and it would be not obvious that the constructor from
-   /// byte string creates the variant with type VAR_STRING.
+   /// Construct the variant of type string.
+   ///
+   /// This will produce a variant of type \ref MVariant::VAR_STRING.
+   /// Note that to C++ the type MByteString is indistinguishable from MStdString.
+   /// Use \ref MVariant(const MByteString& s, AcceptByteStringType)
+   /// to construct a byte string.
+   ///
+   /// \param s Character string value.
    ///
    MVariant(const MStdString& s)
    :
@@ -296,11 +430,14 @@ public: // Constructor and destructor:
    }
 
    ///@{
-   /// Construct the value of type byte string,
-   /// with the value specified as the constant pointer with length.
-   /// Note that this is the way to create a variant of type VAR_BYTE_STRING
-   /// with the non-copy constructor. This is because the implementation
-   /// with MStdString might be the same as one of MByteString.
+   /// Construct the variant of type byte string.
+   ///
+   /// This will produce a variant of type \ref MVariant::VAR_BYTE_STRING.
+   /// Use \ref MVariant(const char* p, unsigned len, AcceptStringType)
+   /// to construct a regular string, not byte string.
+   ///
+   /// \param p Constant pointer to the first byte of the byte string.
+   /// \param len Length of the byte string.
    ///
    MVariant(const char* p, unsigned len) // SWIG_HIDE
    :
@@ -316,34 +453,54 @@ public: // Constructor and destructor:
    }
    ///@}
 
-   /// Construct the value of type byte string,
-   /// giving the byte string as first parameter.
-   /// The second parameter should always be MVariant::ACCEPT_BYTE_STRING.
-   /// Note that this is the way to create a variant of type VAR_BYTE_STRING
-   /// with the non-copy constructor. This is because the implementation
-   /// with MStdString might be the same as one of MByteString.
+   /// Construct the variant of type byte string.
    ///
-   MVariant(const MByteString& s, AcceptByteStringType) // SWIG_HIDE
+   /// This will produce a variant of type \ref MVariant::VAR_BYTE_STRING.
+   /// The second parameter should always be \ref MVariant::ACCEPT_BYTE_STRING.
+   /// Note that to C++ the type MByteString is indistinguishable from MStdString.
+   /// Use \ref MVariant(const MStdString& s) to construct a regular string, not byte string.
+   ///
+   /// \param s Byte string value.
+   /// \param tag The only accepted value is \ref MVariant::ACCEPT_BYTE_STRING.
+   ///
+   MVariant(const MByteString& s, AcceptByteStringType tag) // SWIG_HIDE
    :
       m_type(VAR_EMPTY)
    {
+      M_USED_VARIABLE(tag);
       DoAssignByteStringToEmpty(s);
    }
 
-   /// Construct the value of type byte string vector,
-   /// giving the byte string vector as first parameter.
-   /// The second parameter should always be MVariant::ACCEPT_BYTE_STRING_VECTOR.
-   /// The internal representation of a byte string vector is a variant collection.
+   /// Construct the variant of type varaint collection that hold byte strings.
    ///
-   MVariant(const MByteStringVector& v, AcceptByteStringCollectionType) // SWIG_HIDE
+   /// This will produce a variant of type \ref MVariant::VAR_VARIANT_COLLECTION
+   /// where every element will be of type \ref MVariant::VAR_BYTE_STRING.
+   /// The second parameter should always be \ref MVariant::ACCEPT_BYTE_STRING_COLLECTION,
+   /// and it is necessary for distinguishing MByteStringVector from MStdStringVector,
+   /// which are the same typedefs in C++.
+   /// Use \ref MVariant(const MStdStringVector&) to construct a variant
+   /// of type \ref MVariant::VAR_STRING_COLLECTION.
+   ///
+   /// \param v Vector (collection) of byte strings.
+   /// \param tag The only accepted value is \ref MVariant::ACCEPT_BYTE_STRING_COLLECTION.
+   ///
+   MVariant(const MByteStringVector& v, AcceptByteStringCollectionType tag) // SWIG_HIDE
    :
       m_type(VAR_EMPTY)
    {
+      M_USED_VARIABLE(tag);
       DoAssignByteStringCollectionToEmpty(v);
    }
 
-   /// Construct the value of type string collection with the value specified
-   /// as parameter.
+   /// Construct the variant of type string collection.
+   ///
+   /// This will produce a variant of type \ref MVariant::VAR_STRING_COLLECTION
+   /// where every element will be of type \ref MVariant::VAR_STRING.
+   /// Use \ref MVariant(const MByteStringVector&, AcceptByteStringCollectionType)
+   /// to construct a variant of type \ref MVariant::VAR_VARIANT_COLLECTION
+   /// where every element will be of type \ref MVariant::VAR_BYTE_STRING.
+   ///
+   /// \param v Vector (collection) of strings.
    ///
    MVariant(const MStdStringVector& v)
    :
@@ -352,8 +509,11 @@ public: // Constructor and destructor:
       DoAssignToEmpty(v);
    }
 
-   /// Construct the value of type variant collection with the value specified
-   /// as parameter.
+   /// Construct the variant of type varaint collection.
+   ///
+   /// This will produce a variant of type \ref MVariant::VAR_VARIANT_COLLECTION.
+   ///
+   /// \param v Vector (collection) of variants.
    ///
    MVariant(const VariantVector& v) // SWIG_HIDE
    :
@@ -362,37 +522,55 @@ public: // Constructor and destructor:
       DoAssignToEmpty(v);
    }
 
-   /// Construct the value of type object, which references the object given.
-   /// Note that the variant does not own the object,
-   /// and it is the responsibility of the application to ensure
-   /// that the object is not discarded before its reference.
+   /// Construct the variant of type object, which references the object given.
+   ///
+   /// This will produce a variant of type \ref MVariant::VAR_OBJECT.
+   /// The variant does not own the object, and it is the responsibility of the application
+   /// to ensure that the object is not discarded before its reference.
+   /// To create a variant that holds and owns an embedded object
+   /// use \ref MVariant(const C* o, AcceptObjectEmbedded).
+   ///
+   /// \param o Object value, possibly NULL.
    ///
    MVariant(MObject* o);
 
-   /// Copy the embedded object to the variant.
+   /// Construct the variant of type embedded object.
    ///
-   /// \pre The given embedded object shall be nonzero, or there is a debug check.
+   /// This will produce a variant of type \ref MVariant::VAR_OBJECT_EMBEDDED.
+   /// To create a variant that holds and does not own a regular object
+   /// use \ref MVariant(const MObject*).
+   ///
+   /// \param o Embedded object value.
+   ///          There is a debug check to verify that the given object is not NULL,
+   ///          and it is indeed an embedded object.
+   /// \param tag The only accepted value is \ref MVariant::ACCEPT_OBJECT_EMBEDDED.
+   ///            The tag is necessary to distinguis this constructor from MVariant(MObject*).
    ///
    template
       <class C>
-   MVariant(const C* o, AcceptObjectEmbedded) // SWIG_HIDE
+   MVariant(const C* o, AcceptObjectEmbedded tag) // SWIG_HIDE
    :
       m_type(VAR_EMPTY)
    {
+      M_USED_VARIABLE(tag);
       DoAssignObjectEmbeddedToEmpty(o);
    }
 
-   /// Construct the value from the copy. Initialize the object
-   /// with the attributes of the other object.
+   /// Construct the variant from a given copy.
    ///
-   MVariant(const MVariant& v)
+   /// This will produce a variant of the same type as the one given.
+   /// It is not an error to create a copy of an empty variant.
+   ///
+   /// \param other Variant from which to copy the value.
+   ///
+   MVariant(const MVariant& other)
    :
       m_type(VAR_EMPTY)
    {
-      DoAssignToEmpty(v);
+      DoAssignToEmpty(other);
    }
 
-   /// Destroy the variant object, reclaim memory if the value is of type string.
+   /// Destroy the variant object, reclaim memory if necessary.
    ///
    ~MVariant() M_NO_THROW
    {
@@ -408,19 +586,28 @@ public: // Services that work with type of the variant:
       return static_cast<Type>(m_type);
    }
 
-   /// Tells whether the variant is of type VAR_EMPTY, which means it is not initialized
-   /// with any value.
+   /// Tells whether the variant has no value.
+   ///
+   /// Empty variant is one of the following:
+   ///   - Variant type is \ref MVariant::VAR_EMPTY.
+   ///   - Variant type is \ref MVariant::VAR_OBJECT and the value is NULL, no object.
    ///
    bool IsEmpty() const
    {
       return m_type == VAR_EMPTY || (m_type == VAR_OBJECT && m_object == NULL);
    }
 
-   /// Whether the variant is of numeric type, so the arithmetic
-   /// operations can be performed.
-   /// The following types are arithmetic: VAR_BOOL,
-   /// VAR_CHAR, VAR_INT, VAR_UINT, and VAR_DOUBLE.
-   /// Empty and string types are not numeric.
+   /// Whether the variant is of numeric type, so the arithmetic operations can be performed with it.
+   ///
+   /// The following types are arithmetic:
+   ///   - \ref MVariant::VAR_BOOL
+   ///   - \ref MVariant::VAR_CHAR
+   ///   - \ref MVariant::VAR_BYTE
+   ///   - \ref MVariant::VAR_INT
+   ///   - \ref MVariant::VAR_UINT
+   ///   - \ref MVariant::VAR_DOUBLE.
+   ///
+   /// All the other types are not numeric.
    ///
    bool IsNumeric() const
    {
@@ -428,6 +615,18 @@ public: // Services that work with type of the variant:
    }
 
    /// Whether the variant can be indexed.
+   ///
+   /// This means that \ref GetCount(), \ref GetItem and \ref SetItem are callable,
+   /// subjects of valid array ranges. The following types are indexed:
+   ///   - \ref MVariant::VAR_BYTE_STRING.
+   ///   - \ref MVariant::VAR_STRING.
+   ///   - \ref MVariant::VAR_STRING_COLLECTION.
+   ///   - \ref MVariant::VAR_VARIANT_COLLECTION.
+   ///   - \ref MVariant::VAR_MAP.
+   ///
+   /// All the other types are not indexed.
+   ///
+   /// \see \ref IsCollection for checking if the type is a collection
    ///
    bool IsIndexed() const
    {
@@ -440,6 +639,15 @@ public: // Services that work with type of the variant:
 
    /// Whether the variant is a collection, array, or a map (which is a key-indexed collection).
    ///
+   /// This is a subset of all indexed types that holds other variants:
+   ///   - \ref MVariant::VAR_STRING_COLLECTION.
+   ///   - \ref MVariant::VAR_VARIANT_COLLECTION.
+   ///   - \ref MVariant::VAR_MAP.
+   ///
+   /// All the other types are not collections.
+   ///
+   /// \see \ref IsIndexed for checking if the type is a collection, string or byte string.
+   ///
    bool IsCollection() const
    {
       return m_type == VAR_STRING_COLLECTION  ||
@@ -450,14 +658,26 @@ public: // Services that work with type of the variant:
    ///@{
    /// Count of elements in the variant, if they can be indexed.
    ///
-   /// \pre IsIndexed should be true, or the attempt to use this
+   /// \pre \ref IsIndexed should be true, or the attempt to use this
    /// operation will cause an exception to be thrown.
    ///
+   /// When the count value is assigned, the indexed variant can either shrink or grow.
+   /// Depending on the type:
+   ///   - \ref MVariant::VAR_BYTE_STRING will add bytes with zero value.
+   ///   - \ref MVariant::VAR_STRING will add characters with zero value.
+   ///   - \ref MVariant::VAR_STRING_COLLECTION will add empty strings.
+   ///   - \ref MVariant::VAR_VARIANT_COLLECTION will add variants of type \ref MVariant::VAR_EMPTY.
+   ///   - \ref MVariant::VAR_MAP will add mappings of pairs of \ref MVariant::VAR_EMPTY variants (not much useful).
+   ///
    int GetCount() const;
-   void SetCount(int count);
+   void SetCount(int);
    ///@}
 
-   /// Whether the variant has an object reference.
+   /// Whether the variant is of object or embedded object type.
+   ///
+   /// Formally, these are variants of these types:
+   ///   - \ref MVariant::VAR_OBJECT.
+   ///   - \ref MVariant::VAR_OBJECT_EMBEDDED.
    ///
    bool IsObject() const
    {
@@ -467,9 +687,14 @@ public: // Services that work with type of the variant:
    ///@{
    /// Whether the pointer to variant is an object reference.
    ///
-   /// Different from just var->IsObject, this call checks if the variable is not NULL.
+   /// Different from just var->IsObject, this static method checks if the variable is not NULL.
    /// The call that mentions reference avoids a problem when newer C++ compilers
    /// assume that object reference is never NULL.
+   ///
+   /// Usage example:
+   ///   \code
+   ///     M_ASSERT(MVariant::StaticIsObject(variantPtr)); // will not generate access violation if variantPtr is NULL
+   ///   \endcode
    ///
    static bool StaticIsObject(const MVariant* var); // SWIG_HIDE
    static bool StaticIsObject(const MVariant& var)  // SWIG_HIDE
@@ -495,22 +720,23 @@ public: // Assignment operators:
    }
 
 #if !M_NO_WCHAR_T
+
    /// Assignment operator that takes variable of type char.
+   ///
+   /// The result type of the variant will depend on the given value as follows:
+   ///   - If c is an ASCII character, range 0 to 127, the result variant will be \ref MVariant::VAR_CHAR.
+   ///   - Otherwise, for non-ASCII character the result will be a string, \ref MVariant::VAR_STRING.
+   /// The method will work correctly only if the current code page is UTF-8, which correstonds to \ref M_UNICODE = 1.
+   ///
+   /// \param c Character value.
    ///
    MVariant& operator=(wchar_t c)
    {
-      #if (M_OS & M_OS_WINDOWS) != 0
-         return DoSetInt((int)(Muint32)(unsigned short)c, VAR_CHAR);
-      #else
-         if ( sizeof(wchar_t) == 2 )
-            return DoSetInt((int)(Muint32)(unsigned short)c, VAR_CHAR);
-         else
-         {
-            M_ASSERT(sizeof(wchar_t) == 4);
-            return DoSetInt((int)c, VAR_CHAR);
-         }
-      #endif
+      DoCleanup();
+      DoAssignToEmpty(c);
+      return *this;
    }
+
 #endif
 
    /// Assignment operator that takes variable of type byte.
@@ -581,6 +807,22 @@ public: // Assignment operators:
    ///
    MVariant& operator=(const MStdString& s);
 
+#if !M_NO_WCHAR_T
+
+   /// Assignment operator that takes variable of type constant pointer to zero terminated wide character string.
+   ///
+   /// The result type of the variant will be a string.
+   ///
+   MVariant& operator=(const wchar_t* s);
+
+   /// Assignment operator that takes variable of type to wide string.
+   ///
+   /// The result type of the variant will be a string.
+   ///
+   MVariant& operator=(const MWideString& s);
+
+#endif
+
    /// Assignment operator that takes variable of type string collection.
    ///
    MVariant& operator=(const MStdStringVector& s);
@@ -620,6 +862,16 @@ public: // Assignment operators:
    ///
    void AssignString(MConstChars p, unsigned len);
 
+#if !M_NO_WCHAR_T
+
+   /// Assign the wide string to the variant type.
+   ///
+   /// The result type of the variant will be a string.
+   ///
+   void AssignString(const wchar_t* p, unsigned len);
+
+#endif
+
    /// Assign the byte embedded object to the variant type.
    ///
    /// \pre The given object value is not null, there is a debug check.
@@ -643,15 +895,24 @@ public: // Conversion services:
 
    /// Interpret string related values of this variant as zero terminated string.
    ///
-   /// The type of the value should only be a string, a byte string, a char, or a byte.
-   ///
-   /// \pre The conversion should be possible.
-   /// If the current value is of incompatible type,
-   /// bad conversion is thrown.
+   /// This is an efficient conersion, and multiple restrictions apply
+   /// depending on the variant type:
+   ///   - \ref MVariant::VAR_EMPTY will throw a no value exception
+   ///   - \ref MVariant::VAR_BYTE will be converted into a single character followed by terminating zero.
+   ///   - \ref MVariant::VAR_CHAR will be converted into a single character followed by terminating zero.
+   ///   - \ref MVariant::VAR_INT will only be converted successfully
+   ///     into a string of up to seven characters if it has range of -999999 to 9999999.
+   ///   - \ref MVariant::VAR_UINT will only be converted successfully
+   ///     into a string of up to seven characters if it has range of 0 to 9999999.
+   ///   - \ref MVariant::VAR_STRING will always be converted successfully and effieicntly.
+   ///     If a string has binary zeroes its real length can be deterined by \ref GetCount.
+   ///   - \ref MVariant::VAR_BYTE_STRING will always be converted successfully and effieicntly.
+   ///     If a string has binary zeroes its real length can be deterined by \ref GetCount.
    ///
    const char* AsConstChars() const;
 
    /// Interpret the variant value as type bool, if possible.
+   ///
    /// The type of the value should allow conversion
    /// of it into boolean. It should either be boolean itself,
    /// or numeric. If the value is numeric, nonzero would mean TRUE.
@@ -666,6 +927,7 @@ public: // Conversion services:
    bool AsBool() const;
 
    /// Interpret the variant value as byte, if possible.
+   ///
    /// The type of the value should fit within one byte.
    ///
    /// \pre The conversion should be possible.
@@ -674,9 +936,10 @@ public: // Conversion services:
    ///
    Muint8 AsByte() const;
 
-   /// Interpret the variant value as type MChar, if possible.
+   /// Interpret the variant value as type char, if possible.
+   ///
    /// The type of the value should allow conversion
-   /// of it into MChar. It should either be VAR_CHAR itself,
+   /// of it into char. It should either be VAR_CHAR itself,
    /// or it should be numeric with the allowed range,
    /// or it should be a string with the size 1.
    ///
@@ -684,9 +947,10 @@ public: // Conversion services:
    /// Bad conversion can be thrown in cases such as the type is incompatible 
    /// or the range is bad.
    ///
-   MChar AsChar() const;
+   char AsChar() const;
 
    /// Interpret the variant value as double word.
+   ///
    /// This service is like AsInt or AsUInt, but it will ignore
    /// the sign and never throw an exception or overflow.
    ///
@@ -697,6 +961,7 @@ public: // Conversion services:
    Muint32 AsDWord() const;
 
    /// Interpret the variant value as integer type, if possible.
+   ///
    /// The type of the value should allow conversion
    /// of it into integer. The numeric type has to fit within
    /// the range of integer, and the string has to be the valid
@@ -709,6 +974,7 @@ public: // Conversion services:
    int AsInt() const;
 
    /// Interpret the variant value as unsigned integer type, if possible.
+   ///
    /// The type of the value should allow conversion
    /// of it into unsigned integer. The numeric type has to fit within
    /// the range of integer, and the string has to be the valid
@@ -721,6 +987,7 @@ public: // Conversion services:
    unsigned AsUInt() const;
 
    /// Interpret the variant value as long integer type, if possible.
+   ///
    /// The type of the value should allow conversion
    /// of it into long integer. The numeric type has to fit within
    /// the range of integer, and the string has to be the valid
@@ -742,6 +1009,7 @@ public: // Conversion services:
    }
 
    /// Interpret the variant value as unsigned long integer type, if possible.
+   ///
    /// The type of the value should allow conversion
    /// of it into unsigned long integer. The numeric type has to fit within
    /// the range of integer, and the string has to be the valid
@@ -763,6 +1031,7 @@ public: // Conversion services:
    }
 
    /// Interpret the variant value as 64-bit integer type, if possible.
+   ///
    /// The type of the value should allow conversion
    /// of it into 64-bit integer. The numeric type has to fit within
    /// the range of 64-bit integer, and the string has to be the valid
@@ -775,6 +1044,7 @@ public: // Conversion services:
    Mint64 AsInt64() const;
 
    /// Interpret the variant value as unsigned long integer type, if possible.
+   ///
    /// The type of the value should allow conversion
    /// of it into unsigned long integer. The numeric type has to fit within
    /// the range of integer, and the string has to be the valid
@@ -787,6 +1057,7 @@ public: // Conversion services:
    Muint64 AsUInt64() const;
 
    /// Interpret the variant value as an integer type equivalent to size_t, if possible.
+   ///
    /// The type of the value should allow conversion
    /// of it into size_t. The numeric type has to fit within
    /// the range of size_t, and the string has to be the valid
@@ -808,6 +1079,7 @@ public: // Conversion services:
    }
 
    /// Interpret the variant value as double precision floating point, if possible.
+   ///
    /// The type of the value should allow conversion
    /// of it into double precision floating point. If this is the string,
    /// the string has to be the valid string representation of double precision number.
@@ -819,6 +1091,7 @@ public: // Conversion services:
    double AsDouble() const;
 
    /// Interpret the variant value as byte string, if possible.
+   ///
    /// The only value that cannot be interpreted as byte string is an empty value.
    ///
    /// \pre If the value of the variant is not initialized,
@@ -837,16 +1110,6 @@ public: // Conversion services:
    ///
    MStdString AsString() const;
 
-   /// Interpret the variant value as shared string, if possible.
-   /// The only value that cannot be interpreted as shared string is an empty value.
-   /// If the variant is an object, its AsString method is called.
-   /// For Boolean value, its string representations are numeric: 1 or 0.
-   ///
-   /// \pre If the value of the variant is not initialized,
-   /// the No Value exception is thrown.
-   ///
-   MSharedString AsSharedString() const; // SWIG_HIDE
-
    /// Interpret the variant value as string, if possible, using mask that specifies the conversions to make.
    ///
    /// The only value that cannot be interpreted as string is an empty value.
@@ -860,7 +1123,19 @@ public: // Conversion services:
    ///
    MStdString AsString(unsigned mask) const;
 
+   /// Interpret the variant value as shared string, if possible.
+   ///
+   /// The only value that cannot be interpreted as shared string is an empty value.
+   /// If the variant is an object, its AsString method is called.
+   /// For Boolean value, its string representations are numeric: 1 or 0.
+   ///
+   /// \pre If the value of the variant is not initialized,
+   /// the No Value exception is thrown.
+   ///
+   MSharedString AsSharedString() const; // SWIG_HIDE
+
    /// Interpret the variant value as a string with C escapes, if possible.
+   ///
    /// The only value that cannot be interpreted as string is an empty value.
    /// If the variant is an object, its AsString method is called, then
    /// converted to escaped string.
@@ -871,7 +1146,50 @@ public: // Conversion services:
    ///
    MStdString AsEscapedString() const;
 
+#if !M_NO_WCHAR_T
+
+   /// Interpret the variant value as wide string, if possible.
+   ///
+   /// The only value that cannot be interpreted as string is an empty value.
+   /// If the variant is an object, its AsString method is called,
+   /// and the result is converted into a wide string.
+   /// For Boolean value, its string representations are numeric: 1 or 0.
+   ///
+   /// \pre If the value of the variant is not initialized,
+   /// the No Value exception is thrown.
+   ///
+   MWideString AsWideString() const;
+
+   /// Interpret the variant value as wide string, if possible, using mask that specifies the conversions to make.
+   ///
+   /// The only value that cannot be interpreted as string is an empty value.
+   /// If the variant is an object, its AsString method is called,
+   /// and the result is converted into a wide string.
+   /// For Boolean value, its string representations are numeric: 1 or 0.
+   ///
+   /// \param mask The mask of type MStr::Mask
+   ///
+   /// \pre If the value of the variant is not initialized,
+   /// the No Value exception is thrown.
+   ///
+   MWideString AsWideString(unsigned mask) const;
+
+   /// Interpret the variant value as a wide string with C escapes, if possible.
+   ///
+   /// The only value that cannot be interpreted as string is an empty value.
+   /// If the variant is an object, its AsString method is called, then
+   /// converted to escaped wide string.
+   /// For Boolean value, its string representations are numeric: 1 or 0.
+   ///
+   /// \pre If the value of the variant is not initialized,
+   /// the No Value exception is thrown.
+   ///
+   MWideString AsEscapedWideString() const;
+
+#endif
+
    /// Interpret the variant value as string collection, if possible.
+   ///
    /// The string collection returns directly.
    /// The only value that cannot be interpreted as string is an empty value.
    /// For the rest, AsString is attempted and the resulting collection
@@ -883,6 +1201,7 @@ public: // Conversion services:
    MStdStringVector AsStringCollection() const;
 
    /// Interpret the variant value as byte string collection, if possible.
+   ///
    /// The only value that cannot be interpreted as string is an empty value.
    /// For the rest, AsByteString is attempted for each element.
    ///
@@ -892,6 +1211,7 @@ public: // Conversion services:
    MByteStringVector AsByteStringCollection() const;
 
    /// Interpret the variant value as variant collection, if possible.
+   ///
    /// The variant collection returns directly.
    /// The only value that cannot be interpreted as variant is an empty value.
    /// For the rest, the resulting collection will have only one element.
@@ -903,6 +1223,7 @@ public: // Conversion services:
 
    ///@{
    /// Interpret the variant value as object reference, if possible.
+   ///
    /// The only value that can be interpreted as object is an object itself.
    ///
    /// \pre An exception is thrown in case the value is not of type object.
@@ -916,6 +1237,7 @@ public: // Conversion services:
 
    ///@{
    /// Interpret the variant value as an existing non-NULL object reference, if possible.
+   ///
    /// The only value that can be interpreted as object is an object itself.
    ///
    /// \pre An exception is thrown in case the value is not of type object.
@@ -1519,10 +1841,10 @@ public: // Semi-public services that have to be used carefully:
    /// \pre The type is VAR_UINT, otherwise the behavior
    /// is undefined. The debugger version has the assert operator.
    ///
-   MChar DoInterpretAsChar() const
+   char DoInterpretAsChar() const
    {
       M_ASSERT(m_type == VAR_CHAR);
-      return static_cast<MChar>(m_uint32);
+      return static_cast<char>(m_uint32);
    }
 
    /// Interpret the internals of the variant as INT.
@@ -1545,6 +1867,12 @@ public: // Semi-public services that have to be used carefully:
    {
       M_ASSERT(m_type == VAR_UINT);
       return m_uint32;
+   }
+
+   double DoInterpretAsDouble() const
+   {
+      M_ASSERT(m_type == VAR_DOUBLE);
+      return m_double;
    }
 
    /// Interpret the internals of the variant as standard string.
@@ -1646,18 +1974,9 @@ public: // Semi-public services that have to be used carefully:
    }
 
 #if !M_NO_WCHAR_T
-   void DoAssignToEmpty(wchar_t c) // SWIG_HIDE
-   {
-      M_ASSERT(m_type == VAR_EMPTY);
-      m_type = VAR_UINT;
-      m_bufferType = BUFFERTYPE_NONE;
-      #if M_WCHAR_T_BIT_SIZE == 16
-         m_uint32 = (Muint32)(unsigned short)c;
-      #else
-         M_ASSERT(sizeof(wchar_t) == 4);
-         m_uint32 = (Muint32)c;
-      #endif
-   }
+
+   void DoAssignToEmpty(wchar_t c); // SWIG_HIDE
+
 #endif
 
    void DoAssignToEmpty(int n)
@@ -1775,20 +2094,13 @@ public: // Semi-public services that have to be used carefully:
    void DoAssignToEmpty(const MStdString& s);
 
 #if !M_NO_WCHAR_T
-   void DoAssignToEmpty(const wchar_t* s)
-   {
-      DoAssignToEmpty(s, static_cast<unsigned>(wcslen(s)));
-   }
 
-   void DoAssignToEmpty(const wchar_t* s, unsigned len)
-   {
-      DoAssignToEmpty(MToStdString(s, len));
-   }
+   void DoAssignToEmpty(const wchar_t* s);
 
-   void DoAssignToEmpty(const MWideString& str)
-   {
-      DoAssignToEmpty(MToStdString(str));
-   }
+   void DoAssignToEmpty(const wchar_t* s, unsigned len);
+
+   void DoAssignToEmpty(const MWideString& str);
+
 #endif
 
    void DoAssignToEmpty(const MStdStringVector& s);

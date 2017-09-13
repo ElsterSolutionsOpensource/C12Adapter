@@ -48,20 +48,12 @@
          return M_NEW MTimeZone(standardOffset, name);
       }
 
-      static MObject* DoNew4(int                         standardOffset,
-                             int                         daylightOffset,
-                             const MTimeRecurrentYearly& switchToDaylightTime,
-                             const MTimeRecurrentYearly& switchToStandardTime)
+      static MObject* DoNew4(int standardOffset, int daylightOffset, const MTimeRecurrentYearly& switchToDaylightTime, const MTimeRecurrentYearly& switchToStandardTime)
       {
          return M_NEW MTimeZone(standardOffset, daylightOffset, switchToDaylightTime, switchToStandardTime);
       }
 
-      static MObject* DoNew6(int                         standardOffset,
-                             int                         daylightOffset,
-                             const MTimeRecurrentYearly& switchToDaylightTime,
-                             const MTimeRecurrentYearly& switchToStandardTime,
-                             const MStdString&           standardName,
-                             const MStdString&           daylightName)
+      static MObject* DoNew6(int standardOffset, int daylightOffset, const MTimeRecurrentYearly& switchToDaylightTime, const MTimeRecurrentYearly& switchToStandardTime, const MStdString& standardName, const MStdString& daylightName)
       {
          return M_NEW MTimeZone(standardOffset, daylightOffset, switchToDaylightTime, switchToStandardTime, standardName, daylightName);
       }
@@ -115,7 +107,7 @@ M_START_METHODS(TimeZone)
    M_OBJECT_SERVICE                           (TimeZone, NewClone,                ST_MObjectP_X)
 M_END_CLASS(TimeZone, Object)
 
-const MChar    MTimeZone::s_timezoneNameSeparator []  = " / ";
+const char    MTimeZone::s_timezoneNameSeparator []  = " / ";
 const unsigned MTimeZone::s_timezoneNameSeparatorSize = M_NUMBER_OF_ARRAY_ELEMENTS(s_timezoneNameSeparator) - 1;
 
 MTimeZone::MTimeZone()
@@ -376,10 +368,15 @@ void MTimeZone::DoComputeRecurringSwitchTimes()
    M_ASSERT(m_switchToStandardTime.IsNull());
 
    // Check if the switch times in the coming three years are representable by MTimeRecurrentYearly.
-   // This is how we determine there are DST switch times that make any sense
+   // This is how we determine if there are any DST switch times that make sense.
+   //
+   // The calculation is done using local time, but we have to use
+   // MTime::GetCurrentUtcTime() instead of MTime::GetCurrentLocalTime()
+   // in order to prevent recursion. However, this is okay as the current time
+   // does not have to be precise - we only need some approximate date to look up for three years in advance.
 
-   MTime time = MTime::GetCurrentUtcTime(); // has to be UTC time to prevent recursion
-   MTime switchTime1 = GetNextSwitchTime(time, false);
+   MTime time = MTime::GetCurrentUtcTime();            // get UTC time to prevent recursion (see the comment above)
+   MTime switchTime1 = GetNextSwitchTime(time, false); // but perform calculation in local times (see the comment above)
    if ( !switchTime1.IsNull() )
    {
       time = switchTime1;

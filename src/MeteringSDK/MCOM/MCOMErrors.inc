@@ -156,6 +156,12 @@ M__ERROR_ENUM(C12ServiceResponseSGNP, 0x800404A1) // (unsigned)2147746977, (int)
 M__ERROR_ENUM(C12ServiceResponseSGERR, 0x800404A2) // (unsigned)2147746978, (int)-2147220318
 
 
+// Text: "0x%02X Not registered to you (NRY)"
+//
+// Not registered to you, code not defined in C12 standard, specific to Elster cNIC devices
+//
+M__ERROR_ENUM(C12ServiceResponseNRY, 0x800404B0) // (unsigned)2147746992, (int)-2147220304
+
 // Text: "Invalid checksum"
 M__ERROR_ENUM(InvalidChecksum, 0x800404B4) // (unsigned)2147746996, (int)-2147220300
 
@@ -348,3 +354,5 @@ M__ERROR_ENUM(CollisionDetected, 0x8004180B) // (unsigned)2147751947, (int)-2147
 
 // Text: "Failed to connect within %u seconds"
 M__ERROR_ENUM(ChannelConnectTimeout, 0x8004180E) // (unsigned)2147751950, (int)-2147215346
+
+

@@ -13,7 +13,7 @@ M_START_PROPERTIES(ProtocolC1221)
    M_OBJECT_PROPERTY_PERSISTENT_INT        (ProtocolC1221, AuthenticationKeyId,               0u)
    M_OBJECT_PROPERTY_PERSISTENT_BOOL       (ProtocolC1221, EnableAuthentication,            true)
    M_OBJECT_PROPERTY_PERSISTENT_UINT       (ProtocolC1221, Identity,                          0u)
-   M_OBJECT_PROPERTY_PERSISTENT_UINT       (ProtocolC1221, DataFormat,                        MProtocolC1221::DataFormatC1218C1221)
+   M_OBJECT_PROPERTY_PERSISTENT_INT        (ProtocolC1221, DataFormat,                        MProtocolC1221::DataFormatC1218C1221)
    M_OBJECT_PROPERTY_PERSISTENT_BOOL       (ProtocolC1221, IssueNegotiateOnStartSession,    true)
    M_OBJECT_PROPERTY_PERSISTENT_BOOL       (ProtocolC1221, IssueTimingSetupOnStartSession, false)
 #if !M_NO_MCOM_PASSWORD_AND_KEY_LIST
@@ -26,7 +26,7 @@ M_START_PROPERTIES(ProtocolC1221)
    M_OBJECT_PROPERTY_PERSISTENT_UINT       (ProtocolC1221, ChannelTrafficTimeout,      30000u) // DOXYGEN_HIDE SWIG_HIDE
 // Number of Packets is by C12.21 default 1, but this implementation uses 64
    M_OBJECT_PROPERTY_READONLY_UINT         (ProtocolC1221, IncomingIdentity)
-   M_OBJECT_PROPERTY_READONLY_UINT         (ProtocolC1221, IncomingDataFormat)
+   M_OBJECT_PROPERTY_READONLY_INT          (ProtocolC1221, IncomingDataFormat)
    M_OBJECT_PROPERTY_READONLY_INT          (ProtocolC1221, IdentifiedAuthenticationAlgorithm)
 M_START_METHODS(ProtocolC1221)
    M_OBJECT_SERVICE                        (ProtocolC1221, TimingSetup,                ST_X)
@@ -636,14 +636,14 @@ void MProtocolC1221::DoApplicationLayerRequest(char command, const MByteString* 
                   if ( incomingAckNak == '\x00' )
                   {
                      doNotSendOutgoingPacket = true;
-                     m_channel->WriteChar(CHAR_NAK); // <NAK>, the packet was not received
+                     m_channel->WriteByte(CHAR_NAK); // <NAK>, the packet was not received
                   }
                   MCOMException::Throw(M_CODE_STR(MErrorEnum::CrcCheckFailed, M_I("CRC check failed")));
                   M_ENSURED_ASSERT(0);
                }
 
                if ( incomingAckNak == '\x00' )
-                  m_channel->WriteChar(CHAR_ACK);
+                  m_channel->WriteByte(CHAR_ACK);
                else if ( incomingAckNak != '\x04' ) // NAK or invalid packet
                {
                   MCOMException::Throw(M_CODE_STR(MErrorEnum::DeviceReportedBadPacketCRC, M_I("Device reported bad packet CRC")));
@@ -679,7 +679,7 @@ void MProtocolC1221::DoApplicationLayerRequest(char command, const MByteString* 
                         m_receiveToggleBit = !m_receiveToggleBit;
                   #endif
                }
-               m_applicationLayerIncoming.Assign(packet + 7, dataLength);
+               m_applicationLayerIncoming.Assign(packet + 7, dataLength - 1);
                break; // success
             }
             catch ( MException& ex ) // excluding timeout exception...
@@ -688,12 +688,11 @@ void MProtocolC1221::DoApplicationLayerRequest(char command, const MByteString* 
             }
          }
          m_nextOutgoingToggleBit = !m_nextOutgoingToggleBit;
+
+         m_applicationLayerReader.AssignBuffer(&m_applicationLayerIncoming);
          MEC12NokResponse::ResponseCode responseCode = (MEC12NokResponse::ResponseCode)packet[6];
          if ( responseCode == MEC12NokResponse::RESPONSE_OK )
-         {
-            m_applicationLayerReader.AssignBuffer(&m_applicationLayerIncoming);
             return; // success
-         }
 
          MByteString extraParameters;
          m_applicationLayerReader.ReadRemainingBytes(extraParameters); // this can read zero bytes

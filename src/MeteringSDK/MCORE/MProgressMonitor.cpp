@@ -11,17 +11,33 @@
          return M_NEW MProgressListener();
       }
 
+      /// Create progress monitor with no listener associated
+      ///
+      static MProgressMonitor* DoNew0()
+      {
+         return M_NEW MProgressMonitor();
+      }
+
+      /// Create progress monitor with listener
+      ///
+      /// \param listener Listener object that will receive progress notifications
+      ///
+      static MProgressMonitor* DoNew1(MProgressListener* listener)
+      {
+         return M_NEW MProgressMonitor(M_DYNAMIC_CAST_WITH_THROW(MProgressListener, listener));
+      }
+
    #endif
 
 M_START_PROPERTIES(ProgressListener)
-   M_CLASS_ENUMERATION     (ProgressListener, FlagRefreshProgress)
-   M_CLASS_ENUMERATION     (ProgressListener, FlagRefreshActionMessage)
-   M_CLASS_ENUMERATION     (ProgressListener, FlagRefreshSubActionMessage)
-   M_CLASS_ENUMERATION     (ProgressListener, FlagRestoreSubActionMessage)
-   M_CLASS_ENUMERATION     (ProgressListener, FlagRefreshAll)
+   M_CLASS_ENUMERATION_UINT(ProgressListener, FlagRefreshProgress)
+   M_CLASS_ENUMERATION_UINT(ProgressListener, FlagRefreshActionMessage)
+   M_CLASS_ENUMERATION_UINT(ProgressListener, FlagRefreshSubActionMessage)
+   M_CLASS_ENUMERATION_UINT(ProgressListener, FlagRestoreSubActionMessage)
+   M_CLASS_ENUMERATION_UINT(ProgressListener, FlagRefreshAll)
    M_OBJECT_PROPERTY_OBJECT(ProgressListener, Client)
 M_START_METHODS(ProgressListener)
-   M_CLASS_FRIEND_SERVICE(Monitor, New, DoNewListener0, ST_MObjectP_S)
+   M_CLASS_FRIEND_SERVICE(ProgressListener, New, DoNewListener0, ST_MObjectP_S)
 M_END_CLASS(ProgressListener, Object)
 
 MProgressListener::MProgressListener()
@@ -65,26 +81,6 @@ void MProgressListener::CommitChanges(unsigned flags)
          m_client->Call1("CommitChanges", flags);
    #endif
 }
-
-   #if !M_NO_REFLECTION
-
-      /// Create progress monitor with no listener associated
-      ///
-      static MProgressMonitor* DoNew0()
-      {
-         return M_NEW MProgressMonitor();
-      }
-
-      /// Create progress monitor with listener
-      ///
-      /// \param listener Listener object that will receive progress notifications
-      ///
-      static MProgressMonitor* DoNew1(MProgressListener* listener)
-      {
-         return M_NEW MProgressMonitor(M_DYNAMIC_CAST_WITH_THROW(MProgressListener, listener));
-      }
-
-   #endif
 
 MProgressAction MProgressMonitor::m_dummyAction;
 

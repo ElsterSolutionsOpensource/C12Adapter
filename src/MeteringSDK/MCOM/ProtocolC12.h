@@ -155,21 +155,6 @@ public: // I2C public services:
 protected: // Services:
 /// \cond SHOW_INTERNAL
 
-   // Synchronously execute the function with no parameters,
-   // the number of the function is given as parameter.
-   // This base class service is overloaded to fulfill the duties
-   // relevant to this particular protocol.
-   //
-   // See QFunctionExecute and FunctionExecute of MProtocol for public variations of this
-   // service, which do the necessary steps for monitoring, counting statistics, 
-   // and formatting error messages.
-   //
-   // \pre The channel is open, the session is started.
-   // The function number is convertible to two-byte unsigned integer.
-   // Otherwise an exception can be thrown.
-   //
-   virtual void DoFunctionExecute(MCOMNumberConstRef number);
-
    // Synchronously execute the function with request data,
    // the number of the function is given as parameter.
    // This base class service is overloaded to fulfill the duties
@@ -807,7 +792,7 @@ public: // Property manipulators:
    ///
    /// \pre The packet was received successfully, and it has the code data available.
    ///
-   Muint8 ReceiveServiceCode();
+   char ReceiveServiceCode();
 
    /// Read one byte from the incoming application layer data packet.
    /// The service works like a stream, one can issue ReceiveByte many times in small chunks, and it will

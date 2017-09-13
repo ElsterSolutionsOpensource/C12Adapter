@@ -1,9 +1,54 @@
 #include "MCOREExtern.h"
 #include "MCOREDefs.h"
+#include "MCriticalSection.h"
+
 #ifndef M_USE_USTL
    #include <limits>
    #include <cfloat>
 #endif
+
+// START private/dtoa.c definitions
+
+static MCriticalSection s_dtoaLock[2];
+
+#define IEEE_8087 1
+#define dtoa meteringsdk_dtoa
+#define freedtoa meteringsdk_freedtoa
+#define strtod meteringsdk_strtod
+#define Long int
+#define ULong unsigned
+#define Llong Mint64
+#define ULLong Muint64
+#define MULTIPLE_THREADS 1
+#define ACQUIRE_DTOA_LOCK(n)   do { M_ASSERT(n == 0 || n == 1); s_dtoaLock[n].Lock();   } while(false)
+#define FREE_DTOA_LOCK(n)      do { M_ASSERT(n == 0 || n == 1); s_dtoaLock[n].Unlock(); } while(false)
+
+extern "C"  // double-define to make sure the prototypes are as expected in "private/dtoa.c"
+{
+   void meteringsdk_freedtoa(char* s);
+   char* meteringsdk_dtoa(double d, int mode, int ndigits, int* decpt, int* sign, char** rve);
+}
+
+#ifdef __BORLANDC__
+   // Disable: "Condition is always true", "Possibly incorrect assignment", and "Unreachable code"
+   #pragma option push -w-8008 -w-8060 -w-8066
+#endif
+#ifdef _MSC_VER
+   #pragma warning(push)
+   #pragma warning(disable : 4244) // disable "'return/initializing' : conversion from '...' to '...', possible loss of data
+   #pragma warning(disable : 4267) // disable "conversion from '...' to '...', possible loss of data"
+#endif
+
+#include "private/dtoa.c"
+
+#ifdef _MSC_VER
+   #pragma warning(pop)
+#endif
+#ifdef __BORLANDC__
+   #pragma option pop
+#endif
+
+// END private/dtoa.c definitions
 
 #ifdef max
    #undef max
@@ -30,6 +75,10 @@ typedef unsigned long long F_U64;
 #define F_UNLIKELY(x) x
 #endif
 
+static const char NAN_STRING[] = "nan";
+static const char INF_STRING[] = "inf";
+static const char NIL_STRING[] = "(nil)";
+
 typedef uintptr_t F_UINTPTR;
 
 #if defined(_MSC_VER) || defined(__BORLANDC__)
@@ -41,10 +90,6 @@ typedef ssize_t F_SSIZE_T;
 const size_t DEF_NBUF_SIZE = 1024;
 const size_t FLOAT_DIGITS = 6;
 const size_t EXPONENT_LENGTH = 10;
-const int NDIG = 320;
-
-const bool IS_64BIT_LONG = (sizeof(long) == 8);
-const bool IS_64BIT_POINTER = (sizeof(void*) == 8);
 
 const char LOW_DIGITS[] = "0123456789abcdef";
 const char UPPER_DIGITS[] = "0123456789ABCDEF";
@@ -60,6 +105,28 @@ inline size_t Fstrlen(const char* s) { return strlen(s); }
 inline char* Fmemcpy(char* dst, const char* src, size_t n) { return static_cast<char*>(memcpy(dst, src, n)); }
 inline char* Fmemset(char* dst, char ch, size_t n) { return static_cast<char*>(memset(dst, ch, n)); }
 
+#if defined(_MSC_VER) || defined(__BORLANDC__)
+inline bool isnan(double x) {return _isnan(x) != 0;}
+#endif
+
+template
+  < class T>
+T* Fstrcpy(T* dst, const char* p, bool toUpper)
+{
+   T* b = dst;
+   if ( toUpper )
+   {
+      while ( *p != '\0' )
+         *b++ = static_cast<T>(toupper(*p++));
+   }
+   else
+   {
+      while ( *p != '\0' )
+         *b++ = static_cast<T>(*p++);
+   }
+   return dst;
+}
+
 #if !M_NO_WCHAR_T
 inline int Fislower(wchar_t ch) { return iswlower(ch); }
 inline int Fisdigit(wchar_t ch) { return iswdigit(ch); }
@@ -72,24 +139,6 @@ inline wchar_t* Fmemset(wchar_t* dst, wchar_t ch, size_t n) { return static_cast
 #endif
 
 using namespace std;
-
-inline int Fisnan(double x)
-{
-#if defined(_MSC_VER) || defined(__BORLANDC__)
-   return _isnan(x);
-#else
-   return isnan(x);
-#endif
-}
-
-inline int Fisinf(double x)
-{
-#if defined(_MSC_VER) || defined(__BORLANDC__)
-   return _finite(x) == 0;
-#else
-   return isinf(x);
-#endif
-}
 
 #if !M_NO_WCHAR_T
 size_t Fwcsrtombs(char* dest, const wchar_t** src, size_t len, mbstate_t* ps)
@@ -284,199 +333,119 @@ T* ConvP2(unsigned int value, int nbits, char format, T* end, size_t& stringLeng
    return DoConvP2(value, nbits, format, end, stringLength);
 }
 
-char* DoConvFp(double arg, int ndigits, int& decpt, bool& sign, int eflag, char *buf) // cvt_r
-{
-   int r2 = 0;
-   double fi, fj;
-   char *p = &buf[0], *p1 = &buf[NDIG];
-
-   if ( ndigits >= NDIG - 1 )
-      ndigits = NDIG - 2;
-
-   sign = (arg < 0);
-   if ( sign )
-      arg = -arg;
-
-   arg = modf(arg, &fi);
-
-   if ( fi != 0 )
-   {
-      while ( p1 > &buf[0] && fi != 0 )
-      {
-         fj = modf(fi / 10, &fi);
-         *--p1 = static_cast<int>((fj + .03) * 10) + '0';
-         r2++;
-      }
-      while ( p1 < &buf[NDIG] )
-         *p++ = *p1++;
-   }
-   else if ( arg > 0.0 )
-   {
-      while ( (fj = arg * 10.0) + DBL_EPSILON < 1.0 )
-      {
-         arg = fj;
-         r2--;
-      }
-   }
-
-   p1 = &buf[ndigits];
-
-   if ( eflag == 0 )
-      p1 += r2;
-
-   if ( p1 < &buf[0] ) {
-      decpt = -ndigits;
-      buf[0] = '\0';
-      return buf;
-   }
-
-   decpt = r2;
-   while ( p <= p1 && p < &buf[NDIG] )
-   {
-      arg *= 10;
-      arg = modf(arg, &fj);
-      *p++ = static_cast<int>(fj) + '0';
-   }
-
-   if ( p1 >= &buf[NDIG] )
-   {
-      buf[NDIG - 1] = '\0';
-      return buf;
-   }
-
-   p = p1;
-   *p1 += 5;
-
-   while ( *p1 > '9' )
-   {
-      *p1 = '0';
-      if ( p1 > buf )
-      {
-         ++ * --p1;
-      }
-      else
-      {
-         *p1 = '1';
-         ++decpt;
-         if ( eflag == 0 )
-         {
-            if (p > buf)
-               *p = '0';
-            p++;
-         }
-      }
-   }
-
-   *p = '\0';
-   return buf;
-}
-
-inline char* ConvFFp(double num, int ndigits, int& decpt, bool& sign, char* buf) // fcvt_r
-{
-   // int sign1;
-   // fcvt_r(num, ndigits, &decpt, &sign1, buf, NDIG - 1);
-   // sign = sign1;
-   // return buf;
-   return DoConvFp(num, ndigits, decpt, sign, 0, buf);
-}
-
-inline char* ConvEFp(double num, int ndigits, int& decpt, bool& sign, char* buf) // ecvt_r
-{
-   // int sign1;
-   // ecvt_r(num, ndigits, &decpt, &sign1, buf, NDIG - 1);
-   // sign = sign1;
-   // return buf;
-   return DoConvFp(num, ndigits, decpt, sign, 1, buf);
-}
-
 template <typename T>
-T* ConvFp(T format, double num, const FFlags& fflags, bool& isNeg, T* buf, size_t& stringLength)
+T* ConvFFp(double num, const FFlags& fflags, bool& isNeg, T* buf, size_t& stringLength)
 {
    int decp;
-   char localbuf[NDIG];
+   char* rve;
+   int sign;
    T* s = buf;
 
    int precision = int(fflags.adjustPrecision ? fflags.precision : FLOAT_DIGITS);
 
-   char* p = (format == 'f')
-      ? ConvFFp(num, precision, decp, isNeg, localbuf)
-      : ConvEFp(num, precision + 1, decp, isNeg, localbuf);
-
-   if ( format == 'f' )
+   char* localbuf = meteringsdk_dtoa(num, 3, precision, &decp, &sign, &rve);
+   isNeg = (sign != 0);
+   int localbufLen = static_cast<int>(rve - localbuf);
+   M_ASSERT(localbufLen == static_cast<int>(strlen(localbuf)));
+   int extraZeros = precision - localbufLen;
+   char* p = localbuf;
+   if ( decp <= 0 )
    {
-      if ( decp <= 0 )
+      *s++ = '0';
+      if ( precision > 0 )
       {
-         *s++ = '0';
-         if ( precision > 0 )
-         {
-            *s++ = fflags.dp;
-            while ( decp++ < 0 )
-               *s++ = '0';
-         }
-         else if ( fflags.alternateForm )
-         {
-            *s++ = fflags.dp;
-         }
+         *s++ = fflags.dp;
+         for ( ; decp < 0; ++decp, --extraZeros )
+            *s++ = '0';
       }
-      else
-      {
-         while ( decp-- > 0 )
-            *s++ = *p++;
-         if ( precision > 0 || fflags.alternateForm )
-            *s++ = fflags.dp;
-      }
+      else if ( fflags.alternateForm )
+         *s++ = fflags.dp;
    }
    else
    {
-      *s++ = *p++;
+      for ( ; *p  && decp > 0; --decp, ++extraZeros )
+         *s++ = *p++;
+      for ( ; decp > 0;  --decp )
+         *s++ = '0';
       if ( precision > 0 || fflags.alternateForm )
          *s++ = fflags.dp;
    }
 
    while ( *p )
       *s++ = *p++;
+   for ( ; extraZeros > 0; --extraZeros )
+      *s++ = '0';
 
-   if ( format != 'f' )
-   {
-      char tmp[EXPONENT_LENGTH];
-      size_t tmpLen;
-      bool expIsNeg;
-
-      *s++ = format;
-
-      const double absnum = fabs(num);
-      if ( (absnum > DBL_EPSILON * absnum) )
-         --decp;
-
-      if ( decp != 0 )
-      {
-         p = Conv10(decp, expIsNeg, &tmp[EXPONENT_LENGTH], tmpLen);
-         *s++ = expIsNeg ? '-' : '+';
-
-         if ( tmpLen == 1 )
-            *s++ = '0';
-
-         while ( tmpLen-- )
-            *s++ = *p++;
-      }
-      else
-      {
-         *s++ = '+';
-         *s++ = '0';
-         *s++ = '0';
-      }
-   }
-
+   meteringsdk_freedtoa(localbuf);
    stringLength = s - buf;
    return buf;
 }
 
 template <typename T>
-T* ConvGFp(double number, const FFlags& fflags, bool& isNeg, T *buf, size_t& stringLength)
+T* ConvEFp(double num, const FFlags& fflags, bool& isNeg, T* buf, size_t& stringLength)
 {
+   char tmp [ EXPONENT_LENGTH ];
+   size_t tmpLen;
+   bool expIsNeg;
+   int sign;
+   char* rve;
+   int decp;
+   T* s = buf;
+
+   int precision = int(fflags.adjustPrecision ? fflags.precision : FLOAT_DIGITS);
+   ++precision;
+   char* localbuf = dtoa(num, 2, precision, &decp, &sign, &rve);
+
+   int localbufLen = static_cast<int>(rve - localbuf);
+   M_ASSERT(localbufLen == static_cast<int>(strlen(localbuf)));
+   int extraZeros = precision - localbufLen;
+   char* p = localbuf;
+   isNeg = (sign != 0);
+
+   *s++ = *p++;
+   if ( precision > 1 || fflags.alternateForm )
+      *s++ = fflags.dp;
+
+   while ( *p )
+      *s++ = *p++;
+   for ( ; extraZeros > 0; --extraZeros )
+      *s++ = '0';
+   *s++ = fflags.fform;
+
+   const double absnum = fabs(num);
+   if ( absnum > DBL_EPSILON * absnum )
+      --decp;
+
+   if ( decp != 0 )
+   {
+      p = Conv10(decp, expIsNeg, &tmp[EXPONENT_LENGTH], tmpLen);
+      *s++ = expIsNeg ? '-' : '+';
+
+      if ( tmpLen == 1 )
+         *s++ = '0';
+
+      while ( tmpLen-- )
+         *s++ = *p++;
+   }
+   else
+   {
+      *s++ = '+';
+      *s++ = '0';
+      *s++ = '0';
+   }
+
+   meteringsdk_freedtoa(localbuf);
+   stringLength = s - buf;
+   return buf;
+}
+
+template <typename T>
+T* ConvGFp(double num, const FFlags& fflags, bool& isNeg, T *buf, size_t& stringLength)
+{
+   int sign;
+   char* rve;
    int i;
    int decpt;
-   char buf1[NDIG];
 
    int ndigits, savedndigits;
    if ( !fflags.adjustPrecision ) ndigits = FLOAT_DIGITS;
@@ -484,22 +453,22 @@ T* ConvGFp(double number, const FFlags& fflags, bool& isNeg, T *buf, size_t& str
    else ndigits = static_cast<int>(fflags.precision);
    savedndigits = ndigits;
 
-   char* p1 = ConvEFp(number, ndigits, decpt, isNeg, buf1);
+   char* localbuf = meteringsdk_dtoa(num, 2, ndigits, &decpt, &sign, &rve);
+   isNeg = (sign != 0);
+   char* p1 = localbuf;
    T* p2 = buf;
 
-   for ( i = ndigits - 1; i > 0 && p1[i] == '0'; --i )
-      --ndigits;
-
-   if ( (decpt >= 0 && decpt - savedndigits > 0) || decpt < -4 ) /* use E-style */
+   ndigits = static_cast<int>(rve - localbuf);
+   M_ASSERT(ndigits == static_cast<int>(strlen(localbuf)));
+   if ( (decpt >= 0 && decpt - savedndigits > 0) || decpt < -3 ) // use E-style
    {
       --decpt;
       *p2++ = *p1++; // copy one significant digit
-
       if ( ndigits == 1 )
       {
-         *p2++ = fflags.dp;
          if ( fflags.alternateForm )
          {
+            *p2++ = fflags.dp;
             if ( fflags.alternateFormShort )
                *p2++ = '0'; // add only one zero for one-digit representation
             else
@@ -589,7 +558,7 @@ T* ConvGFp(double number, const FFlags& fflags, bool& isNeg, T *buf, size_t& str
 
          if ( fflags.alternateFormShort )
          {
-            if ( p2[-1] == fflags.dp ) // add only one extra zero in short form
+            if ( static_cast<char>(p2[-1]) == fflags.dp ) // add only one extra zero in short form
                *p2++ = '0';
          }
          else
@@ -598,13 +567,13 @@ T* ConvGFp(double number, const FFlags& fflags, bool& isNeg, T *buf, size_t& str
                *p2++ = '0';
          }
       }
-      else if ( p2[-1] == fflags.dp )
+      else if ( static_cast<char>(p2[-1]) == fflags.dp )
          p2--;
    }
 
+   meteringsdk_freedtoa(localbuf);
    *p2 = '\0';
    stringLength = p2 - buf;
-
    return buf;
 }
 
@@ -627,16 +596,6 @@ template <typename T>
 struct FBuf
 {
    static const T NULL_STRING[];
-   static const size_t NULL_STRING_LEN;
-
-   static const T NIL_STRING[];
-   static const size_t NIL_STRING_LEN;
-
-   static const T INF_STRING[];
-   static const size_t INF_STRING_LEN;
-
-   static const T NAN_STRING[];
-   static const size_t NAN_STRING_LEN;
 
    FBuf(T* buf, size_t bufSize)
    {
@@ -721,55 +680,24 @@ struct FBuf
    size_t size;
 };
 
-template <typename T>
-const T FBuf<T>::NULL_STRING[] = { '(', 'n', 'u', 'l', 'l', ')', '\0' };
-
-template <typename T>
-const size_t FBuf<T>::NULL_STRING_LEN = 6;
-
-template <typename T>
-const T FBuf<T>::NIL_STRING[] = { '(', 'n', 'i', 'l', ')', '\0' };
-
-template <typename T>
-const size_t FBuf<T>::NIL_STRING_LEN = 5;
-
-template <typename T>
-const T FBuf<T>::INF_STRING[] = { 'i', 'n', 'f', '\0' };
-
-template <typename T>
-const size_t FBuf<T>::INF_STRING_LEN = 3;
-
-template <typename T>
-const T FBuf<T>::NAN_STRING[] = { 'n', 'a', 'n', '\0' };;
-
-template <typename T>
-const size_t FBuf<T>::NAN_STRING_LEN = 3;
+template <typename T> const T FBuf<T>::NULL_STRING[] = { '(', 'n', 'u', 'l', 'l', ')', '\0' };
 
 template <typename T>
 void DoPString(FBuf<T>& buf, const T* s, size_t& stringLength, const FFlags& fflags)
 {
-   if ( s )
+   if ( s == NULL )
+      s = FBuf<T>::NULL_STRING;
+   stringLength = fflags.adjustPrecision ? Mstrnlen(s, fflags.precision) : Fstrlen(s);
+   if ( fflags.adjustWidth && fflags.adjust == ADJUST_RIGHT && fflags.minWidth > stringLength )
    {
-      stringLength = fflags.adjustPrecision ? Mstrnlen(s, fflags.precision) : Fstrlen(s);
-
-      if ( fflags.adjustWidth && fflags.adjust == ADJUST_RIGHT && fflags.minWidth > stringLength )
-      {
-         const size_t diff = fflags.minWidth - stringLength;
-         buf.Add(' ', diff);
-      }
-
-      buf.Add(s, stringLength);
-
-      if ( fflags.adjustWidth && fflags.adjust == ADJUST_LEFT && fflags.minWidth > stringLength )
-      {
-         const size_t diff = fflags.minWidth - stringLength;
-         buf.Add(' ', diff);
-      }
+      const size_t diff = fflags.minWidth - stringLength;
+      buf.Add(' ', diff);
    }
-   else
+   buf.Add(s, stringLength);
+   if ( fflags.adjustWidth && fflags.adjust == ADJUST_LEFT && fflags.minWidth > stringLength )
    {
-      stringLength = FBuf<T>::NULL_STRING_LEN;
-      buf.Add(FBuf<T>::NULL_STRING, stringLength);
+      const size_t diff = fflags.minWidth - stringLength;
+      buf.Add(' ', diff);
    }
 }
 
@@ -817,60 +745,53 @@ template <> struct SpeciateFor<char>
 #if !M_NO_WCHAR_T
    static char* ConvWS(FBuf<char>& buf, const wchar_t* s, char* nBuf, size_t& stringLength, const FFlags& fflags)
    {
-      if ( s )
+      if ( s == NULL )
+         s = FBuf<wchar_t>::NULL_STRING;
+      mbstate_t ps = {0};
+      const wchar_t* ws = s;
+      char* p = NULL;
+      if ( fflags.adjustPrecision )
       {
-         mbstate_t ps = {0};
-         const wchar_t* ws = s;
-         char* p = NULL;
-         if ( fflags.adjustPrecision )
-         {
-            const size_t available = buf.GetAvailableChars();
-            const size_t need = (fflags.precision > available) ? available : fflags.precision;
-            p = (need < DEF_NBUF_SIZE) ? nBuf : M_NEW char[need + 1];
-            stringLength = Fwcsrtombs(p, &ws, need, &ps);
-         }
-         else
-         {
-            stringLength = Fwcsrtombs(0, &ws, 0, &ps);
-            const size_t available = buf.GetAvailableChars();
-            if ( available && stringLength && stringLength != static_cast<size_t>(-1) )
-            {
-               memset(&ps, 0, sizeof ps);
-               const size_t need = (stringLength > available) ? available : stringLength;
-               p = (need < DEF_NBUF_SIZE) ? nBuf : M_NEW char[need + 1];
-               Fwcsrtombs(p, &ws, need, &ps);
-            }
-         }
-
-         if ( stringLength == static_cast<size_t>(-1) )
-         {
-            stringLength = 0;
-            M_ASSERT(0); // bad conversion
-         }
-         else
-         {
-            if ( fflags.adjustWidth && fflags.adjust == ADJUST_RIGHT && fflags.minWidth > stringLength )
-            {
-               const size_t diff = fflags.minWidth - stringLength;
-               buf.Add(' ', diff);
-            }
-            buf.Add(p, stringLength);
-            if ( fflags.adjustWidth && fflags.adjust == ADJUST_LEFT && fflags.minWidth > stringLength )
-            {
-               const size_t diff = fflags.minWidth - stringLength;
-               buf.Add(' ', diff);
-            }
-         }
-
-         if ( p != nBuf )
-            delete[] p;
+         const size_t available = buf.GetAvailableChars();
+         const size_t need = (fflags.precision > available) ? available : fflags.precision;
+         p = (need < DEF_NBUF_SIZE) ? nBuf : M_NEW char[need + 1];
+         stringLength = Fwcsrtombs(p, &ws, need, &ps);
       }
       else
       {
-         stringLength = FBuf<char>::NULL_STRING_LEN;
-         buf.Add(FBuf<char>::NULL_STRING, stringLength);
+         stringLength = Fwcsrtombs(0, &ws, 0, &ps);
+         const size_t available = buf.GetAvailableChars();
+         if ( available && stringLength && stringLength != static_cast<size_t>(-1) )
+         {
+            memset(&ps, 0, sizeof ps);
+            const size_t need = (stringLength > available) ? available : stringLength;
+            p = (need < DEF_NBUF_SIZE) ? nBuf : M_NEW char[need + 1];
+            Fwcsrtombs(p, &ws, need, &ps);
+         }
       }
 
+      if ( stringLength == static_cast<size_t>(-1) )
+      {
+         stringLength = 0;
+         M_ASSERT(0); // bad conversion
+      }
+      else
+      {
+         if ( fflags.adjustWidth && fflags.adjust == ADJUST_RIGHT && fflags.minWidth > stringLength )
+         {
+            const size_t diff = fflags.minWidth - stringLength;
+            buf.Add(' ', diff);
+         }
+         buf.Add(p, stringLength);
+         if ( fflags.adjustWidth && fflags.adjust == ADJUST_LEFT && fflags.minWidth > stringLength )
+         {
+            const size_t diff = fflags.minWidth - stringLength;
+            buf.Add(' ', diff);
+         }
+      }
+
+      if ( p != nBuf )
+         delete[] p;
       return 0;
    }
 #endif
@@ -919,61 +840,56 @@ template <> struct SpeciateFor<wchar_t>
       return buffer;
    }
 
-   static wchar_t* ConvAS(FBuf<wchar_t>& buf, char* s, wchar_t* nBuf, size_t& stringLength, const FFlags& fflags)
+   static wchar_t* ConvAS(FBuf<wchar_t>& buf, const char* s, wchar_t* nBuf, size_t& stringLength, const FFlags& fflags)
    {
-      if ( s )
+      if ( s == NULL )
+         s = FBuf<char>::NULL_STRING;
+
+      mbstate_t ps = {0};
+      const char* mbs = s;
+      wchar_t* p = 0;
+      if ( fflags.adjustPrecision )
       {
-         mbstate_t ps = {0};
-         const char* mbs = s;
-         wchar_t* p = 0;
-         if ( fflags.adjustPrecision )
-         {
-            const size_t available = buf.GetAvailableChars();
-            const size_t need = (fflags.precision > available) ? available : fflags.precision;
-            p = (need < DEF_NBUF_SIZE) ? nBuf : M_NEW wchar_t[need + 1];
-            stringLength = Fmbsrtowcs(p, &mbs, need, &ps);
-         }
-         else
-         {
-            stringLength = Fmbsrtowcs(0, &mbs, 0, &ps);
-            const size_t available = buf.GetAvailableChars();
-            if ( available && stringLength && stringLength != static_cast<size_t>(-1) )
-            {
-               memset(&ps, 0, sizeof ps);
-               const size_t need = (stringLength > available) ? available : stringLength;
-               p = (need < DEF_NBUF_SIZE) ? nBuf : M_NEW wchar_t[need + 1];
-               Fmbsrtowcs(p, &mbs, need, &ps);
-            }
-         }
-
-         if ( stringLength == static_cast<size_t>(-1) )
-         {
-            stringLength = 0;
-            M_ASSERT(0); // bad conversion, warn in debug
-         }
-         else
-         {
-            if ( fflags.adjustWidth && fflags.adjust == ADJUST_RIGHT && fflags.minWidth > stringLength )
-            {
-               const size_t diff = fflags.minWidth - stringLength;
-               buf.Add(' ', diff);
-            }
-            buf.Add(p, stringLength);
-            if ( fflags.adjustWidth && fflags.adjust == ADJUST_LEFT && fflags.minWidth > stringLength )
-            {
-               const size_t diff = fflags.minWidth - stringLength;
-               buf.Add(' ', diff);
-            }
-         }
-
-         if ( p != nBuf )
-            delete[] p;
+         const size_t available = buf.GetAvailableChars();
+         const size_t need = (fflags.precision > available) ? available : fflags.precision;
+         p = (need < DEF_NBUF_SIZE) ? nBuf : M_NEW wchar_t[need + 1];
+         stringLength = Fmbsrtowcs(p, &mbs, need, &ps);
       }
       else
       {
-         stringLength = FBuf<wchar_t>::NULL_STRING_LEN;
-         buf.Add(FBuf<wchar_t>::NULL_STRING, stringLength);
+         stringLength = Fmbsrtowcs(0, &mbs, 0, &ps);
+         const size_t available = buf.GetAvailableChars();
+         if ( available && stringLength && stringLength != static_cast<size_t>(-1) )
+         {
+            memset(&ps, 0, sizeof ps);
+            const size_t need = (stringLength > available) ? available : stringLength;
+            p = (need < DEF_NBUF_SIZE) ? nBuf : M_NEW wchar_t[need + 1];
+            Fmbsrtowcs(p, &mbs, need, &ps);
+         }
       }
+
+      if ( stringLength == static_cast<size_t>(-1) )
+      {
+         stringLength = 0;
+         M_ASSERT(0); // bad conversion, warn in debug
+      }
+      else
+      {
+         if ( fflags.adjustWidth && fflags.adjust == ADJUST_RIGHT && fflags.minWidth > stringLength )
+         {
+            const size_t diff = fflags.minWidth - stringLength;
+            buf.Add(' ', diff);
+         }
+         buf.Add(p, stringLength);
+         if ( fflags.adjustWidth && fflags.adjust == ADJUST_LEFT && fflags.minWidth > stringLength )
+         {
+            const size_t diff = fflags.minWidth - stringLength;
+            buf.Add(' ', diff);
+         }
+      }
+
+      if ( p != nBuf )
+         delete[] p;
 
       return 0;
    }
@@ -1045,7 +961,7 @@ void Format(FBuf<T>& buf, const T* fmt, va_list args, const lconv* lc) M_NO_THRO
 #endif
 
    enum { MODE_DEF, MODE_CHAR } mode = MODE_DEF;
-   T nBuf[DEF_NBUF_SIZE];
+   T nBuf [ DEF_NBUF_SIZE ];
    T* string = 0;
    size_t stringLength = 0;
    int nbits;
@@ -1064,8 +980,13 @@ void Format(FBuf<T>& buf, const T* fmt, va_list args, const lconv* lc) M_NO_THRO
          fflags.alternateFormShort = false;
          fflags.printSign = false;
          fflags.printBlank = false;
+         fflags.adjustPrecision = false;
+         fflags.adjustWidth = false;
          fflags.pad = ' ';
          fflags.prefix = '\0';
+         fflags.minWidth = 0;
+         fflags.precision = 0;
+
          mode = MODE_DEF;
 
          const T* savedfmt = fmt;
@@ -1364,33 +1285,59 @@ void Format(FBuf<T>& buf, const T* fmt, va_list args, const lconv* lc) M_NO_THRO
          case 'f':
          case 'e':
          case 'E':
-            fflags.fform = (*fmt == 'E') ? 'E' : 'e';
-            val.fp = va_arg(args, double);
-            if ( Fisnan(val.fp) )
-            {
-               string = const_cast<T*>(FBuf<T>::NAN_STRING);
-               stringLength = FBuf<T>::NAN_STRING_LEN;
-            }
-            else if ( Fisinf(val.fp) )
-            {
-               string = const_cast<T*>(FBuf<T>::INF_STRING);
-               stringLength = FBuf<T>::INF_STRING_LEN;
-            }
-            else
-            {
-               string = ConvFp(*fmt, val.fp, fflags, isNeg, &nBuf[1], stringLength);
-               if ( isNeg ) fflags.prefix = '-';
-               else if ( fflags.printSign ) fflags.prefix = '+';
-               else if ( fflags.printBlank ) fflags.prefix = ' ';
-            }
-            break;
          case 'g':
          case 'G':
-            fflags.fform = (*fmt == 'G') ? 'E' : 'e';
-            string = ConvGFp(va_arg(args, double), fflags, isNeg, &nBuf[1], stringLength);
-            if ( isNeg ) fflags.prefix = '-';
-            else if ( fflags.printSign ) fflags.prefix = '+';
-            else if ( fflags.printBlank ) fflags.prefix = ' ';
+            {
+               bool upperFormat = isupper(*fmt) != 0;
+               val.fp = va_arg(args, double);
+               if ( isnan(val.fp) )
+               {
+                  fflags.pad = ' '; // overwrite padding with zero if it was set
+                  isNeg = false;
+                  string = Fstrcpy(nBuf + 1, NAN_STRING, upperFormat);
+                  stringLength = sizeof(NAN_STRING) - 1;
+               }
+               else if ( std::numeric_limits<double>::infinity() == -val.fp ) // can compare a number to negative infinity
+               {
+                  fflags.pad = ' '; // overwrite padding with zero if it was set
+                  isNeg = true;
+                  string = Fstrcpy(nBuf + 1, INF_STRING, upperFormat);
+                  stringLength = sizeof(INF_STRING) - 1;
+               }
+               else if ( std::numeric_limits<double>::infinity() == val.fp ) // can compare a number to negative infinity
+               {
+                  fflags.pad = ' '; // overwrite padding with zero if it was set
+                  isNeg = false;
+                  string = Fstrcpy(nBuf + 1, INF_STRING, upperFormat);
+                  stringLength = sizeof(INF_STRING) - 1;
+               }
+               else // regular number
+               {
+                  fflags.fform = upperFormat ? 'E' : 'e';
+                  switch ( *fmt ) // again
+                  {
+                  default:
+                     M_ENSURED_ASSERT(0);
+                  case 'f':
+                     string = ConvFFp(val.fp, fflags, isNeg, nBuf + 1, stringLength);
+                     break;
+                  case 'e':
+                  case 'E':
+                     string = ConvEFp(val.fp, fflags, isNeg, nBuf + 1, stringLength);
+                     break;
+                  case 'g':
+                  case 'G':
+                     string = ConvGFp(val.fp, fflags, isNeg, nBuf + 1, stringLength);
+                     break;
+                  }
+               }
+               if ( isNeg )
+                  fflags.prefix = '-';
+               else if ( fflags.printSign )
+                  fflags.prefix = '+';
+               else if ( fflags.printBlank )
+                  fflags.prefix = ' ';
+            }
             break;
          case 'n':
             switch ( type )
@@ -1416,8 +1363,8 @@ void Format(FBuf<T>& buf, const T* fmt, va_list args, const lconv* lc) M_NO_THRO
             }
             else
             {
-               string = const_cast<T*>(FBuf<T>::NIL_STRING);
-               stringLength = FBuf<T>::NIL_STRING_LEN;
+               string = Fstrcpy(nBuf, NIL_STRING, false);
+               stringLength = sizeof(NIL_STRING) - 1;
             }
             fflags.pad = ' ';
             break;
@@ -1444,7 +1391,7 @@ void Format(FBuf<T>& buf, const T* fmt, va_list args, const lconv* lc) M_NO_THRO
          }
          else
          {
-            if ( fflags.prefix != '\0' && string != FBuf<T>::NULL_STRING && mode != MODE_CHAR )
+            if ( fflags.prefix != '\0' && mode != MODE_CHAR )
             {
                *--string = fflags.prefix;
                ++stringLength;
@@ -1907,9 +1854,10 @@ M_FUNC char* MSignedToString(int value, char* string, size_t& length)
 }
 
 template <typename T>
-T* MDoubleToString(double value, T* nBuf, size_t& length, bool shortestFormat)
+T* MDoubleToStringGeneric(double value, T* nBuf, size_t& length, bool shortestFormat, unsigned precision)
 {
    FFlags fflags;
+   fflags.precision = precision <= 17 ? precision : 17; // do not use min() due to a problem in Borland
    fflags.adjust = ADJUST_LEFT;
    if ( shortestFormat )
    {
@@ -1930,7 +1878,6 @@ T* MDoubleToString(double value, T* nBuf, size_t& length, bool shortestFormat)
    fflags.dp = '.';
    fflags.fform = 'e';
    fflags.minWidth = 0;
-   fflags.precision = 14;
 
    bool isNeg;
    length = 0;
@@ -1943,11 +1890,21 @@ T* MDoubleToString(double value, T* nBuf, size_t& length, bool shortestFormat)
    return string;
 }
 
-M_FUNC char* MToChars(double value, char* buffer, bool shortestFormat) M_NO_THROW
+M_FUNC char* MDoubleToString(double value, char* nBuf, size_t& length, bool shortestFormat, unsigned precision)
+{
+   return MDoubleToStringGeneric(value, nBuf, length, shortestFormat, precision);
+}
+
+M_FUNC wchar_t* MDoubleToString(double value, wchar_t* nBuf, size_t& length, bool shortestFormat, unsigned precision)
+{
+   return MDoubleToStringGeneric(value, nBuf, length, shortestFormat, precision);
+}
+
+M_FUNC char* MToChars(double value, char* buffer, bool shortestFormat, unsigned precision) M_NO_THROW
 {
    size_t length;
    char tmp [ 128 ];
-   char* ptr = MDoubleToString(value, tmp, length, shortestFormat);
+   char* ptr = MDoubleToString(value, tmp, length, shortestFormat, precision);
    memcpy(buffer, ptr, length);
    buffer[length] = '\0';
    return buffer;
@@ -2048,15 +2005,14 @@ M_FUNC wchar_t* MSignedToString(int value, wchar_t* string, size_t& length)
    return ptr;
 }
 
-M_FUNC wchar_t* MToChars(double value, wchar_t* buffer, bool shortestFormat) M_NO_THROW
+M_FUNC wchar_t* MToChars(double value, wchar_t* buffer, bool shortestFormat, unsigned precision) M_NO_THROW
 {
    size_t length;
    wchar_t tmp [ 128 ];
-   wchar_t* ptr = MDoubleToString(value, tmp, length, shortestFormat);
+   wchar_t* ptr = MDoubleToString(value, tmp, length, shortestFormat, precision);
    memcpy(buffer, ptr, length * sizeof(wchar_t));
    buffer[length] = L'\0';
    return buffer;
 }
 
 #endif
-

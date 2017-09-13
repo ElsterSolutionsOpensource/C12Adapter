@@ -38,10 +38,15 @@
    #define M_START_PROPERTIES(Class) \
       const MPropertyDefinition s__properties ## Class[] = {
 
-   /// Define the enumeration value within a class.
+   /// Define the signed integer enumeration value within a class.
    ///
    #define M_CLASS_ENUMERATION(Class, Enumeration) \
-      {# Enumeration, MVariant::VAR_EMPTY, MClass::ST__NULL, MClass::ST__NULL, NULL, NULL, NULL, NULL, NULL, (int)(M ## Class::Enumeration)},
+      {# Enumeration, MVariant::VAR_INT, MClass::ST__NULL, MClass::ST__NULL, NULL, NULL, NULL, NULL, NULL, (int)(M ## Class::Enumeration)},
+
+   /// Define the unsigned integer enumeration value within a class.
+   ///
+   #define M_CLASS_ENUMERATION_UINT(Class, Enumeration) \
+      {# Enumeration, MVariant::VAR_UINT, MClass::ST__NULL, MClass::ST__NULL, NULL, NULL, NULL, NULL, NULL, (int)(M ## Class::Enumeration)},
 
    /// Define the object Boolean persistent property with default value. See details in MObject class header comment.
    ///
@@ -102,7 +107,7 @@
    /// Define the object Char persistent property with default value. See details in MObject class header comment.
    ///
    #define M_OBJECT_PROPERTY_PERSISTENT_CHAR(Class, Property, defaultValue) \
-      {# Property, MVariant::VAR_CHAR, MClass::ST_MChar_X, MClass::ST_X_MChar, \
+      {# Property, MVariant::VAR_CHAR, MClass::ST_char_X, MClass::ST_X_char, \
        (MObject::Method)&M ## Class::Get ## Property, NULL, (MObject::Method)&M ## Class::Set ## Property, NULL, (void*)-1, (int)(defaultValue)},
 
    /// Define the object Byte property. See details in MObject class header comment.
@@ -114,7 +119,7 @@
    /// Define the object Char property. See details in MObject class header comment.
    ///
    #define M_OBJECT_PROPERTY_CHAR(Class, Property) \
-      {# Property, MVariant::VAR_CHAR, MClass::ST_MChar_X, MClass::ST_X_MChar, \
+      {# Property, MVariant::VAR_CHAR, MClass::ST_char_X, MClass::ST_X_char, \
        (MObject::Method)&M ## Class::Get ## Property, NULL, (MObject::Method)&M ## Class::Set ## Property, NULL, NULL},
 
    /// Define the object Byte property. See details in MObject class header comment.
@@ -126,7 +131,7 @@
    /// Define the object Char property. See details in MObject class header comment.
    ///
    #define M_OBJECT_PROPERTY_READONLY_CHAR(Class, Property) \
-      {# Property, MVariant::VAR_CHAR, MClass::ST_MChar_X, MClass::ST__NULL, \
+      {# Property, MVariant::VAR_CHAR, MClass::ST_char_X, MClass::ST__NULL, \
        (MObject::Method)&M ## Class::Get ## Property, NULL, NULL, NULL, NULL},
 
    /// Define the object Integer persistent property with default value. See details in MObject class header comment.
@@ -510,6 +515,8 @@
       inline void MStaticDoSetPersistentPropertiesToDefault(M ## Class* obj) {
 
    #define M_CLASS_ENUMERATION(Class, Enumeration)
+
+   #define M_CLASS_ENUMERATION_UINT(Class, Enumeration)
 
    #define M_OBJECT_PROPERTY_PERSISTENT_BOOL(Class, Property, defaultValue) \
       obj->Set ## Property(defaultValue);

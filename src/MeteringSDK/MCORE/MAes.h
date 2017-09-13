@@ -34,29 +34,29 @@ public: // Types:
    {
       /// Supported binary key size in bytes of this AES algorithm.
       ///
-      /// Currently this is only 16 bytes, which corresponds to 128-bit AES
+      /// Currently this is only 16 bytes, which corresponds to 128-bit AES.
       ///
       KeySize = 16,
 
       /// AES encryption block size.
       ///
-      /// This is 16 bytes
+      /// This is 16 bytes.
       ///
       BlockSize = 16,
 
-      /// Extra size added to key material at wrapping
+      /// Extra size added to key material at wrapping.
       ///
       KeyWrapEncryptionExtraSize = 8,
 
       /// Maximum size of key material for key wrap.
       ///
-      /// The result encrypted key material will be KeyWrapMinimumSize + KeyWrapEncryptionExtraSize
+      /// The result encrypted key material will be KeyWrapMinimumSize + KeyWrapEncryptionExtraSize.
       ///
       KeyWrapMinimumSize = KeySize,
 
       /// Maximum size of key material for key wrap
       ///
-      /// The result encrypted key material will be KeyWrapMaximumSize + KeyWrapEncryptionExtraSize
+      /// The result encrypted key material will be KeyWrapMaximumSize + KeyWrapEncryptionExtraSize.
       ///
       KeyWrapMaximumSize = 2048
    };
@@ -74,7 +74,7 @@ public: // Constructor, destructor:
    /// After successful initialization, assuming the key has correct size,
    /// the result object can be used for data encryption or decryption.
    ///
-   /// \param key Raw 16 bytes, key to use during encryption or decryption
+   /// \param key Raw 16 bytes, key to use during encryption or decryption.
    ///
    MAes(const MByteString& key);
 
@@ -136,7 +136,7 @@ public: // Methods:
 
    /// Assignment operator that copies the key from another class.
    ///
-   /// \param other Other object from which to copy
+   /// \param other Other object from which to copy.
    ///
    MAes& operator=(const MAes& other);
 
@@ -144,7 +144,7 @@ public: // Methods:
    ///
    /// An exception is thrown if the given binary key has size other than 16 bytes.
    ///
-   /// \param key The key which size is to be checked
+   /// \param key The key which size is to be checked.
    ///
    static void CheckKeySizeValid(const MByteString& key);
 
@@ -158,18 +158,18 @@ public: // Methods:
    ///   - "000102030405060708090A0B0C0D0E0F"
    ///   - "0102 0304 0506 0708  090A 0B0C 0D0E 0F00"
    ///
-   /// \param key The hex representation of key which size is to be checked
+   /// \param key The hex representation of key which size is to be checked.
    ///
    static void CheckHexKeySizeValid(const MStdString& key);
 
    ///@{
-   /// Encrypt buffer of size equal to block size
+   /// Encrypt buffer of size equal to block size.
    ///
    /// Plain text and cipher text can be the same buffer in which case
    /// the plain text will be encrypted in-place.
    ///
-   /// \param plainText    Buffer of size 16 bytes
-   /// \param cipherText   Result buffer of size 16 bytes
+   /// \param plainText    Buffer of size 16 bytes.
+   /// \param cipherText   Result buffer of size 16 bytes.
    ///
    void EncryptBuffer(const Muint8* plainText, Muint8* cipherText);
    void EncryptBuffer(const char* plainText, char* cipherText)
@@ -184,8 +184,8 @@ public: // Methods:
    /// Cipher text and plain text can be the same buffer in which case
    /// the plain text will be decrypted in-place.
    ///
-   /// \param cipherText   Buffer of size 16 bytes, previously encrypted with this key
-   /// \param plainText    Result buffer of size 16 bytes
+   /// \param cipherText   Buffer of size 16 bytes, previously encrypted with this key.
+   /// \param plainText    Result buffer of size 16 bytes.
    ///
    void DecryptBuffer(const Muint8* cipherText, Muint8* plainText);
    void DecryptBuffer(const char* cipherText, char* plainText)
@@ -219,7 +219,7 @@ public: // Methods:
    /// \return MByteString - result cipher text, same size as plainText.
    ///
    /// \see Decrypt - decrypting the data encrypted by this method.
-   /// \see StaticEncrypt - static version, method of a class that gets key as parameter
+   /// \see StaticEncrypt - static version, method of a class that gets key as parameter.
    ///
    MByteString Encrypt(const MByteString& plainText);
 
@@ -248,7 +248,7 @@ public: // Methods:
    /// \return MByteString - result plain text, same size as cipherText.
    ///
    /// \see Encrypt - how to encrypt the data using ECB mode.
-   /// \see StaticDecrypt - static version, method of a class that gets key as parameter
+   /// \see StaticDecrypt - static version, method of a class that gets key as parameter.
    ///
    MByteString Decrypt(const MByteString& cipherText);
 
@@ -278,8 +278,8 @@ public: // Methods:
    ///
    /// \return MByteString - result cipher text, same size as plainText.
    ///
-   /// \see Encrypt - object version of StaticEncrypt
-   /// \see StaticDecrypt - static version, method of a class that gets key as parameter
+   /// \see Encrypt - object version of StaticEncrypt.
+   /// \see StaticDecrypt - static version, method of a class that gets key as parameter.
    ///
    static MByteString StaticEncrypt(const MByteString& key, const MByteString& plainText);
 
@@ -309,24 +309,24 @@ public: // Methods:
    ///
    /// \return MByteString - result plain text, same size as cipherText.
    ///
-   /// \see Decrypt - object version of StaticEncrypt
-   /// \see StaticEncrypt - static version, method of a class that gets key as parameter
+   /// \see Decrypt - object version of StaticEncrypt.
+   /// \see StaticEncrypt - static version, method of a class that gets key as parameter.
    ///
    static MByteString StaticDecrypt(const MByteString& key, const MByteString& cipherText);
 
    ///@{
-   /// Encrypt key material with AES key wrap algorithm
+   /// Encrypt key material with AES key wrap algorithm.
    ///
    /// Cipher text and plain text can be the same buffer in which case
    /// the plain text will be decrypted in-place. However remember the size of cipher text buffer
    /// should be bigger by 8 bytes.
    ///
-   /// \param keyText     Buffer with key material that has to be wrapped
-   /// \param keyTextSize Size of the buffer with key material
-   /// \param cipherText  Result cipher text, the buffer should be 8 bytes bigger than keyTextSize
-   /// \return keyTextSize + 8 is returned, cipherText buffer size
+   /// \param keyText     Buffer with key material that has to be wrapped.
+   /// \param keyTextSize Size of the buffer with key material.
+   /// \param cipherText  Result cipher text, the buffer should be 8 bytes bigger than keyTextSize.
+   /// \return keyTextSize + 8 is returned, cipherText buffer size.
    ///
-   /// \see KeyWrap for complete description of functionality
+   /// \see KeyWrap for complete description of functionality.
    ///
    unsigned KeyWrapBuffer(const Muint8* keyText, unsigned keyTextSize, Muint8* cipherText);
    unsigned KeyWrapBuffer(const char* keyText, unsigned keyTextSize, char* cipherText)
@@ -336,19 +336,19 @@ public: // Methods:
    ///@}
 
    ///@{
-   /// Decrypt key material with AES key wrap algorithm
+   /// Decrypt key material with AES key wrap algorithm.
    ///
    /// If the key is not correct an exception will be thrown as the verification will not be successful.
    /// Plain text and cipher text can be the same buffer in which case
    /// the plain text will be decrypted in-place. However remember the size of cipher text buffer
    /// should be bigger by 8 bytes.
    ///
-   /// \param cipherText     Encrypted buffer with key material that has to be decrypted and verified
-   /// \param cipherTextSize Size of the encrypted buffer
-   /// \param keyText        Result cipher text, the buffer should be 8 bytes bigger than keyTextSize
-   /// \return keyTextSize - 8 is returned, keyText buffer size
+   /// \param cipherText     Encrypted buffer with key material that has to be decrypted and verified.
+   /// \param cipherTextSize Size of the encrypted buffer.
+   /// \param keyText        Result cipher text, the buffer should be 8 bytes bigger than keyTextSize.
+   /// \return keyTextSize - 8 is returned, keyText buffer size.
    ///
-   /// \see KeyUnwrap for complete description of functionality
+   /// \see KeyUnwrap for complete description of functionality.
    ///
    unsigned KeyUnwrapBuffer(const Muint8* cipherText, unsigned cipherTextSize, Muint8* keyText);
    unsigned KeyUnwrapBuffer(const char* cipherText, unsigned cipherTextSize, char* keyText)
@@ -400,12 +400,12 @@ public: // Methods:
    /// data has arrived intact.
    ///
    /// \param keys
-   ///     One or more keys, should be 16 bytes or more, size divisible by 8
+   ///     One or more keys, should be 16 bytes or more, size divisible by 8.
    ///
-   /// \return bytes - cipher, which is 8 bytes longer than the keys string given
+   /// \return bytes - cipher, which is 8 bytes longer than the keys string given.
    ///
-   /// \see KeyUnwrap - reverse operation
-   /// \see StaticKeyWrap - version that accepts key directly
+   /// \see KeyUnwrap - reverse operation.
+   /// \see StaticKeyWrap - version that accepts key directly.
    ///
    MByteString KeyWrap(const MByteString& keys);
 
@@ -421,42 +421,42 @@ public: // Methods:
    /// be used to guess the key (such as a known ciphertext attack).
    ///
    /// \param cipher
-   ///     Input that contains wrapped key material
+   ///     Input that contains wrapped key material.
    ///
-   /// \return bytes - keys, the size is 8 bytes shorter than the given cipher
+   /// \return bytes - keys, the size is 8 bytes shorter than the given cipher.
    ///
-   /// \see KeyWrap - reverse operation
-   /// \see StaticKeyUnwrap - version that accepts key directly
+   /// \see KeyWrap - reverse operation.
+   /// \see StaticKeyUnwrap - version that accepts key directly.
    ///
    MByteString KeyUnwrap(const MByteString& cipher);
 
-   /// Static variant of KeyWrap
+   /// Static variant of KeyWrap.
    ///
-   /// \see KeyWrap - object version that accepts key as property
-   /// \see StaticKeyUnwrap - reverse static operation
+   /// \see KeyWrap - object version that accepts key as property.
+   /// \see StaticKeyUnwrap - reverse static operation.
    ///
    /// \param key
-   ///     Encryption key to use in key wrap, should be the same as the one in the unwrap call
+   ///     Encryption key to use in key wrap, should be the same as the one in the unwrap call.
    ///
    /// \param keys
-   ///     One or more 16-byte keys to wrap
+   ///     One or more 16-byte keys to wrap.
    ///
-   /// \return bytes - cipher, which is 8 bytes longer than the keys string given
+   /// \return bytes - cipher, which is 8 bytes longer than the keys string given.
    /// 
    static MByteString StaticKeyWrap(const MByteString& key, const MByteString& keys);
 
-   /// Static variant of KeyUnwrap
+   /// Static variant of KeyUnwrap.
    ///
-   /// \see KeyUnwrap - object version that accepts key as property
-   /// \see StaticKeyWrap - reverse static operation
+   /// \see KeyUnwrap - object version that accepts key as property.
+   /// \see StaticKeyWrap - reverse static operation.
    ///
    /// \param key
-   ///     Encryption key to use in key unwrap, should be the same as the one in the wrap call
+   ///     Encryption key to use in key unwrap, should be the same as the one in the wrap call.
    ///
    /// \param cipher
-   ///     Cipher text as produced by keys wrap call
+   ///     Cipher text as produced by keys wrap call.
    ///
-   /// \return bytes - byte string of keys, which is 8 bytes shorter than the cipher given
+   /// \return bytes - byte string of keys, which is 8 bytes shorter than the cipher given.
    /// 
    static MByteString StaticKeyUnwrap(const MByteString& key, const MByteString& cipher);
 
@@ -471,7 +471,7 @@ public: // Methods:
    static M_NORETURN_FUNC void ThrowValidationError();
 
    ///@{
-   /// Destroy secure data such as key, password and so on
+   /// Destroy secure data such as key, password and so on.
    ///
    /// The memory area denoted by the data will be filled with zeros.
    /// Only the data are erased, while the array sizes are unchanged.
@@ -489,7 +489,7 @@ public: // Methods:
    ///@}
 
    ///@{
-   /// Assign one secure data such as key or password to another variable
+   /// Assign one secure data such as key or password to another variable.
    ///
    /// As the data size of a new buffer can be different
    /// as a safety measure the previous contents of the destination is erased.
@@ -500,14 +500,14 @@ public: // Methods:
    /// \see MoveSecureData(MByteString& destination, MByteString& source)
    /// \see MoveSecureData(MByteStringVector& destination, MByteStringVector& source)
    /// \see SwapSecureData(MByteString& v1, MByteString& v2);
-   /// \see SwapSecureData(MByteStringVector& v1, MByteStringVector& v2);
+   /// \see SwapSecureData(MByteStringVector& v1, MByteStringVector& v2)
    ///
    static void AssignSecureData(MByteString& destination, const MByteString& source);
    static void AssignSecureData(MByteStringVector& destination, const MByteStringVector& source);
    ///@}
 
    ///@{
-   /// Move one secure data such as key or password into another variable, destroy source value
+   /// Move one secure data such as key or password into another variable, destroy source value.
    ///
    /// As the data size of a new buffer can be different
    /// as a safety measure the previous contents of the destination is erased.
@@ -519,20 +519,20 @@ public: // Methods:
    /// \see AssignSecureData(MByteString& destination, const MByteString& source)
    /// \see AssignSecureData(MByteStringVector& destination, const MByteStringVector& source)
    /// \see SwapSecureData(MByteString& v1, MByteString& v2);
-   /// \see SwapSecureData(MByteStringVector& v1, MByteStringVector& v2);
+   /// \see SwapSecureData(MByteStringVector& v1, MByteStringVector& v2)
    ///
    static void MoveSecureData(MByteString& destination, MByteString& source);
    static void MoveSecureData(MByteStringVector& destination, MByteStringVector& source);
    ///@}
 
    ///@{
-   /// Swap secure data such as key or password with another data
+   /// Swap secure data such as key or password with another data.
    ///
    /// As the data sizes of these can be different, the data gets erased to make sure
    /// nothing stays in memory after the operation.
    ///
-   /// \param v1 Data to be swapped with v2
-   /// \param v2 Data to be swapped with v1
+   /// \param v1 Data to be swapped with v2.
+   /// \param v2 Data to be swapped with v1.
    ///
    /// \see AssignSecureData(MByteString& destination, const MByteString& source)
    /// \see AssignSecureData(MByteStringVector& destination, const MByteStringVector& source)

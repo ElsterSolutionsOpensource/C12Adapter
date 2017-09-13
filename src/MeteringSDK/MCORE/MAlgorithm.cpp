@@ -487,7 +487,7 @@ MStdString MAlgorithm::TrimString(const MStdString& str, MConstChars trimCharact
       return result;
    }
 
-MStdStringVector MAlgorithm::SplitWithDelimiter(const MStdString& str, MChar separator, bool trimBlanks, bool allowEmpty)
+MStdStringVector MAlgorithm::SplitWithDelimiter(const MStdString& str, char separator, bool trimBlanks, bool allowEmpty)
 {
    MStdString separatorString(1, separator);
    return SplitWithDelimiter(str, separatorString, trimBlanks, allowEmpty);

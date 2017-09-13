@@ -1,10 +1,12 @@
 IF(INSIDE_METERINGSDK)
-   SET(M_COMPANY_NAME                  "Elster Solutions, LLC"                               CACHE STRING "Company name")
+   SET(M_COMPANY_NAME                  "Elster Solutions"                                    CACHE STRING "Company name")
    SET(M_PRODUCT_NAME                  "MyProduct"                                           CACHE STRING "Product name")
-   SET(M_PRODUCT_LEGAL_COPYRIGHT       "Copyright (c) 1997-2016 Elster Solutions, LLC"       CACHE STRING "Product copyright")
+   SET(M_PRODUCT_LEGAL_COPYRIGHT       "Copyright (c) 1997-2017 Elster Solutions"            CACHE STRING "Product copyright")
    SET(M_PRODUCT_VERSION               "1.0.0"                                               CACHE STRING "Product version")
    SET(M_GLOBAL_MESSAGE_CATALOG_DOMAIN ""                                                    CACHE STRING "Global message catalog domain name")
 
+   MESSAGE(STATUS "Project build location (CMAKE_BINARY_DIR) = ${CMAKE_BINARY_DIR}")
+   MESSAGE(STATUS "Project root location (PROJECT_ROOT_SOURCE_DIR) = ${PROJECT_ROOT_SOURCE_DIR}")
    MESSAGE(STATUS "MeteringSDK location (METERINGSDK_SOURCE_DIR) = ${METERINGSDK_SOURCE_DIR}")
 
    # Parse MeteringSDK version from the version header file
@@ -79,7 +81,7 @@ OPTION(M_USE_MFC                         "Whether to include MFC headers when co
 OPTION(M_USE_CRYPTODEV                   "Whether to use /dev/crypto device"               OFF)
 OPTION(M_USE_CRYPTOAPI                   "Whether to use Windows CryptoAPI"                OFF)
 OPTION(M_USE_OPENSSL                     "Whether to use OpenSSL for cryptography support" OFF)
-IF((DEFINED UCLINUX) OR (DEFINED ANDROID))
+IF(DEFINED UCLINUX)
   OPTION(M_NO_WCHAR_T                    "No support for any unicode or wchar_t"           ON)
 ELSE()
   OPTION(M_NO_WCHAR_T                    "No support for any unicode or wchar_t"           OFF)

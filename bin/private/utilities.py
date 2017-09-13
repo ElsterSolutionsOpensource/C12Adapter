@@ -9,12 +9,16 @@ def log(s):
     if verbose:
         print(s)
 
+def is_tool_installed(name):
+    try:
+        return shutil.which(name) != None
+    except AttributeError:  # older python
+        proc = subprocess.Popen(['where' if os.name == 'nt' else 'which', name])
+        return proc.wait() == 0
+
 def check_tool_installed(name):
-    sys.stdout.write("Path to %s: " % name)
-    sys.stdout.flush()
-    proc = subprocess.Popen(['which', name])
-    if proc.wait() != 0:
-        print_and_exit("Tool not present: %s" % " ".join(command))
+    if not is_tool_installed(name):
+        print_and_exit("Tool not present: %s" % name)
 
 def split_without_last_empty_line(txt):
     split = txt.split('\n')

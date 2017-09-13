@@ -28,7 +28,7 @@ class MCOM_CLASS MProtocol : public MCOMObject
    friend class MProtocolC1222;
    friend class MProtocolServiceWrapper;
    friend class MSessionKeeper;
-   friend class MServerProtocolC12;
+   friend class MServerProtocol;
    friend class MServerProtocolC1222;
 
 public: // Types:
@@ -1362,7 +1362,7 @@ public: // Services:
    /// \pre The start character among those in the set given should be present in the input stream
    /// within trafficTimeout period. Otherwise an exception is thrown.
    ///
-   char ReadStartByte(const MByteString& setOfValidStartBytes, unsigned trafficTimeout);
+   Muint8 ReadStartByte(const MByteString& setOfValidStartBytes, unsigned trafficTimeout);
 
 
    /// Synchronously read the whole table with number given as parameter.

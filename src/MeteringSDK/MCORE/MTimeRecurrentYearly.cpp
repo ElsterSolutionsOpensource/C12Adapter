@@ -62,6 +62,7 @@ M_START_PROPERTIES(TimeRecurrentYearly)
    M_OBJECT_PROPERTY_INT                  (TimeRecurrentYearly, Minutes)
    M_OBJECT_PROPERTY_INT                  (TimeRecurrentYearly, Seconds)
    M_OBJECT_PROPERTY_READONLY_BOOL_EXACT  (TimeRecurrentYearly, IsDayOfWeekIgnored)
+   M_OBJECT_PROPERTY_READONLY_BOOL_EXACT  (TimeRecurrentYearly, IsNull)
 
    M_CLASS_ENUMERATION                    (TimeRecurrentYearly, OffsetNo)
    M_CLASS_ENUMERATION                    (TimeRecurrentYearly, OffsetWeekdayBefore)
@@ -80,6 +81,10 @@ M_START_PROPERTIES(TimeRecurrentYearly)
    M_CLASS_ENUMERATION                    (TimeRecurrentYearly, OffsetMondayIfSundayFridayIfSaturday)
    M_CLASS_ENUMERATION                    (TimeRecurrentYearly, OffsetObserveOnFollowingDate)
 M_START_METHODS(TimeRecurrentYearly)
+   M_OBJECT_SERVICE                       (TimeRecurrentYearly, CheckIsValid,                  ST_X)
+   M_OBJECT_SERVICE                       (TimeRecurrentYearly, SetToNull,                     ST_X)
+   M_OBJECT_SERVICE                       (TimeRecurrentYearly, GetPertinent,                  ST_MObjectByValue_X_MObjectP)
+   M_OBJECT_SERVICE                       (TimeRecurrentYearly, GetPertinentForYear,           ST_MObjectByValue_X_int)
    M_OBJECT_SERVICE                       (TimeRecurrentYearly, SetOnDay,                      ST_X_int_int_int_int_int)
    M_OBJECT_SERVICE                       (TimeRecurrentYearly, SetOnWeekday,                  ST_X_int_int_int_int_int_int)
    M_OBJECT_SERVICE                       (TimeRecurrentYearly, NewClone,                      ST_MVariant_X)
@@ -264,11 +269,16 @@ void MTimeRecurrentYearly::ChangeTimeZoneTime(SYSTEMTIME& ti) const
 
 MTime MTimeRecurrentYearly::GetPertinent(const MTime& tagTime) const
 {
+   return GetPertinentForYear(tagTime.GetYear());
+}
+
+MTime MTimeRecurrentYearly::GetPertinentForYear(int year) const
+{
    if ( IsNull() )
       return MTime();
 
    OffsetType type = GetOffsetType();
-   MTime ti(tagTime.GetYear(), GetMonth(), ((type == OffsetWeekdayLastAfter) ? 1 : GetDayOfMonth()), GetHours(), GetMinutes(), GetSeconds());
+   MTime ti(year, GetMonth(), ((type == OffsetWeekdayLastAfter) ? 1 : GetDayOfMonth()), GetHours(), GetMinutes(), GetSeconds());
    if ( type != OffsetNo )
    {
       MTime::DayOfWeekType weekday = ti.GetDayOfWeek();
@@ -309,7 +319,7 @@ MTime MTimeRecurrentYearly::GetPertinent(const MTime& tagTime) const
             break;
          }
          M_ASSERT(ti.GetDayOfWeek() == GetDayOfWeek());
-         M_ASSERT(ti.GetMonth() == GetMonth());
+         // M_ASSERT(ti.GetMonth() == GetMonth()); <- this check works for most but not for all dates as anchor date is just any date within month
       }
       else
       {
@@ -318,8 +328,7 @@ MTime MTimeRecurrentYearly::GetPertinent(const MTime& tagTime) const
          default:
             M_ENSURED_ASSERT(0);
          case OffsetObserveOnThisAndFollowingDate:
-            if ( tagTime > ti )
-               ti += MTimeSpan(s_secondsInDay);
+            // Equivalent to type == OffsetNo
             break;
          case OffsetMondayIfSunday:
             if ( ti.GetDayOfWeek() == MTime::WeekdaySunday )
@@ -335,7 +344,7 @@ MTime MTimeRecurrentYearly::GetPertinent(const MTime& tagTime) const
             break;
          case OffsetFridayIfSaturday:
             if ( ti.GetDayOfWeek() == MTime::WeekdaySaturday )
-               ti -= MTimeSpan(s_secondsInDay * 2);
+               ti -= MTimeSpan(s_secondsInDay);
             break;
          case OffsetMondayIfSaturdayOrSunday:
             if ( ti.GetDayOfWeek() == MTime::WeekdaySaturday )
@@ -371,6 +380,7 @@ void MTimeRecurrentYearly::CheckIsValid() const
       MTimeRecurrentYearly t; // cannot use constructor or Set function due to recursion
       t.SetOffsetType(GetOffsetType());
       t.SetMonth(GetMonth());
+      t.SetDayOfMonth(GetDayOfMonth());
       t.SetHours(GetHours());
       t.SetMinutes(GetMinutes());
       t.SetSeconds(GetSeconds());

@@ -11,6 +11,11 @@
    #include <fenv.h>
 #endif
 
+#if defined(_MSC_VER) || defined(__BORLANDC__)
+   #define isnan(x) _isnan(x)
+   #define isinf(x) (!_finite(x))
+#endif
+
 M_START_PROPERTIES(Exception)
    M_OBJECT_PROPERTY_UINT                      (Exception, Code)
    M_OBJECT_PROPERTY_STRING                    (Exception, MessageString,      ST_MStdString_X, ST_X_constMStdStringA)
@@ -18,7 +23,7 @@ M_START_PROPERTIES(Exception)
    M_OBJECT_PROPERTY_READONLY_STRING_EXACT     (Exception, AsSimplifiedString, ST_MStdString_X)
    M_OBJECT_PROPERTY_READONLY_STRING           (Exception, FileName,           ST_MStdString_X)
    M_OBJECT_PROPERTY_READONLY_UINT             (Exception, FileLineNumber)
-   M_OBJECT_PROPERTY_UINT                      (Exception, Kind)
+   M_OBJECT_PROPERTY_INT                       (Exception, Kind)
    M_OBJECT_PROPERTY_READONLY_STRING           (Exception, KindAsString,       ST_MStdString_X)
    M_OBJECT_PROPERTY_READONLY_STRING_COLLECTION(Exception, CallStack,          ST_MStdStringVector_X)
 
@@ -35,6 +40,7 @@ M_START_PROPERTIES(Exception)
    M_CLASS_ENUMERATION                         (Exception, ErrorSecurity)
    M_CLASS_ENUMERATION                         (Exception, ErrorMeter)
    M_CLASS_ENUMERATION                         (Exception, ErrorSoftware)
+   M_CLASS_ENUMERATION                         (Exception, ErrorUser)
 M_START_METHODS(Exception)
    M_CLASS_SERVICE                             (Exception, New,                   ST_MObjectP_S)
    M_OBJECT_SERVICE                            (Exception, Append,                ST_X_constMStdStringA)
@@ -1169,7 +1175,7 @@ MENumberOutOfRange::MENumberOutOfRange(double lo, double hi, double val, MConstC
 #if !M_NO_VERBOSE_ERROR_INFORMATION
    if ( itemName != NULL )
       m_name = itemName;
-   MChar valStr [ 64 ];
+   char valStr [ 64 ];
    MToChars(val, valStr, true);
 
    // Check if the range was proper, and the value is in that range.
@@ -1185,8 +1191,8 @@ MENumberOutOfRange::MENumberOutOfRange(double lo, double hi, double val, MConstC
    }
    else
    {
-      MChar loStr [ 64 ];
-      MChar hiStr [ 64 ];
+      char loStr [ 64 ];
+      char hiStr [ 64 ];
       MToChars(lo, loStr, true);
       MToChars(hi, hiStr, true);
 
@@ -1396,8 +1402,9 @@ MEIndexOutOfRange* MEIndexOutOfRange::New()
 
 M_START_PROPERTIES(EMath)
 M_START_METHODS(EMath)
-   M_CLASS_SERVICE                  (EMath, New,   ST_MObjectP_S)
-   M_CLASS_SERVICE                  (EMath, Throw, ST_S)
+   M_CLASS_SERVICE                  (EMath, ClearMathError, ST_S)
+   M_CLASS_SERVICE                  (EMath, New,            ST_MObjectP_S)
+   M_CLASS_SERVICE                  (EMath, Throw,          ST_S)
 M_END_CLASS(EMath, Exception)
 
 MEMath::MEMath()
@@ -1416,24 +1423,20 @@ MEMath::~MEMath() M_NO_THROW
 {
 }
 
-void MEMath::BeforeDoingMath() M_NO_THROW
+void MEMath::ClearMathError() M_NO_THROW
 {
    errno = 0;
-   #if (M_OS & M_OS_POSIX) != 0
-     feclearexcept(FE_ALL_EXCEPT);
+   #if defined(_MSC_VER) || defined(__BORLANDC__)
+      _clearfp();
+   #else // Standard call
+      feclearexcept(FE_ALL_EXCEPT);
    #endif
 }
-
-   #if defined(_MSC_VER) || defined(__BORLANDC__)
-      #define isnan(x) _isnan(x)
-   #endif
-
-using namespace std;
 
 void MEMath::AfterDoingMath(double result, const char* operationName)
 {
    int e = errno;
-   if ( e != 0 || isnan(result) )
+   if ( e != 0 || isnan(result) || isinf(result) )
    {
        errno = 0; // clear it before throwing
 
@@ -1529,7 +1532,7 @@ void MEProgramError::Guard::InitializeException(MException* ex) M_NO_THROW
       err = "Stack overflow. Infinite recursion?";
       break;
    default:
-      MFormat(buff, 64, "Application error %d", m_programErrorCode);
+      MFormat(buff, sizeof(buff), "Application error %d", m_programErrorCode);
       err = buff;
       break;
    }

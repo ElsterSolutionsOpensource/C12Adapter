@@ -62,33 +62,49 @@ public: // Thread client calls:
    ///
    virtual void Start();
 
-   /// A request of the thread client to wait until the thread finishes execution
-   /// using the normal execution path. If the thread finished already,
-   /// return immediately.
+   /// A request of the thread client to wait until the thread finishes execution.
    ///
+   /// If the thread finished already, return immediately.
    /// If there was no thread created, or it was destroyed,
    /// WaitUntilFinished returns true immediately, a success.
    ///
-   /// If throwIfError is true, the exception with which the thread
-   /// is finished will be rethrown in the context of this thread.
-   ///
-   /// \pre This call should be made by the thread client,
+   /// This call should be made by the thread client,
    /// as it does not make any sense to be called by the worker thread itself.
    ///
-#if M_OS & M_OS_UCLINUX
-   bool WaitUntilFinished(bool throwIfError = true);
-#else
+   /// \param throwIfError If true, and the worker raised an exception,
+   ///       this exception will be rethrown in the context
+   ///       of the caller of WaitUntilFinished.
+   ///       If the parameter is false, but the error is raised
+   ///       by the worker thread it will be available with GetExitException()/
+   /// \param timeout Timeout in milliseconds to wait for the thread to finish.
+   ///       NOTE: Some operating systems such as Android does not support
+   ///       timeout parameter, the value will be ignored and the thread
+   ///       will be waited for possibly an unlimited time.
+   ///
    bool WaitUntilFinished(bool throwIfError = true, long timeout = -1);
-#endif
 
-   /// Tells if the thread finished execution. Note that by convention,
-   /// if the thread is not started, it is also not finished.
+   /// Tells if the background thread is currently running.
+   ///
+   /// The service can be called by both the worker thread, and its client.
+   ///
+   /// \possible_values
+   ///    - False : the thread has not run yet, or it has finished.
+   ///    - True : the worker thread is running
+   ///
+   bool IsRunning() const;
+
+   /// Legacy method that tells if the thread is not running.
+   ///
+   /// The name is somewhat misleading as it will return true
+   /// even if the thread had not run at all.
+   /// Because of it, use \ref IsRunning instead.
    ///
    /// This service can be called by both the worker thread, and its client.
    ///
-   /// \pre True returned if the thread finished running.
-   ///
-   bool IsFinished() const;
+   M_DEPRECATED("Use IsRunning() instead") bool IsFinished() const
+   {
+      return !IsRunning();
+   }
 
    /// Get the exception with which the thread was finished.
    /// If the thread was finished normally with return from Run, this is NULL.
@@ -171,6 +187,10 @@ private: // Attributes:
    // Used in the implementation of the thread.
    //
    mutable MCriticalSection m_threadLock;
+
+   // Tells whether the thread is not running.
+   //
+   bool m_isRunning;
 
    // The exception with which the thread was exited, NULL if the thread did not
    // exit, or exited with no exception.

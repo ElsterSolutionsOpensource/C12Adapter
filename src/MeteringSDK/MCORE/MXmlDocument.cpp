@@ -15,6 +15,59 @@
 
 #include "private/pugixml.cxx"
 
+   #if !M_NO_REFLECTION
+
+     /// Create an empty XML document, ready to be read or populated manually.
+     ///
+     /// No child nodes are present.
+     ///
+     static MXmlDocument* DoNew0()
+     {
+        return M_NEW MXmlDocument();
+     }
+
+     /// Create an XML document from generic parameter.
+     ///
+     /// An error can result from stream I/O, or if the document is malformed.
+     ///
+     /// \param streamFilenameOrString
+     ///     The parameter can be one of the following types:
+     ///       - Instance of class MXmlDocument. If provided, this document will be a copy.
+     ///       - MStream object that is opened and ready to be read.
+     ///         The whole stream will be read, but there will be no attempt to close the stream.
+     ///       - An in-place XML document in a possibly long string.
+     ///         Whether this is an in-place XML is determined by having '<' at the beginning
+     ///         and '>' at the end of the string.
+     ///       - A file name.
+     ///
+     static MXmlDocument* DoNew1(const MVariant& streamFilenameOrString)
+     {
+        return M_NEW MXmlDocument(streamFilenameOrString);
+     }
+
+     /// Create an XML document from generic parameter and a parse mask.
+     ///
+     /// An error can result from stream I/O, or in case the document is malformed.
+     ///
+     /// \param streamFilenameOrString
+     ///     The parameter can be one of the following types:
+     ///       - Instance of class MXmlDocument. If provided, this document will be a copy.
+     ///       - MStream object that is opened and ready to be read.
+     ///         The whole stream will be read, but there will be no attempt to close the stream.
+     ///       - An in-place XML document in a possibly long string.
+     ///         Whether this is an in-place XML is determined by having '<' at the beginning
+     ///         and '>' at the end of the string.
+     ///       - A file name.
+     /// \param parseMask
+     ///      Parse mask to use. If not given, use ParseMaskDefault.
+     ///
+     static MXmlDocument* DoNew2(const MVariant& streamFilenameOrString, unsigned parseMask)
+     {
+        return M_NEW MXmlDocument(streamFilenameOrString, parseMask);
+     }
+
+   #endif
+
 M_START_PROPERTIES(XmlNode)
    M_CLASS_ENUMERATION                         (XmlNode, NodeDocument)
    M_CLASS_ENUMERATION                         (XmlNode, NodeElement)
@@ -599,84 +652,31 @@ pugi::xml_node MXmlNode::DoAccessPugiNode() const
    return pugi::xml_node((pugi::xml_node_struct*)this);
 }
 
-   #if !M_NO_REFLECTION
-
-     /// Create an empty XML document, ready to be read or populated manually.
-     ///
-     /// No child nodes are present.
-     ///
-     static MXmlDocument* DoNew0()
-     {
-        return M_NEW MXmlDocument();
-     }
-
-     /// Create an XML document from generic parameter.
-     ///
-     /// An error can result from stream I/O, or if the document is malformed.
-     ///
-     /// \param streamFilenameOrString
-     ///     The parameter can be one of the following types:
-     ///       - Instance of class MXmlDocument. If provided, this document will be a copy.
-     ///       - MStream object that is opened and ready to be read.
-     ///         The whole stream will be read, but there will be no attempt to close the stream.
-     ///       - An in-place XML document in a possibly long string.
-     ///         Whether this is an in-place XML is determined by having '<' at the beginning
-     ///         and '>' at the end of the string.
-     ///       - A file name.
-     ///
-     static MXmlDocument* DoNew1(const MVariant& streamFilenameOrString)
-     {
-        return M_NEW MXmlDocument(streamFilenameOrString);
-     }
-
-     /// Create an XML document from generic parameter and a parse mask.
-     ///
-     /// An error can result from stream I/O, or in case the document is malformed.
-     ///
-     /// \param streamFilenameOrString
-     ///     The parameter can be one of the following types:
-     ///       - Instance of class MXmlDocument. If provided, this document will be a copy.
-     ///       - MStream object that is opened and ready to be read.
-     ///         The whole stream will be read, but there will be no attempt to close the stream.
-     ///       - An in-place XML document in a possibly long string.
-     ///         Whether this is an in-place XML is determined by having '<' at the beginning
-     ///         and '>' at the end of the string.
-     ///       - A file name.
-     /// \param parseMask
-     ///      Parse mask to use. If not given, use ParseMaskDefault.
-     ///
-     static MXmlDocument* DoNew2(const MVariant& streamFilenameOrString, unsigned parseMask)
-     {
-        return M_NEW MXmlDocument(streamFilenameOrString, parseMask);
-     }
-
-   #endif
-
 M_START_PROPERTIES(XmlDocument)
-   M_CLASS_ENUMERATION               (XmlDocument, ParsePi)
-   M_CLASS_ENUMERATION               (XmlDocument, ParseComments)
-   M_CLASS_ENUMERATION               (XmlDocument, ParseCdata)
-   M_CLASS_ENUMERATION               (XmlDocument, ParseWsPcdata)
-   M_CLASS_ENUMERATION               (XmlDocument, ParseEscapes)
-   M_CLASS_ENUMERATION               (XmlDocument, ParseEol)
-   M_CLASS_ENUMERATION               (XmlDocument, ParseWconvAttribute)
-   M_CLASS_ENUMERATION               (XmlDocument, ParseWnormAttribute)
-   M_CLASS_ENUMERATION               (XmlDocument, ParseDeclaration)
-   M_CLASS_ENUMERATION               (XmlDocument, ParseDoctype)
-   M_CLASS_ENUMERATION               (XmlDocument, ParseWsPcdataSingle)
-   M_CLASS_ENUMERATION               (XmlDocument, ParseTrimPcdata)
-   M_CLASS_ENUMERATION               (XmlDocument, ParseFragment)
-   M_CLASS_ENUMERATION               (XmlDocument, ParseMaskMinimal)
-   M_CLASS_ENUMERATION               (XmlDocument, ParseMaskDefault)
-   M_CLASS_ENUMERATION               (XmlDocument, ParseMaskFull)
-   M_CLASS_ENUMERATION               (XmlDocument, FormatIndent)
-   M_CLASS_ENUMERATION               (XmlDocument, FormatWriteBom)
-   M_CLASS_ENUMERATION               (XmlDocument, FormatRaw)
-   M_CLASS_ENUMERATION               (XmlDocument, FormatNoDeclaration)
-   M_CLASS_ENUMERATION               (XmlDocument, FormatNoEscapes)
-   M_CLASS_ENUMERATION               (XmlDocument, FormatSaveFileText)
-   M_CLASS_ENUMERATION               (XmlDocument, FormatIndentAttributes)
-   M_CLASS_ENUMERATION               (XmlDocument, FormatMaskDefault)
+   M_CLASS_ENUMERATION_UINT          (XmlDocument, ParsePi)
+   M_CLASS_ENUMERATION_UINT          (XmlDocument, ParseComments)
+   M_CLASS_ENUMERATION_UINT          (XmlDocument, ParseCdata)
+   M_CLASS_ENUMERATION_UINT          (XmlDocument, ParseWsPcdata)
+   M_CLASS_ENUMERATION_UINT          (XmlDocument, ParseEscapes)
+   M_CLASS_ENUMERATION_UINT          (XmlDocument, ParseEol)
+   M_CLASS_ENUMERATION_UINT          (XmlDocument, ParseWconvAttribute)
+   M_CLASS_ENUMERATION_UINT          (XmlDocument, ParseWnormAttribute)
+   M_CLASS_ENUMERATION_UINT          (XmlDocument, ParseDeclaration)
+   M_CLASS_ENUMERATION_UINT          (XmlDocument, ParseDoctype)
+   M_CLASS_ENUMERATION_UINT          (XmlDocument, ParseWsPcdataSingle)
+   M_CLASS_ENUMERATION_UINT          (XmlDocument, ParseTrimPcdata)
+   M_CLASS_ENUMERATION_UINT          (XmlDocument, ParseFragment)
+   M_CLASS_ENUMERATION_UINT          (XmlDocument, ParseMaskMinimal)
+   M_CLASS_ENUMERATION_UINT          (XmlDocument, ParseMaskDefault)
+   M_CLASS_ENUMERATION_UINT          (XmlDocument, ParseMaskFull)
+   M_CLASS_ENUMERATION_UINT          (XmlDocument, FormatIndent)
+   M_CLASS_ENUMERATION_UINT          (XmlDocument, FormatWriteBom)
+   M_CLASS_ENUMERATION_UINT          (XmlDocument, FormatRaw)
+   M_CLASS_ENUMERATION_UINT          (XmlDocument, FormatNoDeclaration)
+   M_CLASS_ENUMERATION_UINT          (XmlDocument, FormatNoEscapes)
+   M_CLASS_ENUMERATION_UINT          (XmlDocument, FormatSaveFileText)
+   M_CLASS_ENUMERATION_UINT          (XmlDocument, FormatIndentAttributes)
+   M_CLASS_ENUMERATION_UINT          (XmlDocument, FormatMaskDefault)
    M_OBJECT_PROPERTY_UINT            (XmlDocument, ParseMask)
    M_OBJECT_PROPERTY_UINT            (XmlDocument, FormatMask)
    M_OBJECT_PROPERTY_STRING          (XmlDocument, IndentationSequence, ST_constMStdStringA_X, ST_X_constMStdStringA)

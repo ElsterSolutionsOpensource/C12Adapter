@@ -17,6 +17,32 @@
    #include <unistd.h>
    #include <sys/utsname.h>
 #endif
+#if (M_OS & M_OS_ANDROID) != 0 && M_NO_JNI
+   // http://stackoverflow.com/questions/28413530/api-to-get-android-system-properties-is-removed-in-arm64-platforms
+   // Later versions of Android no longer expose __system_property_get.
+
+   #include <sys/system_properties.h>
+   #include <dlfcn.h>
+
+   static int do_system_property_get(const char* name, char* value)
+   {
+       typedef int (*PropertyGetFunc)(const char*, char*);
+       static PropertyGetFunc s_property_get = NULL;
+       if ( s_property_get == NULL )
+       {
+           void* h = dlopen("libc.so", RTLD_NOLOAD); // should be loaded, just access
+           if ( h != NULL )
+               s_property_get = (PropertyGetFunc)dlsym(h, "__system_property_get");
+       }
+       if ( s_property_get != NULL )
+          return (*s_property_get)(name, value);
+       value[0] = '?';
+       value[1] = '.';
+       value[2] = '?';
+       return 3;
+   }
+
+#endif
 
 // If not so, one has to re-declare and reimplement
 //    virtual unsigned GetEmbeddedSizeof() const;
@@ -127,9 +153,9 @@ M_START_METHODS(Utilities)
    M_CLASS_SERVICE                  (Utilities, FromRAD40,                    ST_MStdString_S_constMByteStringA)
    M_CLASS_SERVICE                  (Utilities, ToRAD40,                      ST_MByteString_S_constMStdStringA_unsigned)
    M_CLASS_SERVICE                  (Utilities, NumberToHexByte,              ST_byte_S_unsigned)
-   M_CLASS_SERVICE                  (Utilities, NumberToHexChar,              ST_MChar_S_unsigned)
+   M_CLASS_SERVICE                  (Utilities, NumberToHexChar,              ST_char_S_unsigned)
    M_CLASS_SERVICE                  (Utilities, HexByteToNumber,              ST_unsigned_S_byte)
-   M_CLASS_SERVICE                  (Utilities, HexCharToNumber,              ST_unsigned_S_MChar)
+   M_CLASS_SERVICE                  (Utilities, HexCharToNumber,              ST_unsigned_S_char)
    M_CLASS_SERVICE                  (Utilities, BytesToHex,                   ST_MByteString_S_constMByteStringA_constMVariantA)
    M_CLASS_SERVICE                  (Utilities, HexToBytes,                   ST_MByteString_S_constMByteStringA)
    M_CLASS_SERVICE                  (Utilities, BytesToHexString,             ST_MStdString_S_constMByteStringA_constMVariantA)
@@ -175,14 +201,14 @@ M_END_CLASS(Utilities, Timer)
    const unsigned s_MAX_BCD_SIZE  = 64;     // maximum size of the BCD buffer
    const double   s_MAX_BCD_VALUE = 1.0e22; // after such number the algorithm becomes imprecise and starts to give bad values
 
-   inline MChar ToAsciiChar(unsigned radix)
+   inline char ToAsciiChar(unsigned radix)
    {
-      static const MChar s_radixChars[41] = " 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-.?";
+      static const char s_radixChars[41] = " 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-.?";
       M_ASSERT(radix < 40u);
       return s_radixChars[radix];
    }
 
-   static void M_NORETURN_FUNC DoThrowBadRAD40Char(MChar illegalChar)
+   static void M_NORETURN_FUNC DoThrowBadRAD40Char(char illegalChar)
    {
       MException::Throw(M_CODE_STR_P1(M_ERR_BAD_RAD40_CHARACTER_S1, M_I("Character '%s' is not allowed in RAD40"), MStr::CharToEscapedString(illegalChar).c_str()));
       M_ENSURED_ASSERT(0);
@@ -207,13 +233,13 @@ MStdString MUtilities::FromRAD40Buffer(const char* data, int byteLen)
    const Muint16* bufferEnd = (const Muint16*)(data + byteLen);
    for ( ; buffer < bufferEnd; ++buffer )
    {
-      MChar cs [ 3 ];
+      char cs [ 3 ];
       unsigned triple = (unsigned)*buffer;
       for ( int i = 2; i >= 0; --i, triple /= 40 ) // this loop goes backwards, this is why we cannot add to result immediately
          cs[i] = ToAsciiChar(triple % 40);
       if ( triple > 0 )
       {
-         DoThrowBadRAD40Char(MChar(*buffer / (40 * 40)));
+         DoThrowBadRAD40Char(char(*buffer / (40 * 40)));
          M_ENSURED_ASSERT(0);
       }
       result.append(cs, 3);
@@ -226,7 +252,7 @@ MStdString MUtilities::FromRAD40(const MByteString& data)
    return FromRAD40Buffer(data.data(), M_64_CAST(unsigned, data.size()));
 }
 
-   inline unsigned ToRadixChar(MChar ascii)
+   inline unsigned ToRadixChar(char ascii)
    {
       if ( ascii == ' ' )
          return 0u;
@@ -261,7 +287,7 @@ void MUtilities::ToRAD40Buffer(const MStdString& str, char* rad, unsigned radSiz
    unsigned i = 0;
    while ( i < strSize )
    {
-      MChar asciiChar = str[i];
+      char asciiChar = str[i];
       unsigned radixChar = ToRadixChar(asciiChar); // keep it in unsigned for performance, cast later
       if ( radixChar == UINT_MAX )
       {
@@ -332,7 +358,7 @@ Muint8 MUtilities::NumberToHexByte(unsigned n)
    return (Muint8)DoNumberToHexByte(n);
 }
 
-unsigned MUtilities::HexCharToNumber(MChar cc)
+unsigned MUtilities::HexCharToNumber(char cc)
 {
    // This sequence works much faster than isxdigit, etc
    //
@@ -558,9 +584,16 @@ MVariant MUtilities::FromUINT(const MByteString& bytes, bool littleEndian)
          result.append(diff, c);
       else if ( diff < 0 ) // truncate bytes unless they are not padding
       {
-         MByteString::size_type nonzeroPos = result.find_last_not_of(c);
-         if ( nonzeroPos != MByteString::npos )
-            MENumberOutOfRange::CheckNamedUnsignedRange(1u, size, static_cast<unsigned>(nonzeroPos + 1), "result.size");
+         MByteString::const_iterator it = result.begin() + size; // find_last_not_of(char) does not work correctly on Android!
+         MByteString::const_iterator itEnd = result.end();       // ... therefore, implement it 'by hand'
+         for ( ; it < itEnd; ++it )
+         {
+            if ( *it != c )
+            {
+               MENumberOutOfRange::Throw(1.0, static_cast<double>(size), static_cast<double>(it - result.begin()), "value.size");
+               M_ENSURED_ASSERT(0);
+            }
+         }
          result.erase(result.begin() + size, result.end());
       }
       if ( !littleEndian ) // swap bytes
@@ -1063,7 +1096,7 @@ bool MUtilities::IsPathFull(const MStdString& path)
    #if (M_OS & M_OS_WINDOWS) != 0
       if ( path.size() >= 3 && path[1] == ':' && (path[2] == '\\' || path[2] == '/') )
       {
-         MChar c = (MChar)m_toupper(*path.begin());
+         char c = (char)m_toupper(*path.begin());
          if ( c >= 'A' && c <= 'Z' )
             return true;
       }
@@ -1336,13 +1369,13 @@ MStdString MUtilities::GetInstallationPath() M_NO_THROW
       int possibleSlashCharOffset = (int)path.size() - 5;
       if ( possibleSlashCharOffset > 0 && m_stricmp(path.c_str() + possibleSlashCharOffset, "\\bin\\") == 0 )
          path.erase(possibleSlashCharOffset + 1, path.size());
-
       MAddDirectorySeparatorIfNecessary(path);
    }
    catch ( ... )
    {
       path.clear();
    }
+
 #endif
    return path;
 }
@@ -1747,22 +1780,28 @@ MStdString MUtilities::GetProductName()
       OsNameAndVersionHelper()
       {
          MCriticalSection::Locker locker(m_section);
-         #if (M_OS & M_OS_ANDROID) != 0 && !M_NO_JNI
-            MStdString versionString;
+         #if (M_OS & M_OS_ANDROID) != 0
             m_name = "Android";
-            MJavaEnv env;
-            jclass clazz = env.FindClass("android/os/Build$VERSION");  // or "android/os/Build/VERSION/RELEASE"?
-            jfieldID fid = env.GetStaticFieldID(clazz, "RELEASE", "Ljava/lang/String;");
-            jstring jVersionStr = (jstring) env->GetStaticObjectField(clazz, fid);
-            if ( jVersionStr != NULL )
-            {
-               const char* cVersionStr = env->GetStringUTFChars(jVersionStr, NULL);
-               env.CheckForJavaException();
-               versionString = cVersionStr;
-               env->ReleaseStringUTFChars(jVersionStr, cVersionStr);
-               env->DeleteLocalRef(jVersionStr);
-            }
-            m_version.SetAsString(versionString);
+            #if !M_NO_JNI
+               MJavaEnv env;
+               MStdString versionString;
+               jclass clazz = env.FindClass("android/os/Build$VERSION");  // or "android/os/Build/VERSION/RELEASE"?
+               jfieldID fid = env.GetStaticFieldID(clazz, "RELEASE", "Ljava/lang/String;");
+               jstring jVersionStr = (jstring) env->GetStaticObjectField(clazz, fid);
+               if ( jVersionStr != NULL )
+               {
+                  const char* cVersionStr = env->GetStringUTFChars(jVersionStr, NULL);
+                  env.CheckForJavaException();
+                  versionString = cVersionStr;
+                  env->ReleaseStringUTFChars(jVersionStr, cVersionStr);
+                  env->DeleteLocalRef(jVersionStr);
+               }
+               m_version.SetAsString(versionString);
+            #else
+               char version [ PROP_VALUE_MAX + 1 ];
+               int len = do_system_property_get("ro.build.version.release", version);
+               m_version.SetAsString(MStdString(version, len));
+            #endif
          #elif (M_OS & M_OS_POSIX) != 0
              MStdString versionString;
              struct utsname un;
@@ -2028,7 +2067,7 @@ MStdString MUtilities::ExpandEnvVars(const MStdString& source)
       EEV_S_OPENED
    } state = EEV_S_CLOSED;
 
-   MChar ch = 0;
+   char ch = 0;
 #if M_OS & M_OS_WINDOWS
    for ( MStdString::size_type i = 0; i <= source.length(); ++i )
    {
@@ -2103,7 +2142,7 @@ MStdString MUtilities::ExpandEnvVars(const MStdString& source)
       };
    }
 #else // !M_OS & M_OS_WINDOWS
-   MChar bk = 0;
+   char bk = 0;
    int nesting = 0;
    for ( MStdString::size_type i = 0; i <= source.length(); ++i )
    {
@@ -2364,9 +2403,10 @@ MStdString MUtilities::DoMakeTempFileName(const MStdString& prefix, bool isDir)
          path.reserve(32);
          do
          {
-            MChar buf[32];
-            MFormat(buf, 32, "%d", MMath::Rand());
-            path += buf;
+            char buff [ 32 ];
+            size_t size = MFormat(buff, sizeof(buff), "%d", MMath::Rand());
+            M_ASSERT(size < sizeof(buff)); // ensured by the format
+            path.append(buff, size);
          }
          while ( path.length() < 6 );
 
@@ -2431,7 +2471,7 @@ MStdString MUtilities::DoMakeTempFileName(const MStdString& prefix, bool isDir)
 
    if ( isDir )
    {
-#if (M_OS & (M_OS_QNXNTO | M_OS_ANDROID)) != 0
+#if (M_OS & M_OS_QNXNTO) != 0
       for ( std::size_t i = 0; i < 32; ++i )
       {
          mktemp(&tmp[0]);

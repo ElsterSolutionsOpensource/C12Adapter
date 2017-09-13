@@ -47,18 +47,9 @@ protected:
 
 public:
 
-   /// Destructor, destroys the thread object. Its behavior is specific to the
-   /// concrete object which inherits from it.
-   ///
-   /// \pre This object inherits preconditions from children.
-   /// This concrete object does not have any preconditions.
+   /// Destructor, destroys the thread object.
    ///
    virtual ~MThread();
-
-   /// Destroys a thread object. It is not the case that Destroy 
-   /// will lead to termination of the thread.
-   ///
-   void Destroy();
 
    /// Get thread identifier, a number that is guaranteed to be unique per thread.
    ///

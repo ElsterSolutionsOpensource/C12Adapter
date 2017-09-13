@@ -15,11 +15,11 @@
    {
       return M_NEW MDictionary();
    }
-   static MDictionary* DoNew1(MVariant& initializeStringOrCopy)
+   static MDictionary* DoNew1(const MVariant& initializeStringOrCopy)
    {
       if ( initializeStringOrCopy.IsObject() )
       {
-         MDictionary* dict = M_DYNAMIC_CAST_WITH_THROW(MDictionary, initializeStringOrCopy.DoInterpretAsObject());
+         const MDictionary* dict = M_DYNAMIC_CAST_WITH_THROW(const MDictionary, initializeStringOrCopy.DoInterpretAsObject());
          M_ASSERT(dict != NULL);
          return dict->NewClone();
       }
@@ -187,7 +187,7 @@ void MDictionary::Merge(const MDictionary& dict)
    m_map += dict.m_map;
 }
 
-   inline bool NolocaleIsSpace(MChar c)
+   inline bool NolocaleIsSpace(char c)
    {
       return c == ' ' || (c >= '\t' && c <= '\xD');
    }
@@ -209,7 +209,7 @@ void MDictionary::DoAddKeysValues(const MStdString& values)
       ScanState state = STATE_NAME;
       for ( MStdString::const_iterator it = values.begin() + 4; it != values.end(); ++it )
       {
-         MChar ch = *it;
+         char ch = *it;
          switch ( state )
          {
          case STATE_NAME:
@@ -262,7 +262,7 @@ void MDictionary::DoAddKeysValues(const MStdString& values)
       ScanState state = STATE_EXPECT_NAME;
       for ( MStdString::const_iterator it = values.begin(); it != values.end(); ++it )
       {
-         MChar ch = *it;
+         char ch = *it;
          switch ( state )
          {
          case STATE_EXPECT_NAME:

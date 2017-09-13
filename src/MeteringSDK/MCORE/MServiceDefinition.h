@@ -34,7 +34,7 @@ public: // Fields:
    /// Internally, if the name is a string containing only binary zeros, 
    /// it means this structure is the last in the service list.
    ///
-   MChar m_name [ MAXIMUM_SERVICE_NAME_LENGTH ];
+   char m_name [ MAXIMUM_SERVICE_NAME_LENGTH ];
 
    /// If the procedure has overloaded parameters, this is the number of them.
    /// If this is not an overloaded procedure, this value is -1.

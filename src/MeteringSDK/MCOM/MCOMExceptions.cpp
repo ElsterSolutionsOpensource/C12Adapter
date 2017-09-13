@@ -252,6 +252,7 @@ void MEC12NokResponse::Init(Muint8 responseCode)
    case RESPONSE_RSTL:  str = M_I("0x%02X Response too large (RSTL)");                           kind = MException::ErrorMeter;         break;  // For successfully restart service after changing protocol parameters
    case RESPONSE_SGNP:  str = M_I("0x%02X Segmentation required, but not possible (SGNP)");                                             break;
    case RESPONSE_SGERR: str = M_I("0x%02X Segmentation error (SGERR)");                                                                 break;
+   case RESPONSE_NRY:  str = M_I("0x%02X Not registered to you (NRY)");                                                               break;
    default:             str = M_I("0x%02X, Unknown response");                                                                          break;
    }
    MCOMException::Init(kind, errorCode, str, unsigned(responseCode));
@@ -301,7 +302,7 @@ M_START_PROPERTIES(EC12BadProcedureResult)
    M_OBJECT_PROPERTY_INT               (EC12BadProcedureResult, ProcedureResultCode)
 M_START_METHODS(EC12BadProcedureResult)
    M_CLASS_SERVICE                     (EC12BadProcedureResult, New,                ST_MObjectP_S)
-   M_CLASS_SERVICE                     (EC12BadProcedureResult, Throw,              ST_S_byte)
+   M_CLASS_SERVICE                     (EC12BadProcedureResult, Throw,              ST_S_int)
 M_END_CLASS(EC12BadProcedureResult, COMException)
 
 MEC12BadProcedureResult::MEC12BadProcedureResult(ResultCodeEnum resultCode)

@@ -273,7 +273,7 @@ public:
    /// \see \ref Join - Reverse function.
    /// \endif
    ///
-   static MStdStringVector SplitWithDelimiter(const MStdString& str, MChar delimiter, bool trimBlanks = false, bool allowEmpty = false);
+   static MStdStringVector SplitWithDelimiter(const MStdString& str, char delimiter, bool trimBlanks = false, bool allowEmpty = false);
    static MStdStringVector SplitWithDelimiter(const MStdString& str, const MStdString& delimiter, bool trimBlanks = false, bool allowEmpty = false);
    ///@}
 

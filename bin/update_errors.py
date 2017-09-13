@@ -34,7 +34,7 @@ mErrorEnumH = r"""#ifndef MCORE_MERRORENUM_H
 
 /// Error enumeration
 ///
-class MErrorEnum : public MObject
+class M_CLASS MErrorEnum : public MObject
 {
 public: // Types:
 
@@ -185,7 +185,7 @@ def generateErrorEnum(mcoreDir, allErrors):
                 hPublicErrorsStr += "      // %s\n\n" % fileName
                 currFilePublic = fileName
             hPublicErrorsStr += "%s\n      %s = 0x%08X,\n\n" % (comment, symbol, code)
-            cppPublicErrorsStr += "   M_CLASS_ENUMERATION(ErrorEnum, %s)\n" % symbol
+            cppPublicErrorsStr += "   M_CLASS_ENUMERATION_UINT(ErrorEnum, %s)\n" % symbol
         elif v["macro"] == "M__ERROR":
             comment = v["comment"]
             if comment.find("///") < 0:

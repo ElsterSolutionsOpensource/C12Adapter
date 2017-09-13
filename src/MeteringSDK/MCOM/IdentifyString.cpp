@@ -33,14 +33,14 @@ void MIdentifyString::AppendTag(MConstChars tag, const char* value, unsigned len
 
 void MIdentifyString::AppendTag(MConstChars tag, unsigned v)
 {
-   MChar str [ 16 ];
+   char str [ 16 ];
    MStdString value = MToChars((unsigned long)v, str);
    AppendTag(tag, value);
 }
 
 void MIdentifyString::AppendTag(MConstChars tag, unsigned v1, unsigned v2)
 {
-   MChar str [ 16 ];
+   char str [ 16 ];
    MStdString value = MToChars((unsigned long)v1, str);
    value += '.';
    value += MToChars((unsigned long)v2, str);
@@ -76,12 +76,12 @@ bool MIdentifyString::AppendObTags(int position, const char* sspec, unsigned gro
 
    ++m_obTagOrdinalNumber;
 
-   MChar nameBuffer [ 32 ]; // add some for alignment
+   char nameBuffer [ 32 ]; // add some for alignment
    nameBuffer[0] = 'O';
    nameBuffer[1] = 'B';
-   nameBuffer[2] = MChar(m_obTagOrdinalNumber + '0'); // we know we are ASCII
+   nameBuffer[2] = char(m_obTagOrdinalNumber + '0'); // we know we are ASCII
    nameBuffer[3] = '_';
-   MChar* nameBufferStart = nameBuffer + 4;
+   char* nameBufferStart = nameBuffer + 4;
 
    #define M__DO_COPY(s)  memcpy(nameBufferStart, (s), sizeof(s));
 
@@ -103,16 +103,16 @@ void MIdentifyString::InsertNumberOfObTags()
 {
    M_ASSERT(m_obTagOrdinalNumber >= 0);
 
-   MChar buffer [ 64 ];
-   MFormat(buffer, 64, "[NUMBER_OF_OPTION_BOARDS:%d]", m_obTagOrdinalNumber);
+   char buff [ 64 ];
+   MFormat(buff, sizeof(buff), "[NUMBER_OF_OPTION_BOARDS:%d]", m_obTagOrdinalNumber);
 
    MStdString::size_type pos = find("[OB1_");
    if ( pos == MStdString::npos )
       pos = size();
 #ifdef M_USE_USTL
-   insert(pos, buffer, strlen(buffer));
+   insert(pos, buff, strlen(buff));
 #else
-   insert(pos, buffer);
+   insert(pos, buff);
 #endif
 }
 

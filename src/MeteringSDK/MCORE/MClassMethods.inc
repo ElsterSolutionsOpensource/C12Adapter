@@ -96,9 +96,9 @@ _M_FUNCTION0(ST_byte_S,
    result.DoAssignToEmpty(((Method_byte_S)def->m_classMethod)()),
    _M_NULL, MVariant::VAR_BYTE)
 
-_M_FUNCTION0(ST_MChar_S,
-   MChar (*Method_MChar_S)(),
-   result.DoAssignToEmpty(((Method_MChar_S)def->m_classMethod)()),
+_M_FUNCTION0(ST_char_S,
+   char (*Method_char_S)(),
+   result.DoAssignToEmpty(((Method_char_S)def->m_classMethod)()),
    _M_NULL, MVariant::VAR_CHAR)
 
 _M_FUNCTION0(ST_int_S,
@@ -184,9 +184,9 @@ _M_PROCEDURE1(ST_S_byte,
    ((Method_S_byte)def->m_classMethod)(p[0].AsByte()),
    {MVariant::VAR_BYTE})
 
-_M_PROCEDURE1(ST_S_MChar,
-   void (*Method_S_MChar)(MChar),
-   ((Method_S_MChar)def->m_classMethod)(p[0].AsChar()),
+_M_PROCEDURE1(ST_S_char,
+   void (*Method_S_char)(char),
+   ((Method_S_char)def->m_classMethod)(p[0].AsChar()),
    {MVariant::VAR_CHAR})
 
 _M_PROCEDURE1(ST_S_int,
@@ -233,6 +233,11 @@ _M_PROCEDURE1(ST_S_MObjectP,
    void (*Method_S_MObjectP)(MObject*),
    ((Method_S_MObjectP)def->m_classMethod)(p[0].AsObject()),
    {MVariant::VAR_OBJECT})
+
+_M_FUNCTION1(ST_bool_S_char,
+   bool (*Method_bool_S_char)(char),
+   result.DoAssignToEmpty(((Method_bool_S_char)def->m_classMethod)(p[0].AsChar())),
+   {MVariant::VAR_CHAR}, MVariant::VAR_BOOL)
 
 _M_FUNCTION1(ST_bool_S_byte,
    bool (*Method_bool_S_byte)(Muint8),
@@ -349,9 +354,9 @@ _M_FUNCTION1(ST_byte_S_unsigned,
    result.DoAssignToEmpty(((Method_byte_S_unsigned)def->m_classMethod)(p[0].AsUInt())),
    {MVariant::VAR_UINT}, MVariant::VAR_BYTE)
 
-_M_FUNCTION1(ST_MChar_S_unsigned,
-   MChar (*Method_MChar_S_unsigned)(unsigned),
-   result.DoAssignToEmpty(((Method_MChar_S_unsigned)def->m_classMethod)(p[0].AsUInt())),
+_M_FUNCTION1(ST_char_S_unsigned,
+   char (*Method_char_S_unsigned)(unsigned),
+   result.DoAssignToEmpty(((Method_char_S_unsigned)def->m_classMethod)(p[0].AsUInt())),
    {MVariant::VAR_UINT}, MVariant::VAR_CHAR)
 
 _M_FUNCTION1(ST_unsigned_S_byte,
@@ -359,9 +364,9 @@ _M_FUNCTION1(ST_unsigned_S_byte,
    result.DoAssignToEmpty(((Method_unsigned_S_byte)def->m_classMethod)(p[0].AsByte())),
    {MVariant::VAR_BYTE}, MVariant::VAR_UINT)
 
-_M_FUNCTION1(ST_unsigned_S_MChar,
-   unsigned (*Method_unsigned_S_MChar)(MChar),
-   result.DoAssignToEmpty(((Method_unsigned_S_MChar)def->m_classMethod)(p[0].AsChar())),
+_M_FUNCTION1(ST_unsigned_S_char,
+   unsigned (*Method_unsigned_S_char)(char),
+   result.DoAssignToEmpty(((Method_unsigned_S_char)def->m_classMethod)(p[0].AsChar())),
    {MVariant::VAR_CHAR}, MVariant::VAR_UINT)
 
 _M_FUNCTION1(ST_bool_S_MObjectP,

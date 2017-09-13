@@ -16,8 +16,8 @@ M_START_PROPERTIES(MessageCatalog)
    M_OBJECT_PROPERTY_STRING           (MessageCatalog, Locale,  ST_constMStdStringA_X, ST_X_constMStdStringA)
    M_CLASS_PROPERTY_READONLY_OBJECT   (MessageCatalog, Default)
 M_START_METHODS(MessageCatalog)
-   M_OBJECT_SERVICE_OVERLOADED        (MessageCatalog, GetText, GetStdStringDomain, 2, ST_MStdString_X_constMStdStringA_constMByteStringA)
-   M_OBJECT_SERVICE_OVERLOADED        (MessageCatalog, GetText, GetStdString,       1, ST_MStdString_X_constMByteStringA)
+   M_OBJECT_SERVICE_OVERLOADED        (MessageCatalog, GetText, GetStdStringDomain, 2, ST_MStdString_X_constMStdStringA_constMStdStringA)
+   M_OBJECT_SERVICE_OVERLOADED        (MessageCatalog, GetText, GetStdString,       1, ST_MStdString_X_constMStdStringA)
    M_CLASS_SERVICE                    (MessageCatalog, SetLocaleToAllCatalogs,         ST_S_constMStdStringA)
 M_END_CLASS(MessageCatalog, Object)
 
@@ -80,8 +80,8 @@ M_END_CLASS(MessageCatalog, Object)
 
             // Implement reverse find, it will work faster
             iterator it = std::find(begin(), end(), catalog);
-            M_ASSERT(it != end());
-            this->erase(it);
+            if ( it != end() )       // safe behavior, cannot even assert here
+               this->erase(it);
          }
       }
 
@@ -545,7 +545,7 @@ MStdString MMessageCatalog::GetStdStringDomainDefault(const MStdString& domain, 
    
       struct MLangDef
       {
-         MChar       m_lang[8];
+         char       m_lang[8];
          LANGID      m_langId;
          MConstChars m_localeName;
       };
@@ -556,7 +556,7 @@ MStdString MMessageCatalog::GetStdStringDomainDefault(const MStdString& domain, 
 
       struct MLangDef
       {
-         MChar       m_lang[8];
+         char       m_lang[8];
          MConstChars m_localeName;
       };
 

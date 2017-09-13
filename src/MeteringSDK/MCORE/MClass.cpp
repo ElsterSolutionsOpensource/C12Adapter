@@ -182,7 +182,7 @@ const MServiceDefinition* MClass::GetServiceDefinitionOrNull(const MStdString& n
 
    M_COMPILED_ASSERT(sizeof(unsigned) <= 4); // otherwise would not work
 
-   int dataSizeMinusUnsigned = (int)(name.size() + 1) * sizeof(MChar) - (int)sizeof(unsigned); // +1 to watch for the trailing zero (otherwise Read and ReadPartial would match)
+   int dataSizeMinusUnsigned = (int)(name.size() + 1) * sizeof(char) - (int)sizeof(unsigned); // +1 to watch for the trailing zero (otherwise Read and ReadPartial would match)
 
    const char* data = (const char*)name.data();
    unsigned nameFirstU;
@@ -295,7 +295,7 @@ const MPropertyDefinition* MClass::GetPropertyDefinitionOrNull(const MStdString&
    unsigned dataSize = unsigned(name.size()); // valid property names are not 64-bit length
    if ( dataSize > 2 )
    {
-      int dataSizeMinusUnsigned = (int)(dataSize + 1) * sizeof(MChar) - (int)sizeof(unsigned);   // +1 to watch for trailing zero (otherwise a User and UserId would match)
+      int dataSizeMinusUnsigned = (int)(dataSize + 1) * sizeof(char) - (int)sizeof(unsigned);   // +1 to watch for trailing zero (otherwise a User and UserId would match)
  
       const char* data = chars;
       unsigned nameFirstU = (unsigned)*data++; // Data is not aligned for the majority of basic_string implementations...
@@ -373,8 +373,8 @@ MStdStringVector MClass::GetOwnServiceNames() const
 
 MStdStringVector MClass::GetAllPropertyNames() const
 {
-   static const MChar s_propertyNamesStr[] = "AllPropertyNames";
-   static const MChar s_persistentPropertyNamesStr[] = "AllPersistentPropertyNames";
+   static const char s_propertyNamesStr[] = "AllPropertyNames";
+   static const char s_persistentPropertyNamesStr[] = "AllPersistentPropertyNames";
 
    MStdStringVector result;
    for ( const MClass* cl = this; cl != NULL; cl = cl->m_parent )
@@ -395,8 +395,8 @@ MStdStringVector MClass::GetAllPropertyNames() const
 
 MStdStringVector MClass::GetOwnPropertyNames() const
 {
-   static const MChar s_propertyNamesStr[] = "AllPropertyNames";
-   static const MChar s_persistentPropertyNamesStr[] = "AllPersistentPropertyNames";
+   static const char s_propertyNamesStr[] = "AllPropertyNames";
+   static const char s_persistentPropertyNamesStr[] = "AllPersistentPropertyNames";
 
    MStdStringVector result;
 
@@ -461,8 +461,8 @@ MVariant MClass::GetProperty(const MStdString& name) const
          result.DoAssignToEmpty(((Method_byte_S)def->m_getClassMethod)());
          break;
       case MVariant::VAR_CHAR:
-         M_ENSURED_ASSERT(def->m_getServiceType == MClass::ST_MChar_S);
-         result.DoAssignToEmpty(((Method_MChar_S)def->m_getClassMethod)());
+         M_ENSURED_ASSERT(def->m_getServiceType == MClass::ST_char_S);
+         result.DoAssignToEmpty(((Method_char_S)def->m_getClassMethod)());
          break;
       case MVariant::VAR_INT:
          M_ENSURED_ASSERT(def->m_getServiceType == MClass::ST_int_S);
@@ -534,10 +534,17 @@ MVariant MClass::GetProperty(const MStdString& name) const
    }
    else
    {
-      // Enumeration constant otherwise...
-      //
-      M_ENSURED_ASSERT(def->m_type == MVariant::VAR_EMPTY); // enumeration value has this precondition
-      result.DoAssignToEmpty(static_cast<unsigned>(def->m_valueInt)); // enumerations are always unsigned
+      switch ( def->m_type )
+      {
+      default:
+         M_ENSURED_ASSERT(0);
+      case MVariant::VAR_UINT:
+         result.DoAssignToEmpty(static_cast<unsigned>(def->m_valueInt));
+         break;
+      case MVariant::VAR_INT:
+         result.DoAssignToEmpty(static_cast<int>(def->m_valueInt));
+         break;
+      }
    }
    M_ASSERT(!result.IsEmpty() || def->m_type == MVariant::VAR_VARIANT); // the only way for a property to return an empty variant is to have it of Variant type
    return result;
@@ -561,8 +568,8 @@ void MClass::SetProperty(const MStdString& name, const MVariant& value) const
          ((Method_S_byte)def->m_setClassMethod)(value.AsByte());
          break;
       case MVariant::VAR_CHAR:
-         M_ENSURED_ASSERT(def->m_setServiceType == MClass::ST_S_MChar);
-         ((Method_S_MChar)def->m_setClassMethod)(value.AsChar());
+         M_ENSURED_ASSERT(def->m_setServiceType == MClass::ST_S_char);
+         ((Method_S_char)def->m_setClassMethod)(value.AsChar());
          break;
       case MVariant::VAR_INT:
          M_ENSURED_ASSERT(def->m_setServiceType == MClass::ST_S_int);

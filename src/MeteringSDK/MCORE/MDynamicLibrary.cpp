@@ -12,7 +12,7 @@ typedef std::vector<MDynamicLibrary*>
 
 static MCriticalSection s_loadedModulesCriticalSection;
 static DLList s_loadedModules;
-static const MChar MCORE_LIBRARY[] = "MCORE";
+static const char MCORE_LIBRARY[] = "MCORE";
 
    static struct LocalLibrariesUnloader
    {
@@ -71,9 +71,9 @@ MDynamicLibrary* MDynamicLibrary::LoadExact(const MStdString& name, const MStdSt
 }
 
    #if M_OS & M_OS_WIN32
-      static const MChar s_sExt [] = ".dll";
+      static const char s_sExt [] = ".dll";
    #else
-      static const MChar s_sExt [] = ".so";
+      static const char s_sExt [] = ".so";
    #endif
    const int s_sExtSize = M_NUMBER_OF_ARRAY_ELEMENTS(s_sExt) - 1;
 

@@ -222,13 +222,13 @@ MStdString MTimeSpan::AsString() const
 #endif
    else
    {
-      MChar buff [ 64 ];
+      char buff [ 64 ];
       int days = GetDays();
       int hours = GetHours();
       int minutes = GetMinutes();
       int seconds = GetSeconds();
 
-      MChar* b = buff;
+      char* b = buff;
       size_t len = 0;
       if ( m_span < 0 )
       {
@@ -240,10 +240,14 @@ MStdString MTimeSpan::AsString() const
          minutes = -minutes;
          seconds = -seconds;
       }
+
+      size_t size;
       if ( days == 0 )
-         len += MFormat(b, 64 - len, "%02d:%02d:%02d", hours, minutes, seconds);
+         size = MFormat(b, sizeof(buff) - len, "%02d:%02d:%02d", hours, minutes, seconds);
       else
-         len += MFormat(b, 64 - len, "%d %02d:%02d:%02d", days, hours, minutes, seconds);
+         size = MFormat(b, sizeof(buff) - len, "%d %02d:%02d:%02d", days, hours, minutes, seconds);
+      M_ASSERT(size < sizeof(buff) - len); // Check if the supplied buffer fits, as ensured by the format
+      len += size;
       result.assign(buff, len);
    }
    return result;
@@ -318,19 +322,20 @@ void MTimeSpan::SetAsString(const MStdString& str)
    Set(seconds, minutes, hours, days); // this can throw an error, too
 }
 
-   static void DoAddInteger(MStdString& buff, int value, bool absolute)
+   static void DoAddInteger(MStdString& buffer, int value, bool absolute)
    {
-      MChar b [ 16 ];
+      char buff [ 16 ];
       if ( absolute && value < 0 )
          value = -value;
-      size_t len = MFormat(b, 16, "%d", value);
-      buff.append(b, len);
+      size_t size = MFormat(buff, sizeof(buff), "%d", value);
+      M_ASSERT(size < sizeof(buff)); // Check if the supplied buffer fits, as ensured by the format
+      buffer.append(buff, size);
    }
 
-   static void DoAddInteger02d(MStdString& buff, int value, bool absolute)
+   static void DoAddInteger02d(MStdString& buffer, int value, bool absolute)
    {
-      MChar b [ 16 ];
-      MChar* p = b;
+      char buff [ 16 ];
+      char* p = buff;
       size_t len = 0;
       if ( value < 0 )
       {
@@ -341,8 +346,10 @@ void MTimeSpan::SetAsString(const MStdString& str)
          }
          value = -value;
       }
-      len += MFormat(p, 16 - len, "%02d", value);
-      buff.append(b, len);
+      size_t size = MFormat(p, sizeof(buff) - len, "%02d", value);
+      M_ASSERT(size < sizeof(buff)); // Check if the supplied buffer fits, as ensured by the format
+      len += size;
+      buffer.append(buff, len);
    }
 
 MStdString MTimeSpan::AsFormattedString(MConstChars format) const
@@ -352,7 +359,7 @@ MStdString MTimeSpan::AsFormattedString(MConstChars format) const
    MStdString buff;
    for ( ;; )
    {
-      MChar ch = *format++;
+      char ch = *format++;
       if ( ch == '\0' )
          break;
       if ( ch == '%' )

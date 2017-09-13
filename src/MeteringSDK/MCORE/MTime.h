@@ -109,6 +109,16 @@ public: // Types:
       WeekdaySaturday  = 6     ///< Saturday, 6
    };
 
+   /// Kind of time
+   ///
+   enum KindEnum
+   {
+      KindNull = 0,         ///< Null time, no value
+      KindUnspecified = 1,  ///< Unspecified or unknown, but not null. Offset is zero
+      KindUtc = 2,          ///< UTC time, offset is zero
+      KindLocal = 3         ///< LOcal time, offset is present (can be zero)
+   };
+
 public: // Services:
 
    /// Default constructor, set the time to a null value
@@ -402,104 +412,84 @@ public: // Services:
 
 public: // Property accessors:
 
-   /// Gets the year part of time value.
+   ///@{
+   /// The year part of time value.
    ///
-   /// \pre Object is created and properly initialized, not null,
-   /// or an exception is thrown.
+   /// Year value supported is 1970 to 2099.
+   /// If the time is null, accessing this property results in No Value exception.
    ///
    int GetYear() const;
+   void SetYear(int);
+   ///@}
 
-   /// Set the year for time value, keep the other fractions unchanged.
-   ///
-   /// \pre Object is created and not null, year must be in range 1970 and 2099,
-   /// or bad value exception is thrown.
-   ///
-   void SetYear(int year);
-
+   ///@{
    /// Gets the day of month.
    ///
-   /// \pre Object is created and properly initialized, not null,
-   /// or an exception is thrown.
+   /// Month value in range 1 to 12.
+   /// If the time is null, accessing this property results in No Value exception.
    ///
    int GetDayOfMonth() const;
-
-   /// Set new day of month.
-   ///
-   /// \pre Object is created and not null, day of month must be in range 0 and
-   /// last day in the current month in the current year, or bad value exception is thrown.
-   /// To determine the last day number in month, GetNumberOfDaysInMonth is used.
-   ///
-   void SetDayOfMonth(int day);
+   void SetDayOfMonth(int);
+   ///@}
 
 #if (M_OS & M_OS_NUTTX) == 0
-   /// Gets the day of the year, starting from January first as day one.
+
+   ///@{
+   /// Day of the year starting from January 1 as day one.
    ///
-   /// \pre Object is created and properly initialized, not null,
-   /// or an exception is thrown.
+   /// Value is in range 1 to 366.
+   /// If the time is null, accessing this property results in No Value exception.
    ///
    int GetDayOfYear() const;
+   void SetDayOfYear(int);
+   ///@}
+
 #endif
 
-   /// Gets the month number within the year of the time event.
+   ///@{
+   /// Month number within the year of the time event.
    ///
-   /// \pre Object is created and properly initialized, not null,
-   /// or an exception is thrown.
+   /// Value is in range 1 to 12.
+   /// If the time is null, accessing this property results in No Value exception.
    ///
    int GetMonth() const;
+   void SetMonth(int);
+   ///@}
 
-   /// Set the month for time value, keep the other fractions unchanged.
+   ///@{
+   /// Hours part of time of the day.
    ///
-   /// \pre Object is created and not null, month must be in range 1 and 12,
-   /// or bad value exception is thrown.
-   ///
-   void SetMonth(int month);
-
-   /// Gets hours of the day.
-   ///
-   /// \pre Object is created and properly initialized, not null,
-   /// or an exception is thrown.
+   /// Value is in range 0 to 23.
+   /// If the time is null, accessing this property results in No Value exception.
    ///
    int GetHours() const;
+   void SetHours(int);
+   ///@}
 
-   /// Set hour.
+   ///@{
+   /// Minutes part of time of the day.
    ///
-   /// \pre Object is created and not null, hours must be in range 0 and 23,
-   /// or bad value exception is thrown.
-   ///
-   void SetHours(int hours);
-
-   /// Gets minutes within an hour.
-   ///
-   /// \pre Object is created and properly initialized, not null,
-   /// or an exception is thrown.
+   /// Value is in range 0 to 59.
+   /// If the time is null, accessing this property results in No Value exception.
    ///
    int GetMinutes() const;
+   void SetMinutes(int);
+   ///@}
 
-   /// Set minutes.
+   ///@{
+   /// Seconds part of time of the day.
    ///
-   /// \pre Object is created and not null, minutes must be in range 0 and 59,
-   /// or bad value exception is thrown.
-   ///
-   void SetMinutes(int minutes);
-
-   /// Gets seconds within a minute.
-   ///
-   /// \pre Object is created and properly initialized, not null,
-   /// or an exception is thrown.
+   /// Value is in range 0 to 59.
+   /// If the time is null, accessing this property results in No Value exception.
    ///
    int GetSeconds() const;
-
-   /// Set seconds.
-   ///
-   /// \pre Object is created and not null, seconds must be in range 0 and 59,
-   /// or bad value exception is thrown.
-   ///
-   void SetSeconds(int seconds);
+   void SetSeconds(int);
+   ///@}
 
    /// Gets the day of the week.
    ///
-   /// \pre Object is created and properly initialized, not null,
-   /// or an exception is thrown.
+   /// Value is in range 0 to 6, Sunday to Saturday.
+   /// If the time is null, accessing this property results in No Value exception.
    ///
    DayOfWeekType GetDayOfWeek() const;
 

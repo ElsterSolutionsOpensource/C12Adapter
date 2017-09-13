@@ -291,13 +291,13 @@
    #endif
 
 M_START_PROPERTIES(Str)
-   M_CLASS_ENUMERATION                        (Str, StrNone)
-   M_CLASS_ENUMERATION                        (Str, StrXML)
-   M_CLASS_ENUMERATION                        (Str, StrInternational)
-   M_CLASS_ENUMERATION                        (Str, StrQuote)
-   M_CLASS_ENUMERATION                        (Str, StrKeepSideBlanks)
-   M_CLASS_ENUMERATION                        (Str, StrNoBackslashEscape)
-   M_CLASS_ENUMERATION                        (Str, StrShortEscapes)
+   M_CLASS_ENUMERATION_UINT                   (Str, StrNone)
+   M_CLASS_ENUMERATION_UINT                   (Str, StrXML)
+   M_CLASS_ENUMERATION_UINT                   (Str, StrInternational)
+   M_CLASS_ENUMERATION_UINT                   (Str, StrQuote)
+   M_CLASS_ENUMERATION_UINT                   (Str, StrKeepSideBlanks)
+   M_CLASS_ENUMERATION_UINT                   (Str, StrNoBackslashEscape)
+   M_CLASS_ENUMERATION_UINT                   (Str, StrShortEscapes)
 #if !M_NO_ENCODING
    M_CLASS_PROPERTY_READONLY_STRING_COLLECTION(Str, AllSupportedEncodings, ST_MStdStringVector_S)
 #endif

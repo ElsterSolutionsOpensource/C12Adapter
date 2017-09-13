@@ -43,7 +43,7 @@
 /// the code below creates the default value if it was not.
 ///
 #ifndef M_PRODUCT_LEGAL_COPYRIGHT
-   #define M_PRODUCT_LEGAL_COPYRIGHT "Copyright (c) 1997-2016 Elster Solutions, LLC"
+   #define M_PRODUCT_LEGAL_COPYRIGHT "Copyright (c) 1997-2017 Elster Solutions"
 #endif
 
 /// Product version string.
@@ -939,15 +939,22 @@ M_FUNC unsigned MGetRuntimeOSMask();
 ///
 #define M_L(str) str
 
-/// Pointer to zero terminated character array.
+/// Pointer to zero terminated character array that represents a readable text.
 ///
 typedef char* MChars;
 
-/// Pointer to zero terminated constant character array.
+/// Pointer to zero terminated constant character array that represents a readable text.
+///
+/// This type definition is to distinguish from plain const char*
+/// that can stand for an array of raw bytes.
 ///
 typedef const char* MConstChars;
 
-/// Type for single character.
+/// Type for a single human readable character, legacy define.
+///
+/// This type is discouraged from usage as a single char will not be able to represent
+/// a locale-sensitive non-English readable character. Always use a string
+/// for locale dependent human readable text.
 ///
 typedef char MChar;
 
@@ -1505,12 +1512,18 @@ inline wchar_t* MToChars(unsigned long value, wchar_t* buff) M_NO_THROW
 ///@{
 /// Convert the double precision value to a characters string, using the given buffer.
 ///
-/// If shortest format is \c false, ".0" will be appended for whole numbers, this is the default.
-/// No exceptions can be thrown, but the supplied buffer has to have at least 24 characters.
+/// \param value The number to convert.
+/// \param buff Destination buffer of at least 24 bytes long.
+/// \param shortestFormat If \c false, ".0" will always be appended to whole numbers, this is the default.
+///                       If \c true, if the number is whole, it will not have a decimal separator followed by zero.
+/// \param precision Precision of the number representation.
+///                  The value 14, default, guarantees absence of rounding artefacts.
+///                  Precision 17 is the maximum, and the result number can look like 1.00000000000000001.
+///                  Precisions above 17 are equivalent to 17.
 ///
-M_FUNC char* MToChars(double value, char* buff, bool shortestFormat = false) M_NO_THROW;
+M_FUNC char* MToChars(double value, char* buff, bool shortestFormat = false, unsigned precision = 14) M_NO_THROW;
 #if !M_NO_WCHAR_T
-M_FUNC wchar_t* MToChars(double value, wchar_t* buff, bool shortestFormat = false) M_NO_THROW;
+M_FUNC wchar_t* MToChars(double value, wchar_t* buff, bool shortestFormat = false, unsigned precision = 14) M_NO_THROW;
 #endif
 ///@}
 
@@ -1586,7 +1599,15 @@ inline MStdString MToStdString(unsigned long value)
 /// Memory exceptions can be thrown in case no memory is available,
 /// otherwise any double precision floating point value can be represented as a string.
 ///
-M_FUNC MStdString MToStdString(double value);
+/// \param value The number to convert.
+/// \param shortestFormat If \c false, ".0" will always be appended to whole numbers, this is the default.
+///                       If \c true, if the number is whole, it will not have a decimal separator followed by zero.
+/// \param precision Precision of the number representation.
+///                  The value 14, default, guarantees absence of rounding artefacts.
+///                  Precision 17 is the maximum, and the result number can look like 1.00000000000000001.
+///                  Precisions above 17 are equivalent to 17.
+///
+M_FUNC MStdString MToStdString(double value, bool shortestFormat = false, unsigned precision = 14);
 
 /// Convert the byte string value to a string.
 ///
@@ -1618,14 +1639,14 @@ M_FUNC MWideString MToWideString(const wchar_t* str);
 /// Memory exceptions can be thrown in case no memory is available.
 /// The conversion can yield many errors due to multibyte to UNICODE transformation.
 ///
-M_FUNC MWideString MToWideString(const char* str, size_t len);
+M_FUNC MWideString MToWideString(const char* buff, size_t size);
 
 /// Convert the constant character pointer to the standard ANSI string according to the current locale.
 ///
 /// Memory exceptions can be thrown in case no memory is available.
 /// The conversion can yield many errors due to multibyte to UNICODE transformation.
 ///
-M_FUNC MStdString MToStdString(const wchar_t* str, size_t len);
+M_FUNC MStdString MToStdString(const wchar_t* buff, size_t size);
 
 /// Convert the standard ASCII string to the standard wide string according to the current locale.
 ///

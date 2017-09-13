@@ -23,26 +23,6 @@ MThread::~MThread()
 {
 }
 
-void MThread::Destroy()
-{
-   const volatile InternalHandleType thread = GetInternalHandle();
-   if ( thread )
-   {
-      m_thread = 0;
-#if M_OS & M_OS_WIN32
-      m_unique = 0;
-#endif
-      
-#if M_OS & M_OS_WIN32
-      int status = !!::CloseHandle(thread);
-#elif M_OS & M_OS_POSIX
-      int status = !pthread_detach(thread);
-#endif
-      M_USED_VARIABLE(status);
-      M_ASSERT(status);
-   }
-}
-
 void MThread::Relinquish()
 {
 #if M_OS & M_OS_POSIX

@@ -455,7 +455,7 @@ void MRegistry::SetString(const MStdString& key, const MStdString& value)
 
 void MRegistry::SetInteger(const MStdString& key, int value)
 {
-   MChar str [ 16 ]; // integers are always set as strings
+   char str [ 16 ]; // integers are always set as strings
    SetString(key, MToChars(long(value), str));
 }
 

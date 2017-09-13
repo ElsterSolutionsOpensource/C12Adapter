@@ -240,25 +240,24 @@ unsigned MMonitorFile::DoSendBackgroundBuffer(const MByteString& backgroundThrea
 
 void MMonitorFile::PostSyncMessage()
 {
-   char buffer[64];
+   char buffer [ 64 ];
 #if M_OS & M_OS_POSIX
-
    struct timeval tv;
    struct timezone tz;
    gettimeofday(&tv, &tz);
    MTime t(tv.tv_sec + tz.tz_minuteswest * 60);
    // format is YYYY.MM.DD hh:mm:ss.ms
-   size_t buflen = MFormat(buffer, 64, "Timestamp %04u.%02u.%02u %02u:%02u:%02u.%03u",
+   size_t buflen = MFormat(buffer, sizeof(buffer), "Timestamp %04u.%02u.%02u %02u:%02u:%02u.%03u",
                     t.GetYear(), t.GetMonth(), t.GetDayOfMonth(),
                     t.GetHours(), t.GetMinutes(), t.GetSeconds(), tv.tv_usec / 1000);
 #else
    SYSTEMTIME st;
    GetSystemTime(&st);
    // format is YYYY.MM.DD hh:mm:ss.ms
-   size_t buflen = MFormat(buffer, 64, "Timestamp %04u.%02u.%02u %02u:%02u:%02u.%03u",
+   size_t buflen = MFormat(buffer, sizeof(buffer), "Timestamp %04u.%02u.%02u %02u:%02u:%02u.%03u",
                     st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
 #endif
-   M_ASSERT(buflen > 0);
+   M_ASSERT(buflen > 0 && buflen < sizeof(buffer)); // check if the supplied buffer fits (due to the supplied format it does)
    OnMessage(MMonitor::MessageProtocolSynchronize, buffer, static_cast<int>(buflen));
    m_syncMessagePosted = true;
 }

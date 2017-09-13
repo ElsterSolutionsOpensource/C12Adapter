@@ -135,7 +135,7 @@ M_START_PROPERTIES(Time)
    M_OBJECT_PROPERTY_READONLY_BOOL_EXACT    (Time, IsNull)
    M_OBJECT_PROPERTY_INT                    (Time, Year)
    M_OBJECT_PROPERTY_INT                    (Time, DayOfMonth)
-   M_OBJECT_PROPERTY_READONLY_INT           (Time, DayOfYear)
+   M_OBJECT_PROPERTY_INT                    (Time, DayOfYear)
    M_OBJECT_PROPERTY_INT                    (Time, Month)
    M_OBJECT_PROPERTY_INT                    (Time, Hours)
    M_OBJECT_PROPERTY_INT                    (Time, Minutes)
@@ -148,6 +148,25 @@ M_START_PROPERTIES(Time)
    M_OBJECT_PROPERTY_READONLY_INT           (Time, NumberOfDaysInThisMonth)
    M_OBJECT_PROPERTY_STRING_EXACT           (Time, AsString,                ST_MStdString_X, ST_X_constMStdStringA)
    M_OBJECT_PROPERTY_READONLY_OBJECT_EMBEDDED_EXACT(Time, AsDate,           ST_MObjectByValue_X)
+   M_CLASS_ENUMERATION                      (Time, MonthJanuary)
+   M_CLASS_ENUMERATION                      (Time, MonthFebruary)
+   M_CLASS_ENUMERATION                      (Time, MonthMarch)
+   M_CLASS_ENUMERATION                      (Time, MonthApril)
+   M_CLASS_ENUMERATION                      (Time, MonthMay)
+   M_CLASS_ENUMERATION                      (Time, MonthJune)
+   M_CLASS_ENUMERATION                      (Time, MonthJuly)
+   M_CLASS_ENUMERATION                      (Time, MonthAugust)
+   M_CLASS_ENUMERATION                      (Time, MonthSeptember)
+   M_CLASS_ENUMERATION                      (Time, MonthOctober)
+   M_CLASS_ENUMERATION                      (Time, MonthNovember)
+   M_CLASS_ENUMERATION                      (Time, MonthDecember)
+   M_CLASS_ENUMERATION                      (Time, WeekdaySunday)
+   M_CLASS_ENUMERATION                      (Time, WeekdayMonday)
+   M_CLASS_ENUMERATION                      (Time, WeekdayTuesday)
+   M_CLASS_ENUMERATION                      (Time, WeekdayWednesday)
+   M_CLASS_ENUMERATION                      (Time, WeekdayThursday)
+   M_CLASS_ENUMERATION                      (Time, WeekdayFriday)
+   M_CLASS_ENUMERATION                      (Time, WeekdaySaturday)
 M_START_METHODS(Time)
    M_OBJECT_SERVICE                         (Time, Compare,                 ST_int_X_MObjectP)
    M_OBJECT_SERVICE                         (Time, Set,                     ST_X_int_int_int_int_int_int)
@@ -383,6 +402,13 @@ int MTime::GetDayOfYear() const
    struct tm value;
    return GetTM(&value)->tm_yday + 1; // tm_yday starts from zero
 }
+
+void MTime::SetDayOfYear(int day)
+{
+   MENumberOutOfRange::CheckNamedIntegerRange(1, IsLeapYear(GetYear()) ? 366 : 365, day, "DayOfYear");
+   m_time += (day - GetDayOfYear()) * c_daySeconds;
+   M_ASSERT(day == GetDayOfYear()); // make sure it ended up to be correct
+}
 #endif
 
 int MTime::GetMonth() const
@@ -498,11 +524,12 @@ MStdString MTime::AsString() const
    }
    else
    {
-      MChar buff [ 64 ];
+      char buff [ 64 ];
       struct tm t;
       GetTM(&t);
-      size_t len = MFormat(buff, 128, "%04d-%02d-%02d %02d:%02d:%02d", t.tm_year + 1900, t.tm_mon + 1, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec);
-      result.assign(buff, len);
+      size_t size = MFormat(buff, sizeof(buff), "%04d-%02d-%02d %02d:%02d:%02d", t.tm_year + 1900, t.tm_mon + 1, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec);
+      M_ASSERT(size > 0 && size < sizeof(buff)); // check if the supplied buffer fits (due to the supplied format it does)
+      result.assign(buff, size);
    }
    return result;
 }
@@ -739,6 +766,8 @@ void MTime::SetAsString(const MStdString& str)
 #if M_DEBUG
     static void DoCheckWithStrftime(const MTime& time, const char* buffer, size_t size, const char* fmt, bool useShortFormat)
     {
+       M_ASSERT(size < s_localTimeBufferSize); // check the size fits the buffer, as ensured by the format
+
        struct tm tm;
        time.GetTM(&tm);
        char checkBuffer [ s_localTimeBufferSize ];

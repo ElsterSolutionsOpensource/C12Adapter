@@ -32,14 +32,14 @@ M_START_PROPERTIES(ProtocolC12)
    M_OBJECT_PROPERTY_PERSISTENT_UINT       (ProtocolC12, LinkLayerRetries,                    3u)
    M_OBJECT_PROPERTY_UINT                  (ProtocolC12, ProcedureSequenceNumber)
 M_START_METHODS(ProtocolC12)
-   M_OBJECT_SERVICE(ProtocolC12, ApplicationLayerRequestResponse, ST_MByteString_X_byte_constMByteStringA)
-   M_OBJECT_SERVICE(ProtocolC12, Wait,                            ST_X_unsigned)
-   M_OBJECT_SERVICE(ProtocolC12, Logon,                           ST_X)
-   M_OBJECT_SERVICE(ProtocolC12, Security,                        ST_X)
-   M_OBJECT_SERVICE(ProtocolC12, FullLogin,                       ST_X)
-   M_OBJECT_SERVICE(ProtocolC12, Logoff,                          ST_X)
-   M_OBJECT_SERVICE(ProtocolC12, Terminate,                       ST_X)
-   M_OBJECT_SERVICE            (ProtocolC12, ReceiveServiceCode,                                ST_byte_X)
+   M_OBJECT_SERVICE            (ProtocolC12, ApplicationLayerRequestResponse,                   ST_MByteString_X_char_constMByteStringA)
+   M_OBJECT_SERVICE            (ProtocolC12, Wait,                                              ST_X_unsigned)
+   M_OBJECT_SERVICE            (ProtocolC12, Logon,                                             ST_X)
+   M_OBJECT_SERVICE            (ProtocolC12, Security,                                          ST_X)
+   M_OBJECT_SERVICE            (ProtocolC12, FullLogin,                                         ST_X)
+   M_OBJECT_SERVICE            (ProtocolC12, Logoff,                                            ST_X)
+   M_OBJECT_SERVICE            (ProtocolC12, Terminate,                                         ST_X)
+   M_OBJECT_SERVICE            (ProtocolC12, ReceiveServiceCode,                                ST_char_X)
    M_OBJECT_SERVICE            (ProtocolC12, ReceiveServiceBytes,                               ST_MByteString_X_unsigned)
    M_OBJECT_SERVICE            (ProtocolC12, ReceiveServiceRemainingBytes,                      ST_MByteString_X)
    M_OBJECT_SERVICE            (ProtocolC12, ReceiveServiceByte,                                ST_byte_X)
@@ -150,8 +150,8 @@ bool MProtocolC12::DoBuildComplexC12ServiceName(MChars fullServiceName, MConstCh
       try
       {
          unsigned num = number.AsDWord(); // avoid signed/unsigned differences
-         MChar  prefix [ 4 ];
-         MChar* prefixPtr = prefix;
+         char  prefix [ 4 ];
+         char* prefixPtr = prefix;
          if ( (num & ~0xFFFF) == 0 ) // not a service, etc
          {
             if ( (num & NUMBER_PENDING_BIT) != 0 )
@@ -414,13 +414,6 @@ void MProtocolC12::DoTableWritePartial(MCOMNumberConstRef number, const MByteStr
 #endif
 }
 
-
-void MProtocolC12::DoFunctionExecute(MCOMNumberConstRef number)
-{
-   MByteString request;
-   MByteString response;
-   DoFunction(number, request, response, false);
-}
 
 void MProtocolC12::DoFunctionExecuteRequest(MCOMNumberConstRef number, const MByteString& request)
 {
@@ -751,6 +744,11 @@ void MProtocolC12::DoFunction(MCOMNumberConstRef number, const MByteString& requ
    }
    else // Meter Procedure
       DoMeterProcedure(num, request, response, expectResponse);
+
+   #if !M_NO_MCOM_MONITOR
+      if ( !response.empty() && !expectResponse )
+         WriteToMonitor(MGetStdString("Unexpected function response, %u bytes", static_cast<unsigned>(response.size())));
+   #endif
 }
 
 bool MProtocolC12::DoHaveToSkipReadFunctionResponseTable8(unsigned num, const MByteString& request, bool expectResponse)
@@ -890,7 +888,7 @@ void MProtocolC12::DoAppendTableReadResponse(MByteString& data)
    }
 }
 
-Muint8 MProtocolC12::ReceiveServiceCode()
+char MProtocolC12::ReceiveServiceCode()
 {
    Muint8 responseByte = m_applicationLayerReader.ReadByte(); // buff[0] is the status of command.
    if ( (MEC12NokResponse::ResponseCode)responseByte != MEC12NokResponse::RESPONSE_OK &&
@@ -903,7 +901,7 @@ Muint8 MProtocolC12::ReceiveServiceCode()
       MEC12NokResponse::ThrowWithParameters(responseByte, parameter);
       M_ENSURED_ASSERT(0);
    }
-   return responseByte;
+   return static_cast<char>(responseByte);
 }
 
 Muint8 MProtocolC12::ReceiveServiceByte()

@@ -152,7 +152,7 @@ void MAesEax::DoCheckAndPrepareContext()
    }
 }
 
-Muint32 MAesEax::EaxEncryptBuffer(const char* clearText, unsigned clearTextSize, char* data, unsigned dataSize)
+unsigned MAesEax::EaxEncryptBuffer(const char* clearText, unsigned clearTextSize, char* data, unsigned dataSize)
 {
    DoCheckAndPrepareContext();
 
@@ -178,7 +178,7 @@ Muint32 MAesEax::EaxEncryptBuffer(const char* clearText, unsigned clearTextSize,
     return result;
 }
 
-Muint32 MAesEax::EaxDecryptBuffer(const char* clearText, unsigned clearTextSize, char* data, unsigned dataSize)
+unsigned MAesEax::EaxDecryptBuffer(const char* clearText, unsigned clearTextSize, char* data, unsigned dataSize)
 {
    DoCheckAndPrepareContext();
 
@@ -207,7 +207,7 @@ Muint32 MAesEax::EaxDecryptBuffer(const char* clearText, unsigned clearTextSize,
    return mac;
 }
 
-Muint32 MAesEax::EaxAuthenticateBuffer(const char* clearText, unsigned clearTextSize)
+unsigned MAesEax::EaxAuthenticateBuffer(const char* clearText, unsigned clearTextSize)
 {
    Muint8 wsn[MAes::KeySize];
 
@@ -259,7 +259,7 @@ bool MAesEax::EaxDecryptToResult(const MByteString& clearText, const MByteString
    return eax == dataEax;
 }
 
-Muint32 MAesEax::EaxAuthenticate(const MByteString& clearText)
+unsigned MAesEax::EaxAuthenticate(const MByteString& clearText)
 {
 #ifdef M_USE_USTL
    return EaxAuthenticateBuffer(const_cast<MByteString&>(clearText).data(), M_64_CAST(unsigned, clearText.size()));
@@ -291,7 +291,7 @@ MByteString MAesEax::StaticEaxDecrypt(const MByteString& key, const MByteString&
    return aesEax.EaxDecrypt(clearText, data);
 }
 
-Muint32 MAesEax::StaticEaxAuthenticate(const MByteString& key, const MByteString& clearText)
+unsigned MAesEax::StaticEaxAuthenticate(const MByteString& key, const MByteString& clearText)
 {
    MAesEax aesEax(key);
    return aesEax.EaxAuthenticate(clearText);

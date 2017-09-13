@@ -35,7 +35,7 @@ public: // Services:
    bool IsEnumeration() const
    {
       M_ENSURED_ASSERT(m_name[0] != '\0'); // check if the service is valid (not the end-list tag)
-      return m_type == MVariant::VAR_EMPTY;
+      return m_getClassMethod == NULL && m_getObjectMethod == NULL;
    }
 
    /// True if this is a class service rather than an object service.
@@ -82,8 +82,7 @@ public: // Services:
    MVariant GetDefaultValue() const
    {
       M_ENSURED_ASSERT(m_name[0] != '\0'); // check if the service is valid (not the end-list tag)
-      M_ENSURED_ASSERT(m_type != MVariant::VAR_EMPTY); // check if we are not an enumeration
-      M_ENSURED_ASSERT(m_valuePtr != NULL);
+      M_ASSERT(!IsEnumeration());
       switch ( m_type )
       {
       case MVariant::VAR_BOOL:
@@ -109,16 +108,27 @@ public: // Services:
       return reinterpret_cast<const char*>(m_valuePtr);
    }
 
-   /// Get the enumeration value, always an unsigned.
+   /// Get the enumeration value as signed integer.
    ///
    /// \pre This has to be enumeration property or an assertion is hit in debug mode.
    ///
-   unsigned GetEnumerationValue() const
+   int GetEnumerationValueAsInt() const
    {
       M_ENSURED_ASSERT(m_name[0] != '\0'); // check if the service is valid (not the end-list tag)
-      M_ASSERT(m_getObjectMethod == NULL && m_getClassMethod == NULL);
+      M_ASSERT(IsEnumeration());
       M_ASSERT(m_setObjectMethod == NULL && m_setClassMethod == NULL);
-      M_ENSURED_ASSERT(m_type == MVariant::VAR_EMPTY); // check if we are not an enumeration
+      return static_cast<int>(m_valueInt);
+   }
+
+   /// Get the enumeration value as unsigned.
+   ///
+   /// \pre This has to be enumeration property or an assertion is hit in debug mode.
+   ///
+   unsigned GetEnumerationValueAsUnsigned() const
+   {
+      M_ENSURED_ASSERT(m_name[0] != '\0'); // check if the service is valid (not the end-list tag)
+      M_ASSERT(IsEnumeration());
+      M_ASSERT(m_setObjectMethod == NULL && m_setClassMethod == NULL);
       return static_cast<unsigned>(m_valueInt);
    }
 
@@ -129,7 +139,7 @@ public: // Semi-private attributes:
    /// Internally, if the name is all zeros,
    /// it means this structure is the last in the property list.
    ///
-   MChar m_name [ MAXIMUM_PROPERTY_NAME_LENGTH ];
+   char m_name [ MAXIMUM_PROPERTY_NAME_LENGTH ];
 
    /// Type of the property.
    ///

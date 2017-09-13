@@ -143,12 +143,7 @@
 
 #elif defined(__BORLANDC__) // Borland specific
 
-   #if (__BORLANDC__ >= 0x0530) // if this is Borland...
-      #include <condefs.h>
-   #endif
-
    #include <dir.h>
-   #include <dos.h> // for some reason findfirst macros are there...
    #include <conio.h>
 
    #if (__BORLANDC__ < 0x580) // pre-BDS versions

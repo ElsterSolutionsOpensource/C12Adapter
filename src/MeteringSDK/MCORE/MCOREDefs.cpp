@@ -3,6 +3,10 @@
 #include "MCOREExtern.h"
 #include "MCORE.h"
 
+#if !M_NO_WCHAR_T && (M_OS & (M_OS_WINDOWS | M_OS_ANDROID)) == 0
+   #include <codecvt>
+#endif
+
 using namespace std;
 
    static unsigned  s_runtimeOSMask = M_OS;
@@ -154,11 +158,10 @@ M_FUNC MStdString MGetStdStringVA(MConstLocalChars str, va_list va) M_NO_THROW
    #endif
 }
 
-   const size_t preallocatedSize = 2048;
-
 M_FUNC MStdString MGetStdStringVA(MConstChars format, va_list args) M_NO_THROW
 {
    MStdString response;
+   char buff [ 2048 ];
 #ifdef __GLIBC__
    va_list args2;
 # if !defined(__STRICT_ANSI__) || __STDC_VERSION__ + 0 >= 199900L || defined(__GXX_EXPERIMENTAL_CXX0X__)
@@ -166,68 +169,77 @@ M_FUNC MStdString MGetStdStringVA(MConstChars format, va_list args) M_NO_THROW
 # else
    __va_copy(args2, args);
 # endif
-#endif
-   MChar buffer [ preallocatedSize ];
-   size_t size = MFormatVA(buffer, preallocatedSize, format,
-#ifdef __GLIBC__
-                             args2
+   size_t size = MFormatVA(buff, sizeof(buff), format, args2);
 #else
-                             args
+   size_t size = MFormatVA(buff, sizeof(buff), format, args);
 #endif
-      );
-   if ( size < static_cast<size_t>(preallocatedSize) )
-   {
-      response.assign(buffer);
-   }
+   if ( size < sizeof(buff) )
+      response.assign(buff, size);
    else
    {
-      response.resize(size);
-      MFormatVA(&response[0], size + 1, format, args);
+      response.resize(size + 1); // fit the trailing zero
+      size_t newSize = MFormatVA(&response[0], size + 1, format, args);
+      M_ASSERT(newSize == size); // signal the unlikely case the two are different (on the fly locale change?)
+      response.resize(newSize); // remove the trailing zero (or resize in an unlikely case of a change)
    }
    return response;
 }
 
-M_FUNC MChar* MSignedToString(Mint64 value, MChar* string, size_t& length);
-M_FUNC MChar* MUnsignedToString(Muint64 value, MChar* string, size_t& length);
-M_FUNC MChar* MSignedToString(int value, MChar* string, size_t& length);
-M_FUNC MChar* MUnsignedToString(unsigned int value, MChar* string, size_t& length);
+M_FUNC char*    MSignedToString(Mint64 value, char* string, size_t& length);
+M_FUNC char*    MUnsignedToString(Muint64 value, char* string, size_t& length);
+M_FUNC char*    MSignedToString(int value, char* string, size_t& length);
+M_FUNC char*    MUnsignedToString(unsigned int value, char* string, size_t& length);
+M_FUNC char*    MDoubleToString(double value, char* nBuf, size_t& length, bool shortestFormat, unsigned precision);
+M_FUNC wchar_t* MDoubleToString(double value, wchar_t* nBuf, size_t& length, bool shortestFormat, unsigned precision);
 
 M_FUNC MStdString MToStdString(Mint64 value)
 {
+   MStdString result;
    size_t length;
-   MChar buffer[64];
-   MChar* ptr = MSignedToString(value, &buffer[64], length);
-   return MStdString(ptr, length);
+   char buffer[64];
+   char* ptr = MSignedToString(value, &buffer[64], length);
+   result.assign(ptr, length);
+   return result;
 }
 
 M_FUNC MStdString MToStdString(Muint64 value)
 {
+   MStdString result;
    size_t length;
-   MChar buffer[64];
-   MChar* ptr = MUnsignedToString(value, &buffer[64], length);
-   return MStdString(ptr, length);
+   char buffer[64];
+   char* ptr = MUnsignedToString(value, &buffer[64], length);
+   result.assign(ptr, length);
+   return result;
 }
 
 M_FUNC MStdString MToStdString(int value)
 {
+   MStdString result;
    size_t length;
-   MChar buffer[32];
-   MChar* ptr = MSignedToString(value, &buffer[32], length);
-   return MStdString(ptr, length);
+   char buffer[32];
+   char* ptr = MSignedToString(value, &buffer[32], length);
+   result.assign(ptr, length);
+   return result;
 }
 
 M_FUNC MStdString MToStdString(unsigned value)
 {
+   MStdString result;
    size_t length;
-   MChar buffer[32];
-   MChar* ptr = MUnsignedToString(value, &buffer[32], length);
-   return MStdString(ptr, length);
+   char buffer[32];
+   char* ptr = MUnsignedToString(value, &buffer[32], length);
+   result.assign(ptr, length);
+   return result;
 }
 
-M_FUNC MStdString MToStdString(double value)
+M_FUNC MStdString MToStdString(double value, bool shortestFormat, unsigned precision)
 {
-   MChar buff [ 128 ]; // Maximum number of characters in the number
-   return MStdString(MToChars(value, buff));
+   MStdString result;
+   size_t length;
+   char buff [ 128 ]; // Maximum number of characters in the number that is not an %f
+   char* ptr = MDoubleToString(value, buff, length, shortestFormat, precision);
+   result.assign(ptr, length);
+   return result;
 }
 
 #if !M_NO_WCHAR_T
@@ -247,113 +259,100 @@ M_FUNC MWideString MToWideString(const wchar_t* str)
    return result;
 }
 
-M_FUNC MWideString MToWideString(const char* string, size_t stringLength)
+M_FUNC MWideString MToWideString(const char* buff, size_t size)
 {
-   MWideString wstring;
-   if ( stringLength != 0 )
+   MWideString result;
+   if ( size != 0 )
    {
       #if (M_OS & M_OS_WINDOWS)
-         int wstringLength = MultiByteToWideChar(M_WINDOWS_CP_ACP, 0, string, M_64_CAST(int, stringLength), 0, 0);
-         if ( wstringLength == 0 )
+         int buffSize = M_64_CAST(int, size);
+         int resultSize = MultiByteToWideChar(M_WINDOWS_CP_ACP, 0, buff, buffSize, 0, 0);
+         if ( resultSize <= 0 )
+         {
             MESystemError::ThrowLastSystemError();
-         wstring.resize(wstringLength);
-         (void)MultiByteToWideChar(M_WINDOWS_CP_ACP, 0, string, M_64_CAST(int, stringLength), &wstring[0], wstringLength);
-      #elif (M_OS & M_OS_QNXNTO) || (M_OS & M_OS_BSD)
+            M_ENSURED_ASSERT(0);
+         }
+         result.resize(resultSize);
+         (void)MultiByteToWideChar(M_WINDOWS_CP_ACP, 0, buff, buffSize, &result[0], resultSize);
+      #elif (M_OS & M_OS_ANDROID) != 0
          std::locale currentLocale("");
          typedef std::string::traits_type::state_type State;
          typedef std::codecvt<wchar_t, char, State> CodeCVT;
          const CodeCVT& cc = std::use_facet<CodeCVT>(currentLocale);
          State state = State();
 
-         const char* fromBeg = string;
-         const char* fromEnd = string + stringLength;
+         const char* fromBeg = buff;
+         const char* fromEnd = buff + size;
          const char* fromNxt = NULL;
 
-         wchar_t tmpBuf[256];
+         wchar_t tmpBuf [ 256 ];
          wchar_t* toBeg = tmpBuf;
-         wchar_t* toEnd = toBeg + 256;
+         wchar_t* toEnd = toBeg + M_NUMBER_OF_ARRAY_ELEMENTS(tmpBuf);
          wchar_t* toNxt = NULL;
 
-         wstring.reserve(stringLength);
+         result.reserve(size);
          for ( ;; )
          {
             CodeCVT::result res = cc.in(state, fromBeg, fromEnd, fromNxt, toBeg, toEnd, toNxt);
             if ( res == CodeCVT::error )
             {
-               wstring.append(toBeg, toNxt);
-               wstring += L'?';
+               result.append(toBeg, toNxt);
+               result += L'?';
                fromBeg = fromNxt + 1;
 
                state = State();
             }
             else if ( res == CodeCVT::partial )
             {
-               wstring.append(toBeg, toNxt);
+               result.append(toBeg, toNxt);
                fromBeg = fromNxt;
             }
             else if ( res == CodeCVT::ok )
             {
-               wstring.append(toBeg, toNxt);
+               result.append(toBeg, toNxt);
                break;
             }
          }
       #else
-         size_t converted = 0;
-         size_t needSize = 0;
-
-         while ( converted <= stringLength )
-         {
-            mbstate_t ps = {0};
-            const char* source = string + converted;
-            const size_t sourceLength = Mstrnlen(source, stringLength - converted);
-            const size_t n = mbsnrtowcs(0, &source, sourceLength, 0, &ps);
-            converted += sourceLength + 1;
-            needSize += ( n == static_cast<size_t>(-1) ) ? 1 : n + 1;
-         }
-         wstring.resize(needSize - 1);
-         const size_t fullSize = needSize;
-         converted = needSize = 0;
-         while ( converted <= stringLength )
-         {
-            mbstate_t ps = {0};
-            const char* source = string + converted;
-            const size_t sourceLength = Mstrnlen(source, stringLength - converted);
-            const size_t n = mbsnrtowcs(&wstring[needSize], &source, sourceLength, fullSize - needSize, &ps);
-            converted += sourceLength + 1;
-            needSize += ( n == static_cast<size_t>(-1) ) ? 1 : n + 1;
-         }
+         // Always UTF8 on non-windows systems
+         std::wstring_convert < std::codecvt_utf8<wchar_t> > utf8conv;
+         result = utf8conv.from_bytes(buff , buff + size);
       #endif
    }
-   return wstring;
+   return result;
 }
 
-M_FUNC MStdString MToStdString(const wchar_t* wstring, size_t wstringLength)
+M_FUNC MStdString MToStdString(const wchar_t* buff, size_t size)
 {
-   MStdString string;
-   if ( wstringLength != 0 )
+   MStdString result;
+   if ( size != 0 )
    {
       #if (M_OS & M_OS_WINDOWS)
-         int stringLength = WideCharToMultiByte(M_WINDOWS_CP_ACP, 0, wstring, M_64_CAST(int, wstringLength), 0, 0, NULL, NULL);
-         if ( stringLength == 0 )
+         int buffSize = M_64_CAST(int, size);
+         int resultSize = WideCharToMultiByte(M_WINDOWS_CP_ACP, 0, buff, buffSize, 0, 0, NULL, NULL);
+         if ( resultSize <= 0 )
+         {
             MESystemError::ThrowLastSystemError();
-         string.resize(stringLength);
-         (void)WideCharToMultiByte(M_WINDOWS_CP_ACP, 0, wstring, M_64_CAST(int, wstringLength), &string[0], stringLength, NULL, NULL);
-      #elif (M_OS & M_OS_QNXNTO) || (M_OS & M_OS_BSD)
+            M_ENSURED_ASSERT(0);
+         }
+         result.resize(resultSize);
+         (void)WideCharToMultiByte(M_WINDOWS_CP_ACP, 0, buff, buffSize, &result[0], resultSize, NULL, NULL);
+      #elif (M_OS & M_OS_ANDROID) != 0
          std::locale currentLocale("");
          typedef std::string::traits_type::state_type State;
          typedef std::codecvt<wchar_t, char, State> CodeCVT;
          const CodeCVT& cc = std::use_facet<CodeCVT>(currentLocale);
          State state = State();
 
-         const wchar_t* fromBeg = wstring;
-         const wchar_t* fromEnd = wstring + wstringLength;
+         const wchar_t* fromBeg = buff;
+         const wchar_t* fromEnd = buff + size;
          const wchar_t* fromNxt = NULL;
 
-         string.reserve(wstringLength);
+         result.reserve(size);
 
-         char tmpBuf[256];
+         char tmpBuf [ 256 ];
          char* toBeg = tmpBuf;
-         char* toEnd = toBeg + 256;
+         char* toEnd = toBeg + M_NUMBER_OF_ARRAY_ELEMENTS(tmpBuf);
          char* toNxt = NULL;
 
          for ( ;; )
@@ -361,51 +360,30 @@ M_FUNC MStdString MToStdString(const wchar_t* wstring, size_t wstringLength)
             CodeCVT::result res = cc.out(state, fromBeg, fromEnd, fromNxt, toBeg, toEnd, toNxt);
             if ( res == CodeCVT::error )
             {
-               string.append(toBeg, toNxt);
-               string += '?';
+               result.append(toBeg, toNxt);
+               result += '?';
                fromBeg = fromNxt + 1;
 
                state = State();
             }
             else if ( res == CodeCVT::partial )
             {
-               string.append(toBeg, toNxt);
+               result.append(toBeg, toNxt);
                fromBeg = fromNxt;
             }
             else if ( res == CodeCVT::ok )
             {
-               string.append(toBeg, toNxt);
+               result.append(toBeg, toNxt);
                break;
             }
          }
       #else
-         size_t converted = 0;
-         size_t needSize = 0;
-
-         while ( converted <= wstringLength )
-         {
-            mbstate_t ps = {0};
-            const wchar_t* source = wstring + converted;
-            const size_t sourceLength = Mstrnlen(source, wstringLength - converted);
-            const size_t n = wcsnrtombs(0, &source, sourceLength, 0, &ps);
-            converted += sourceLength + 1;
-            needSize += ( n == static_cast<size_t>(-1) ) ? 1 : n + 1;
-         }
-         string.resize(needSize - 1);
-         const size_t fullSize = needSize;
-         converted = needSize = 0;
-         while ( converted <= wstringLength )
-         {
-            mbstate_t ps = {0};
-            const wchar_t* source = wstring + converted;
-            const size_t sourceLength = Mstrnlen(source, wstringLength - converted);
-            const size_t n = wcsnrtombs(&string[needSize], &source, sourceLength, fullSize - needSize, &ps);
-            converted += sourceLength + 1;
-            needSize += ( n == static_cast<size_t>(-1) ) ? 1 : n + 1;
-         }
+         // Always UTF8 on non-windows systems
+         std::wstring_convert < std::codecvt_utf8<wchar_t> > utf8conv;
+         result = utf8conv.to_bytes(buff, buff + size);
       #endif
    }
-   return string;
+   return result;
 }
 
 M_FUNC MStdString MToStdString(const wchar_t* str)

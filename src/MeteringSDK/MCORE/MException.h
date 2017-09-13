@@ -1776,13 +1776,25 @@ public:
 
 public: // Methods:
 
+   /// Clear the math related error.
+   ///
+   /// Operating system and compiler dependent implementation will clear the
+   /// flags responsible for math error checking, so the mathematical call can be performed.
+   ///
+   static void ClearMathError() M_NO_THROW;
+
    /// Prepare for checking of math function parameters.
    ///
    /// This has to be called before executing any math related operation.
    /// Operating system and compiler dependent implementation will clear the
    /// flags responsible for math error checking, so the mathematical call can be performed.
    ///
-   static void BeforeDoingMath() M_NO_THROW;
+   /// \see \ref ClearMathError - underlying implementation of is call.
+   ///
+   static void BeforeDoingMath() M_NO_THROW
+   {
+      ClearMathError();
+   }
 
    /// Check the result of the execution of math function.
    ///

@@ -24,8 +24,8 @@ M_START_PROPERTIES(Channel)
 #endif
 M_START_METHODS(Channel)
    M_OBJECT_SERVICE                      (Channel, WriteBytes,                        ST_X_constMByteStringA)
-   M_OBJECT_SERVICE                      (Channel, WriteChar,                         ST_X_byte) // actually writes a byte
-   M_OBJECT_SERVICE                      (Channel, ReadChar,                          ST_byte_X) // actually reads a byte
+   M_OBJECT_SERVICE                      (Channel, WriteByte,                         ST_X_byte)
+   M_OBJECT_SERVICE                      (Channel, ReadByte,                          ST_byte_X)
    M_OBJECT_SERVICE                      (Channel, Unread,                            ST_X_constMVariantA)
    M_OBJECT_SERVICE                      (Channel, ReadBytes,                         ST_MByteString_X_unsigned)
    M_OBJECT_SERVICE                      (Channel, ReadBytesUntil,                    ST_MByteString_X_constMByteStringA)
@@ -422,7 +422,7 @@ MByteString MChannel::ReadBytesUntil(const MByteString& terminatingString)
          {
             if ( *result.rbegin() == finisher )
                return result;
-            result += ReadChar();
+            result += static_cast<char>(ReadByte());
          }
       }
       else if ( terminatingString.find(finisher, 1) == MByteString::npos ) // if there is no finisher repeated in string
@@ -438,10 +438,10 @@ MByteString MChannel::ReadBytesUntil(const MByteString& terminatingString)
       {
 #ifdef M_USE_USTL
          while ( result.substr(result.size() - terminatingString.size(), terminatingString.size()).compare(terminatingString) != 0 )
-            result += ReadChar();
+            result += static_cast<char>(ReadByte());
 #else
          while ( result.compare(result.size() - terminatingString.size(), terminatingString.size(), terminatingString) != 0 )
-            result += ReadChar();
+            result += static_cast<char>(ReadByte());
 #endif
       }
    }
@@ -467,7 +467,7 @@ MByteString MChannel::ReadBytesUntilAnyByte(const char* finisher, unsigned finis
    if ( footerSize == 0 )
    {
       while ( DoExistIn(*result.rbegin(), finisher, finisherSize) )
-         result += ReadChar();
+         result += static_cast<char>(ReadByte());
    }
    else
    {
@@ -496,16 +496,16 @@ void MChannel::WriteBytes(const MByteString &buf)
    WriteBuffer(buf.c_str(), M_64_CAST(unsigned, buf.size()));
 }
 
-void MChannel::WriteChar(char buf)
+void MChannel::WriteByte(Muint8 buf)
 {
-   WriteBuffer(&buf, 1);
+   WriteBuffer(reinterpret_cast<const char*>(&buf), sizeof(buf));
 }
 
-char MChannel::ReadChar()
+Muint8 MChannel::ReadByte()
 {
-   char ch;
-   ReadBuffer(&ch, 1);
-   return ch;
+   Muint8 b;
+   ReadBuffer(reinterpret_cast<char*>(&b), 1);
+   return b;
 }
 
 #if !M_NO_MCOM_MONITOR

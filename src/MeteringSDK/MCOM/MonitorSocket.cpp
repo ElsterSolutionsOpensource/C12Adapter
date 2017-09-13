@@ -8,9 +8,9 @@
 
    const unsigned s_PORT = 34783;
    const unsigned s_SEND_TIMEOUT = 5000; // 5 seconds
-   static const MChar str_CLIENT_ADDRESS [] = "CLIENT_ADDRESS";
-   static const MChar str_LOCALHOST      [] = "localhost";
-   static const MChar str_127_0_0_1      [] = "127.0.0.1";
+   static const char str_CLIENT_ADDRESS [] = "CLIENT_ADDRESS";
+   static const char str_LOCALHOST      [] = "localhost";
+   static const char str_127_0_0_1      [] = "127.0.0.1";
 
    #if !M_NO_REFLECTION
       /// Constructor that creates a socket monitor.
@@ -56,7 +56,7 @@ bool MMonitorSocket::IsSocketOpen() const
    return m_socket.IsOpen();
 }
 
-bool MMonitorSocket::IsAddressLocal()
+bool MMonitorSocket::IsAddressLocal() const
 {
    try
    {

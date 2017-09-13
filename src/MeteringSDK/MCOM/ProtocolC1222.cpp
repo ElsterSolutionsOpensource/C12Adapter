@@ -16,7 +16,7 @@ M_START_PROPERTIES(ProtocolC1222)
    M_OBJECT_PROPERTY_PERSISTENT_INT        (ProtocolC1222, SecurityKeyId,              0)
    M_OBJECT_PROPERTY_PERSISTENT_BOOL       (ProtocolC1222, Sessionless,                true)
    M_OBJECT_PROPERTY_PERSISTENT_BOOL       (ProtocolC1222, OneServicePerApdu,          false)
-   M_OBJECT_PROPERTY_PERSISTENT_UINT       (ProtocolC1222, ResponseControl,            MProtocolC1222::ResponseControlAlways)
+   M_OBJECT_PROPERTY_PERSISTENT_INT        (ProtocolC1222, ResponseControl,            MProtocolC1222::ResponseControlAlways)
    M_OBJECT_PROPERTY_PERSISTENT_BOOL       (ProtocolC1222, IssueTerminateOnEndSession, false)
    M_OBJECT_PROPERTY_PERSISTENT_UINT       (ProtocolC1222, SessionIdleTimeout,         60)
    M_OBJECT_PROPERTY_PERSISTENT_UINT       (ProtocolC1222, ResponseTimeout,            300)
@@ -42,8 +42,8 @@ M_START_PROPERTIES(ProtocolC1222)
    M_OBJECT_PROPERTY_BYTE_STRING           (ProtocolC1222, IncomingApdu,                     ST_MByteString_X, ST_X_constMByteStringA)
    M_OBJECT_PROPERTY_READONLY_BYTE_STRING  (ProtocolC1222, OutgoingApdu,                     ST_MByteString_X)
    M_OBJECT_PROPERTY_READONLY_BYTE_STRING  (ProtocolC1222, IncomingEpsem,                    ST_MByteString_X)
-   M_OBJECT_PROPERTY_READONLY_UINT         (ProtocolC1222, IncomingSecurityMode)
-   M_OBJECT_PROPERTY_READONLY_UINT         (ProtocolC1222, IncomingResponseControl)
+   M_OBJECT_PROPERTY_READONLY_INT          (ProtocolC1222, IncomingSecurityMode)
+   M_OBJECT_PROPERTY_READONLY_INT          (ProtocolC1222, IncomingResponseControl)
    M_OBJECT_PROPERTY_READONLY_INT          (ProtocolC1222, IncomingCallingAeQualifier)
 #if !M_NO_MCOM_PASSWORD_AND_KEY_LIST
    M_OBJECT_PROPERTY_BYTE_STRING_COLLECTION(ProtocolC1222, SecurityKeyList,                  ST_constMByteStringVectorA_X)
@@ -55,13 +55,13 @@ M_START_METHODS(ProtocolC1222)
    M_OBJECT_SERVICE                      (ProtocolC1222, ProcessIncomingEPSEM,             ST_X)
    M_OBJECT_SERVICE                      (ProtocolC1222, ServerEnd,                        ST_X)
    M_OBJECT_SERVICE                      (ProtocolC1222, SendStart,                        ST_X)
-   M_OBJECT_SERVICE                      (ProtocolC1222, SendService,                      ST_X_byte)
-   M_OBJECT_SERVICE                      (ProtocolC1222, SendServiceWithData,              ST_X_byte_constMByteStringA)
+   M_OBJECT_SERVICE                      (ProtocolC1222, SendService,                      ST_X_char)
+   M_OBJECT_SERVICE                      (ProtocolC1222, SendServiceWithData,              ST_X_char_constMByteStringA)
    M_OBJECT_SERVICE                      (ProtocolC1222, SendEnd,                          ST_X)
    M_OBJECT_SERVICE                      (ProtocolC1222, ReceiveStart,                     ST_X)
    M_OBJECT_SERVICE                      (ProtocolC1222, SendEndReceiveStart,              ST_bool_X)
    M_OBJECT_SERVICE                      (ProtocolC1222, ReceiveServiceLength,             ST_unsigned_X)
-   M_OBJECT_SERVICE                      (ProtocolC1222, ReceiveServiceCodeIgnoreLength,   ST_byte_X)
+   M_OBJECT_SERVICE                      (ProtocolC1222, ReceiveServiceCodeIgnoreLength,   ST_char_X)
    M_OBJECT_SERVICE                      (ProtocolC1222, ReceiveEnd,                       ST_X)
    M_OBJECT_SERVICE                      (ProtocolC1222, WriteApdu,                        ST_X_constMByteStringA)
    M_OBJECT_SERVICE                      (ProtocolC1222, ReadApdu,                         ST_X)
@@ -69,9 +69,9 @@ M_END_CLASS_TYPED(ProtocolC1222, ProtocolC12, "PROTOCOL_ANSI_C12_22")
 
    // Define this for debugging protocol: M__DEBUG_C1222_WITH_CONSTANT_DATA
 
-   static const MChar s_standardApplicationContextOid [] = "2.16.124.113620.1.22";
-   static const MChar s_standardNetworkContextOid     [] = "2.16.124.113620.1.22.0";
-   static const MChar s_elsterOid                     [] = "1.3.6.1.4.1.33507.1";
+   static const char s_standardApplicationContextOid [] = "2.16.124.113620.1.22";
+   static const char s_standardNetworkContextOid     [] = "2.16.124.113620.1.22.0";
+   static const char s_elsterOid                     [] = "1.3.6.1.4.1.33507.1";
 
    static void DoAddEdClass(MBuffer& result, const MStdString& edClass)
    {
@@ -1052,7 +1052,7 @@ void MProtocolC1222::ReceiveEnd()
    }
 }
 
-void MProtocolC1222::SendService(Muint8 command)
+void MProtocolC1222::SendService(char command)
 {
    char buff [ 2 ];
    buff[0] = '\1'; // length
@@ -1060,7 +1060,7 @@ void MProtocolC1222::SendService(Muint8 command)
    m_outgoingApdu.Append(buff, sizeof(buff));
 }
 
-void MProtocolC1222::SendServiceWithData(Muint8 command, const MByteString& data)
+void MProtocolC1222::SendServiceWithData(char command, const MByteString& data)
 {
    char buff [ 8 ];
    unsigned len = static_cast<unsigned>(data.size()) + 1;// +1 to add command byte size
@@ -1082,7 +1082,7 @@ unsigned MProtocolC1222::ReceiveServiceLength()
    return length;
 }
 
-Muint8 MProtocolC1222::ReceiveServiceCodeIgnoreLength()
+char MProtocolC1222::ReceiveServiceCodeIgnoreLength()
 {
    unsigned length = ReceiveServiceLength();
    if ( length == 0 ) // otherwise, "" will be returned, means no more responses.

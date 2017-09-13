@@ -14,11 +14,13 @@ all relevant bugs and security issues are merged from the following projects:
     pugixml lightweight DOM parser
   - http://utfcpp.sourceforge.net
     UTF8 conversion library
-  - https://github.com/morristech/android-ifaddrs 
+  - https://webrtc.org at ./src/webrtc/base/ifaddrs-android.h and ./src/webrtc/base/ifaddrs-android.cc
     Android implementation of getifaddrs and freeifaddrs
   - https://opensource.apple.com/source/Heimdal/Heimdal-453.40.10/lib/roken/ifaddrs.hin?txt,
     https://opensource.apple.com/source/Heimdal/Heimdal-453.40.10/lib/roken/getifaddrs_w32.c?txt
     Windows implementation of getifaddrs and freeifaddrs.
+  - http://www.netlib.org/fp/dtoa.c
+    Reference dtoa implementation
 
 The following files in this directory are automatically generated,
 see the insides of these files for more information:
