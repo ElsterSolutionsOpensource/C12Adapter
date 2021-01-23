@@ -98,8 +98,6 @@ MAesEax::MAesEax(const MAesEax& other)
 
 MAesEax::~MAesEax()
 {
-   if ( !m_key.empty() ) // erase memory used for key and context per security requirement
-      memset(&m_eaxContext, 0, sizeof(m_eaxContext));
 }
 
 MAesEax& MAesEax::operator=(const MAesEax& other)
@@ -133,7 +131,7 @@ void MAesEax::DoDestructContext()
    MAes::DoDestructContext();
    if ( m_contextUpdatedForEax )
    {
-      memset(&m_eaxContext, 0, sizeof(m_eaxContext));
+      m_eaxContext.clear();
       m_contextUpdatedForEax = false; // this is to prevent infinite recursion at DoCheckAndPrepareContext
    }
 }
