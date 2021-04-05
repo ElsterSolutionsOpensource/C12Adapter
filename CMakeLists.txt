@@ -8,5 +8,9 @@ ENDIF()
 
 INCLUDE(src/MeteringSDK/MeteringSDK.cmake)
 
-ADD_SUBDIRECTORY(examples/cpp/Reader)
-ADD_SUBDIRECTORY(examples/cpp/c1222)
+OPTION(BUILD_EXAMPLES "Build the example projects" ON)
+
+IF (BUILD_EXAMPLES) 
+    ADD_SUBDIRECTORY(examples/cpp/Reader)
+    ADD_SUBDIRECTORY(examples/cpp/c1222)
+ENDIF()
