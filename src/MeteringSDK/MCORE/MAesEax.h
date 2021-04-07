@@ -40,16 +40,18 @@ public: // Types:
 /// \cond SHOW_INTERNAL
    struct EaxContext
    {
-      EaxContext()
-      {
-         memset(L, 0, sizeof(L));
-         memset(D, 0, sizeof(D));
-         memset(Q, 0, sizeof(Q));
+      Muint8 L [ KeySize ] = {};
+      Muint8 D [ KeySize ] = {};
+      Muint8 Q [ KeySize ] = {};
+      ~EaxContext() {
+          clear();
       }
-
-      Muint8 L [ KeySize ];
-      Muint8 D [ KeySize ];
-      Muint8 Q [ KeySize ];
+      void clear() {
+          // erase memory used per security requirment
+          memset(&L, 0, KeySize);
+          memset(&D, 0, KeySize);
+          memset(&Q, 0, KeySize);
+      };
    };
 /// \endcond
 

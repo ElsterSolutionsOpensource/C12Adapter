@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.11)
 project(reader)
 
 set(METERINGSDK_COMPONENTS MCORE MCOM)
