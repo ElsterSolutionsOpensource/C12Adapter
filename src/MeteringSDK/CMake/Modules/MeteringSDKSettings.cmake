@@ -1,8 +1,8 @@
 IF(INSIDE_METERINGSDK)
-   SET(M_COMPANY_NAME                  "Elster Solutions"                                    CACHE STRING "Company name")
-   SET(M_PRODUCT_NAME                  "MyProduct"                                           CACHE STRING "Product name")
-   SET(M_PRODUCT_LEGAL_COPYRIGHT       "Copyright (c) 1997-2017 Elster Solutions"            CACHE STRING "Product copyright")
-   SET(M_PRODUCT_VERSION               "1.0.0"                                               CACHE STRING "Product version")
+   OPTION(M_COMPANY_NAME                  "Elster Solutions"                                    CACHE STRING "Company name")
+   OPTION(M_PRODUCT_NAME                  "MyProduct"                                           CACHE STRING "Product name")
+   OPTION(M_PRODUCT_LEGAL_COPYRIGHT       "Copyright (c) 1997-2017 Elster Solutions"            CACHE STRING "Product copyright")
+   OPTION(M_PRODUCT_VERSION               "1.0.0"                                               CACHE STRING "Product version")
    SET(M_GLOBAL_MESSAGE_CATALOG_DOMAIN ""                                                    CACHE STRING "Global message catalog domain name")
 
    MESSAGE(STATUS "Project build location (CMAKE_BINARY_DIR) = ${CMAKE_BINARY_DIR}")
